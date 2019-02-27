@@ -5,28 +5,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tn.esprit.overpowered.byusforus.entities.Choice;
-import tn.esprit.overpowered.byusforus.services.ChoiceFacadeRemote;
 
+// *** User as ref ****
+//import javax.naming.Context;
+//import javax.naming.InitialContext;
+//import tn.esprit.overpowered.byusforus.entities.Choice;
+//import tn.esprit.overpowered.byusforus.services.ChoiceFacadeRemote;
 public class MainApp extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
     public static void main(String[] args) throws Exception {
-        String jndiName = "piJEE-ejb-1.0/ChoiceFacade!tn.esprit.overpowered.byusforus.services.ChoiceFacadeRemote";
-        Context context = new InitialContext();
-        ChoiceFacadeRemote choiceFacadeProxy = (ChoiceFacadeRemote) context.lookup(jndiName);
-        System.out.println("Starting choice creation...");
-        Choice choice1 = new Choice();
-        choice1.setChoicePoints(1);
-        choice1.setChoiceText("Your choice");
-        choice1.setIsCorrectChoice(Boolean.TRUE);
-        choiceFacadeProxy.create(choice1);
-        System.out.println("Completed choice creation");
+// **** Use as ref ****
+//        String jndiName = "piJEE-ejb-1.0/ChoiceFacade!tn.esprit.overpowered.byusforus.services.ChoiceFacadeRemote";
+//        Context context = new InitialContext();
+//        ChoiceFacadeRemote choiceFacadeProxy = (ChoiceFacadeRemote) context.lookup(jndiName);
+//        System.out.println("Starting choice creation...");
+//        Choice choice1 = new Choice();
+//        choice1.setChoicePoints(1);
+//        choice1.setChoiceText("Your choice");
+//        choice1.setIsCorrectChoice(Boolean.TRUE);
+//        choiceFacadeProxy.create(choice1);
+//        System.out.println("Completed choice creation");
         launch(args);
     }
 
