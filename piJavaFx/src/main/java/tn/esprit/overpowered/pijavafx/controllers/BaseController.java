@@ -20,9 +20,6 @@ import javafx.scene.text.Text;
  */
 public class BaseController implements Initializable {
 
-    @FXML
-    private Button clickMeBtn;
-    @FXML
     private Text text;
 
     /**
@@ -33,7 +30,6 @@ public class BaseController implements Initializable {
         // TODO
     }    
 
-    @FXML
     private void onClickMeBtnClicked(ActionEvent event) {
         text.setText("You just clicked a btn!");
     }
