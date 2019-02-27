@@ -3,21 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tn.esprit.overpowered.pijavafx;
+package tn.esprit.overpowered.pijavafx.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.BorderPane;
 
 /**
  * FXML Controller class
  *
  * @author Yassine
  */
-public class EntrepriseHomeController implements Initializable {
-
-    private BorderPane borderPane;
+public class CandidateHomeController implements Initializable {
 
     /**
      * Initializes the controller class.
@@ -25,10 +22,6 @@ public class EntrepriseHomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }   
-
-    
-    
-    
+    }    
     
 }
