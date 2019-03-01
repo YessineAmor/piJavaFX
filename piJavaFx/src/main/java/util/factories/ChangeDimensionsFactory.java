@@ -19,6 +19,8 @@ public class ChangeDimensionsFactory {
 
     public ChangeListener<Number> createListener(Parent rootNode, String cssId, double factor, int prop) throws WidgetNotFoundException, InvalidArgumentException {
 
+        if (factor < 0)
+            throw new InvalidArgumentException("the resizing factor should be > 0.");
         switch (prop) {
             case ChangeDimensions.HEIGHT:
                 return new ChangeHeight(rootNode, cssId, factor, prop);
