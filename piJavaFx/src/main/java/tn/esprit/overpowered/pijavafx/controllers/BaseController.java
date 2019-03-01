@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 /**
@@ -21,6 +23,16 @@ import javafx.scene.text.Text;
 public class BaseController implements Initializable {
 
     private Text text;
+    @FXML
+    private AnchorPane generalAnchorPane;
+    @FXML
+    private AnchorPane rightMenuAnchorPane;
+    @FXML
+    private AnchorPane centralAnchorPane;
+    @FXML
+    private AnchorPane topMenuAnchorPane;
+    @FXML
+    private MenuBar topMenu;
 
     /**
      * Initializes the controller class.
