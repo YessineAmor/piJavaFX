@@ -1,12 +1,17 @@
 package tn.esprit.overpowered.pijavafx.app;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.factories.ChangeDimensions;
+import util.factories.ChangeDimensionsFactory;
 
 // *** User as ref ****
 //import javax.naming.Context;
@@ -39,14 +44,23 @@ public class MainApp extends Application {
         String fxmlFile = "/fxml/Base.fxml";
         log.debug("Loading FXML for main view from: {}", fxmlFile);
         FXMLLoader loader = new FXMLLoader();
-        Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
+        final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
 
         log.debug("Showing JFX scene");
         Scene scene = new Scene(rootNode);
         scene.getStylesheets().add("/styles/styles.css");
 
+        stage.sizeToScene();
         stage.setTitle("Hello JavaFX and Maven");
         stage.setScene(scene);
         stage.show();
+        stage.setMinHeight(400);
+        stage.setMinWidth(600);
+
+        // registering listeners for resize
+        ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
+        ChangeListener<Number> sideMenuChangeListener = cFactory.createListener(
+                rootNode, "#rightMenu", 1, ChangeDimensions.HEIGHT);
+        stage.widthProperty().addListener(sideMenuChangeListener);
     }
 }
