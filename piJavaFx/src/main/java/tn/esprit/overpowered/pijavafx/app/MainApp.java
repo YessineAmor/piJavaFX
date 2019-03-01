@@ -60,7 +60,15 @@ public class MainApp extends Application {
         // registering listeners for resize
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener = cFactory.createListener(
-                rootNode, "#rightMenu", 1, ChangeDimensions.HEIGHT);
-        stage.widthProperty().addListener(sideMenuChangeListener);
+                rootNode, "#rightMenuAnchorPane", 1, ChangeDimensions.HEIGHT);
+        ChangeListener<Number> topMenuAnchorPaneListener = cFactory.createListener(
+                rootNode, "#topMenuAnchorPane", 1, ChangeDimensions.WIDTH);
+        ChangeListener<Number> topMenuChangeListener = cFactory.createListener(
+                rootNode, "#topMenu", 1, ChangeDimensions.WIDTH);
+        stage.heightProperty().addListener(sideMenuChangeListener);
+        stage.widthProperty().addListener(topMenuChangeListener);
+        stage.widthProperty().addListener(topMenuAnchorPaneListener);
+
+        
     }
 }
