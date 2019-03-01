@@ -8,16 +8,16 @@
 
 <AnchorPane id="AnchorPane" fx:id="generalAnchorPane" minHeight="400.0" minWidth="647.21" prefHeight="400.0" prefWidth="647.21" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.BaseController">
    <children>
-      <AnchorPane id="rightMenu" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="73.0" style="-fx-background-color: gray;">
+      <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="73.0" style="-fx-background-color: gray;">
          <children>
             <Label layoutX="20.0" layoutY="39.0" text="Profile" />
             <Label layoutX="12.0" layoutY="74.0" text="Messages" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="centralAnchorPane" layoutX="73.0" layoutY="20.0" prefHeight="382.0" prefWidth="575.0" />
-      <AnchorPane fx:id="topMenuAnchorPane" prefHeight="25.0" prefWidth="647.0">
+      <AnchorPane id="topMenuAnchorPane" fx:id="topMenuAnchorPane" prefHeight="25.0" prefWidth="647.0">
          <children>
-            <MenuBar fx:id="topMenu" prefHeight="29.0" prefWidth="403.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <MenuBar id="topMenu" fx:id="topMenu" prefHeight="29.0" prefWidth="403.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
