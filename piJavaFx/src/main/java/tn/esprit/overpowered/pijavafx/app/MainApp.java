@@ -2,16 +2,15 @@ package tn.esprit.overpowered.pijavafx.app;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.factories.ChangeDimensions;
 import util.factories.ChangeDimensionsFactory;
+import util.routers.FXRouter;
 
 // *** User as ref ****
 //import javax.naming.Context;
@@ -21,6 +20,9 @@ import util.factories.ChangeDimensionsFactory;
 public class MainApp extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+    private static final double WIN_WIDTH = 600;
+    private static final double WIN_HEIGHT = 400;
+    private static final String FXML_PATH = "/fxml/";
 
     public static void main(String[] args) throws Exception {
 // **** Use as ref ****
@@ -40,7 +42,6 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
         log.info("Starting Hello JavaFX and Maven demonstration application");
-
         String fxmlFile = "/fxml/Base.fxml";
         log.debug("Loading FXML for main view from: {}", fxmlFile);
         FXMLLoader loader = new FXMLLoader();
@@ -57,7 +58,12 @@ public class MainApp extends Application {
         stage.setMinHeight(400);
         stage.setMinWidth(600);
 
-        // registering listeners for window resizing
+
+        FXRouter.bind(this, stage, "By Us For Us", WIN_WIDTH, WIN_HEIGHT);
+        FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
+        FXRouter.when("CreateQuestions", "CreateQuestions.fxml");
+
+        // registering listeners for resize
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener = cFactory.createListener(
                 rootNode, "#rightMenuAnchorPane", 1, ChangeDimensions.HEIGHT);
@@ -69,6 +75,5 @@ public class MainApp extends Application {
         stage.widthProperty().addListener(topMenuChangeListener);
         stage.widthProperty().addListener(topMenuAnchorPaneListener);
 
-        
     }
 }

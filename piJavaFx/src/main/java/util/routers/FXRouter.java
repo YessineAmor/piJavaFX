@@ -14,15 +14,17 @@ package util.routers;
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import static io.undertow.Handlers.resource;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.HashMap;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.util.Duration;
 import javafx.animation.FadeTransition;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
 
 
 /**
@@ -58,6 +60,8 @@ public final class FXRouter {
     private static AbstractMap<String, RouteScene> routes = new HashMap<>();
     // FXRouter current route
     private static RouteScene currentRoute;
+    
+    private static AnchorPane baseCenterAnchorPane;
 
     /**
      * FXRouter Inner Class used into routes map
@@ -208,26 +212,30 @@ public final class FXRouter {
      */
     private static void loadNewRoute(RouteScene route) throws IOException {
         // get Main Class package name to get correct files path
-        String pathRef = "fxml";
+//        String pathRef = mainRef.getClass().getPackage().getName();
+//
+//        // set FXRouter current route reference
+//        currentRoute = route;
+//
+//        // create correct file path.  "/" doesn't affect any OS
+//        String scenePath = "/" + pathRef + "/" + route.scenePath;
+//
+//        // load .fxml resource
+//        Parent resource = FXMLLoader.load(new Object() { }.getClass().getResource(customScenePath));
+//        // set window title from route settings or default setting
+//        window.setTitle(route.windowTitle);
+//        // set new route scene
+//        window.setScene(new Scene(resource, route.sceneWidth, route.sceneHeight));
+//        // show the window
+//        window.show();
 
-        // set FXRouter current route reference
-        currentRoute = route;
-
-        // create correct file path.  "/" doesn't affect any OS
-        String scenePath = "/" + pathRef + "/" + route.scenePath;
-
-        // load .fxml resource
-        Parent resource = FXMLLoader.load(new Object() { }.getClass().getResource(scenePath));
-
-        // set window title from route settings or default setting
-        window.setTitle(route.windowTitle);
-        // set new route scene
-        window.setScene(new Scene(resource, route.sceneWidth, route.sceneHeight));
-        // show the window
-        window.show();
-
+        // Overpowered starts here
+        Node targetNode;
+        String customScenePath = "/fxml/" + route.scenePath; 
+        targetNode = (Node) FXMLLoader.load(new Object() { }.getClass().getResource(customScenePath));
+        baseCenterAnchorPane.getChildren().setAll(targetNode);
         // set scene animation
-        routeAnimation(resource);
+       // routeAnimation(resource);
     }
 
     /* Syntactic sugar for goTo() method when FXRouter get set */
@@ -279,4 +287,9 @@ public final class FXRouter {
         return currentRoute.data;
     }
 
+    public static void setBaseCenterAnchorPane(AnchorPane baseCenterAnchorPane) {
+        FXRouter.baseCenterAnchorPane = baseCenterAnchorPane;
+    }
+
+    
 }

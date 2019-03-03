@@ -5,6 +5,7 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -13,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+import util.routers.FXRouter;
 
 /**
  * FXML Controller class
@@ -22,17 +23,20 @@ import javafx.scene.text.Text;
  */
 public class BaseController implements Initializable {
 
-    private Text text;
     @FXML
     private AnchorPane generalAnchorPane;
-    @FXML
-    private AnchorPane rightMenuAnchorPane;
+//    @FXML
+//    private AnchorPane rightMenuAnchorPane;
     @FXML
     private AnchorPane centralAnchorPane;
     @FXML
     private AnchorPane topMenuAnchorPane;
     @FXML
     private MenuBar topMenu;
+    @FXML
+    private AnchorPane rightMenuAnchorPane;
+    @FXML
+    private Button createQuizBtn;
 
     /**
      * Initializes the controller class.
@@ -40,10 +44,20 @@ public class BaseController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-
-    private void onClickMeBtnClicked(ActionEvent event) {
-        text.setText("You just clicked a btn!");
+        FXRouter.setBaseCenterAnchorPane(centralAnchorPane);
     }
-    
+
+    @FXML
+    private void onCreateQuizBtnClicked(ActionEvent event) throws IOException {
+        FXRouter.goTo("CreateQuiz");
+    }
+
+    public AnchorPane getCentralAnchorPane() {
+        return centralAnchorPane;
+    }
+
+    public void setCentralAnchorPane(AnchorPane centralAnchorPane) {
+        this.centralAnchorPane = centralAnchorPane;
+    }
+
 }
