@@ -208,7 +208,7 @@ public final class FXRouter {
      */
     private static void loadNewRoute(RouteScene route) throws IOException {
         // get Main Class package name to get correct files path
-        String pathRef = mainRef.getClass().getPackage().getName();
+        String pathRef = "fxml";
 
         // set FXRouter current route reference
         currentRoute = route;

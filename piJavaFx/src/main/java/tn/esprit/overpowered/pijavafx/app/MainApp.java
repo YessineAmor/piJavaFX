@@ -57,7 +57,7 @@ public class MainApp extends Application {
         stage.setMinHeight(400);
         stage.setMinWidth(600);
 
-        // registering listeners for resize
+        // registering listeners for window resizing
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener = cFactory.createListener(
                 rootNode, "#rightMenuAnchorPane", 1, ChangeDimensions.HEIGHT);
