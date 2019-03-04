@@ -114,13 +114,6 @@ public class CreateQuizController implements Initializable {
         FXRouter.goTo("CreateQuestions");
     }
 
-    public AnchorPane getBaseCentralAnchorPane() {
-        return baseCentralAnchorPane;
-    }
-
-    public void setBaseCentralAnchorPane(AnchorPane baseCentralAnchorPane) {
-        baseCentralAnchorPane.getChildren().setAll(mainAnchorPane);
-        this.baseCentralAnchorPane = baseCentralAnchorPane;
-    }
+    
 
 }
