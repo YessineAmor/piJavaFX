@@ -5,8 +5,10 @@
  */
 package util.factories;
 
+import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 /**
  *
@@ -14,13 +16,14 @@ import javafx.scene.control.Alert.AlertType;
  */
 public class CreateAlert {
 
-    public static void CreateAlert(AlertType alertTypeValue, String title, String headerText, String contentText) {
+    public static Optional<ButtonType> CreateAlert(AlertType alertTypeValue, String title, String headerText, String contentText) {
 
         Alert alert = new Alert(alertTypeValue);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
-        alert.showAndWait();
+        return alert.showAndWait();
+
     }
 
 }
