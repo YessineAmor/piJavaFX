@@ -62,6 +62,8 @@ public class MainApp extends Application {
         FXRouter.bind(this, stage, "By Us For Us", WIN_WIDTH, WIN_HEIGHT);
         FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
         FXRouter.when("CreateQuestions", "CreateQuestions.fxml");
+        FXRouter.when("TryQuiz", "TryQuiz.fxml");
+        FXRouter.when("QuizInfo", "QuizInfo.fxml");
 
         // registering listeners for resize
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();

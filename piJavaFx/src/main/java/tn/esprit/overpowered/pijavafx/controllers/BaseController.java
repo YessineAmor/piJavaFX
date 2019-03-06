@@ -49,7 +49,8 @@ public class BaseController implements Initializable {
 
     @FXML
     private void onCreateQuizBtnClicked(ActionEvent event) throws IOException {
-        FXRouter.goTo("CreateQuiz");
+        //FXRouter.goTo("CreateQuiz");
+        FXRouter.goTo("QuizInfo");
     }
 
     public AnchorPane getCentralAnchorPane() {
