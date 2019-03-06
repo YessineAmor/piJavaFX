@@ -21,29 +21,25 @@ public class ChangeWidth implements ChangeDimensions {
     private String cssId;
     private double factor;
     private int prop;
-    
-    private ChangeWidth() {}
-    
+
+    private ChangeWidth() {
+    }
+
     public ChangeWidth(Parent root, String cssId, double factor, int prop) throws WidgetNotFoundException {
-          this.rootNode = root;
-        
-         this.child = (Region) rootNode.lookup(cssId);
+        this.rootNode = root;
+
+        this.child = (Region) rootNode.lookup(cssId);
         if (child == null) {
             throw new WidgetNotFoundException("No widget with id " + cssId + " is found.");
         }
-        
+
         this.prop = prop;
         this.factor = factor;
     }
-    
-
-    
-
- 
 
     @Override
     public void changed(ObservableValue<? extends Number> ov, Number oldVal, Number newVal) {
-                                    this.child.setPrefWidth(newVal.doubleValue() * this.factor);
+        this.child.setPrefWidth(newVal.doubleValue() * this.factor);
     }
-    
+
 }

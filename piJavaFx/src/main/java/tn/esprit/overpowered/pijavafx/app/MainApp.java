@@ -58,6 +58,7 @@ public class MainApp extends Application {
         stage.setMinHeight(400);
         stage.setMinWidth(600);
 
+
         FXRouter.bind(this, stage, "By Us For Us", WIN_WIDTH, WIN_HEIGHT);
         FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
         FXRouter.when("CreateQuestions", "CreateQuestions.fxml");

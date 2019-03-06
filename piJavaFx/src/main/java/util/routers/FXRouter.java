@@ -234,7 +234,6 @@ public final class FXRouter {
         String customScenePath = "/fxml/" + route.scenePath; 
         targetNode = (Node) FXMLLoader.load(new Object() { }.getClass().getResource(customScenePath));
         baseCenterAnchorPane.getChildren().setAll(targetNode);
-
         // set scene animation
        // routeAnimation(resource);
     }
