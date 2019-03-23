@@ -2,5 +2,5 @@ language: java
 sudo: false
 install: true
 script:
-  - cd piJavaFX
+  - cd piJavaFx
   - mvn clean install
