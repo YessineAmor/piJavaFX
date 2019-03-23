@@ -7,4 +7,4 @@ script:
   - mvn clean install
   - mvn install:install-file -Dfile=target/piJEE-ejb-1.0.jar
   - cd ../../../piJavaFx
-  - mvn clean install
+  - mvn clean install -nsu
