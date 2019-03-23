@@ -3,8 +3,9 @@ sudo: false
 install: true
 script:
   - git clone https://github.com/amine177/piJEE
-  - cd piJEE/piJEE/piJEE-ejb
   - mvn clean install
-  - mvn install:install-file -Dfile=target/piJEE-ejb-1.0.jar -DgroupId=tn.esprit.overpowered -Dpackaging=jar -DartifactId=piJEE-ejb -Dversion=1.0
+  - mvn package
+  #- cp target/piJEE-ejb-1.0.jar target/piJEE-ejb.jar
+  #- mvn install:install-file -Dfile=target/piJEE-ejb.jar -DgroupId=tn.esprit.overpowered -Dpackaging=jar -DartifactId=piJEE-ejb -Dversion=1.0
   - cd ../../../piJavaFx
-  - mvn clean install -nsu
+  - mvn clean install
