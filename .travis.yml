@@ -5,5 +5,5 @@ script:
   - git clone https://github.com/amine177/piJEE
   - cd piJEE/piJEE/piJEE-ejb
   - mvn clean install
-  - cd ../../piJavaFx
+  - cd ../../../piJavaFx
   - mvn clean install
