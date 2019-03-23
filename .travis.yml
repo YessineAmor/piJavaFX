@@ -3,8 +3,7 @@ sudo: false
 install: true
 script:
   - git clone https://github.com/amine177/piJEE
-  - ls piJEE
-  - cd piJEE/piJEE-ejb
+  - cd piJEE/piJEE/piJEE-ejb
   - mvn clean install
   - cd ../../piJavaFx
   - mvn clean install
