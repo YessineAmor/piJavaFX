@@ -27,10 +27,10 @@
             <Label text="Number of questions" GridPane.rowIndex="1" />
             <Label text="Minimum score to pass" GridPane.rowIndex="2" />
             <Label text="Quiz details" GridPane.rowIndex="3" />
-            <Label fx:id="quizName" prefHeight="17.0" prefWidth="144.0" text="Label" GridPane.columnIndex="1" />
+            <Label fx:id="quizName" prefHeight="17.0" prefWidth="235.0" text="Label" GridPane.columnIndex="1" />
             <Label fx:id="numberOfQuestions" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label fx:id="minScore" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextArea fx:id="quizDetails" prefHeight="95.0" prefWidth="165.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextArea fx:id="quizDetails" prefHeight="69.0" prefWidth="231.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>
