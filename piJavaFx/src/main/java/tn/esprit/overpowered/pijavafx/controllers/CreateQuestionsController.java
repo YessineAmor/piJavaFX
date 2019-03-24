@@ -35,6 +35,7 @@ import tn.esprit.overpowered.byusforus.services.quiz.ChoiceFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuestionFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
 import util.factories.CreateAlert;
+import util.routers.FXRouter;
 
 /**
  * FXML Controller class
@@ -106,7 +107,7 @@ public class CreateQuestionsController implements Initializable {
 
         // Quiz name textfield length input control
         questionTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 30) {
+            if (newValue.length() > 100) {
                 CreateAlert.CreateAlert(Alert.AlertType.ERROR, "Error!", "Input Error!", "Length needs to be < 30 chars");
                 questionTextField.setText(questionTextField.getText().substring(0, 30));
             }
@@ -159,6 +160,7 @@ public class CreateQuestionsController implements Initializable {
             lv.getItems().add(choiceHBox);
             choicesList.add(choice);
             updateBtnState(submitBtn);
+            choiceTextField.setText("");
         });
 
         //choicesHbox.setSpacing(10);
@@ -182,6 +184,8 @@ public class CreateQuestionsController implements Initializable {
                     lv.getItems().removeAll(lv.getItems());
                     pointsTextField.setText("");
                     choiceTextField.setText("");
+                    choicesList = new ArrayList<>();
+
                 }
         );
 
@@ -190,7 +194,14 @@ public class CreateQuestionsController implements Initializable {
     }
 
     public void updateBtnState(Button submitBtn) {
-        if (questionValid && !questionTextField.getText().isEmpty() && !pointsTextField.getText().isEmpty() && lv.getItems().size() > 1) {
+        Boolean choicesValid = true;
+        for (Choice c : choicesList) {
+            if (c.getIsCorrectChoice() == true) {
+                break;
+            }
+            choicesValid = false;
+        }
+        if (questionValid && !questionTextField.getText().isEmpty() && !pointsTextField.getText().isEmpty() && lv.getItems().size() > 1 && choicesValid) {
             submitBtn.setDisable(false);
         } else {
             submitBtn.setDisable(true);
@@ -200,7 +211,7 @@ public class CreateQuestionsController implements Initializable {
 
     @FXML
     private void onSubmitQuizBtnClicked(ActionEvent event) {
-        Quiz quiz = new Quiz("Quiz name", "Quiz details", 70f);
+        Quiz quiz = (Quiz) FXRouter.getData();
         quiz.setQuestions(questionsList);
         quizFacadeProxy.create(quiz);
     }
