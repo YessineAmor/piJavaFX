@@ -1,6 +1,7 @@
 package tn.esprit.overpowered.pijavafx.app;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,6 +40,7 @@ public class MainApp extends Application {
         launch(args);
     }
 
+    @Override
     public void start(Stage stage) throws Exception {
 
         log.info("Starting Hello JavaFX and Maven demonstration application");
@@ -58,12 +60,12 @@ public class MainApp extends Application {
         stage.setMinHeight(400);
         stage.setMinWidth(600);
 
-
         FXRouter.bind(this, stage, "By Us For Us", WIN_WIDTH, WIN_HEIGHT);
         FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
         FXRouter.when("CreateQuestions", "CreateQuestions.fxml");
         FXRouter.when("TryQuiz", "TryQuiz.fxml");
         FXRouter.when("QuizInfo", "QuizInfo.fxml");
+        FXRouter.when("QuizResults", "QuizResults.fxml");
 
         // registering listeners for resize
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
@@ -76,6 +78,12 @@ public class MainApp extends Application {
         stage.heightProperty().addListener(sideMenuChangeListener);
         stage.widthProperty().addListener(topMenuChangeListener);
         stage.widthProperty().addListener(topMenuAnchorPaneListener);
+
+        // Destroy everything on close request
+        stage.setOnCloseRequest((event) -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
     }
 }
