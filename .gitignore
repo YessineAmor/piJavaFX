@@ -1,1 +1,3 @@
 /piJavaFx/target/
+*.ts
+*.log
