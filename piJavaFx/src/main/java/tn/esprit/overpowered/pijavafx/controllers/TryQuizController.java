@@ -31,11 +31,39 @@ import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
 import java.awt.Graphics;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.util.Duration;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.math.geometry.shape.Rectangle;
+import tn.esprit.overpowered.byusforus.entities.quiz.Answer;
+import tn.esprit.overpowered.byusforus.entities.quiz.Choice;
+import tn.esprit.overpowered.byusforus.entities.quiz.Question;
+import tn.esprit.overpowered.byusforus.entities.quiz.QuestionType;
+import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
+import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
+import util.routers.FXRouter;
 
 /**
  * FXML Controller class
@@ -51,23 +79,53 @@ public class TryQuizController implements Initializable {
     private ObjectProperty<Image> imageProperty = new SimpleObjectProperty<Image>();
     private List<DetectedFace> faces = null;
     private Webcam webcam = null;
-    private String mediaPath = "../media/";
+    private final String mediaPath = "../media/";
     BufferedImage capture = null;
     List<BufferedImage> facesList = new ArrayList<>();
     private IMediaWriter writer;
     @FXML
     private ImageView videoArea;
+    @FXML
+    private HBox topHB;
+    @FXML
+    private Label question;
+    @FXML
+    private GridPane choicesGridPane;
+    private Quiz quiz;
+    private List<Question> questionsList;
+    @FXML
+    private Button nextQuestion;
+    private int currentQuestionIndex = 0;
+    @FXML
+    private Button previousQuestion;
+    @FXML
+    private Label timeLabel;
+
+    private Map<Question, Choice> candidateAnswers;
+    private List<Answer> answers;
+    private QuizTryFacadeRemote quizTryFacadeProxy;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
+        String jndiName = "piJEE-ejb-1.0/QuizTryFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote";
+        Context context = null;
+        try {
+            context = new InitialContext();
+            QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) context.lookup(jndiName);
+        } catch (NamingException ex) {
+            System.out.println(ex.getExplanation());
+        }
         System.out.println("alert accepted - TryQuizController");
+        answers = new ArrayList<>();
+        quiz = (Quiz) FXRouter.getData();
         QuizTry quizTry = new QuizTry();
         long start = System.currentTimeMillis();
         quizTry.setStartDate(new Date());
+        quizTry.setQuiz(quiz);
         initVideo(quizTry.getRecording());
         initCam();
         Button stopCapture = new Button("Stop capture");
@@ -84,8 +142,9 @@ public class TryQuizController implements Initializable {
             }
 
         });
-
+        cameraThread.setDaemon(true);
         cameraThread.start();
+
         videoArea.imageProperty().bind(imageProperty);
         stopCapture.setOnAction((e) -> {
             stopCamera = true;
@@ -93,6 +152,96 @@ public class TryQuizController implements Initializable {
             webcam.close();
         });
 
+        topHB.getChildren().add(new Label("You are currently taking the following quiz: " + quiz.getName()));
+        topHB.getChildren().add(new Label(quiz.getDetails()));
+        questionsList = quiz.getQuestions();
+        fillGridPane(questionsList.get(0));
+        nextQuestion.setOnAction((event) -> {
+            if (nextQuestion.getText().equals("Submit")) {
+                quizTry.setFinishDate(new Date());
+                for (Map.Entry<Question, Choice> entry : candidateAnswers.entrySet()) {
+                    Answer answer = new Answer(entry.getKey(), entry.getValue());
+                    answers.add(answer);
+                }
+                quizTry.setAnswers(answers);
+                quizTry.setPercentage(calculateQuizScore());
+                quizTryFacadeProxy.create(quizTry);
+                try {
+                    FXRouter.goTo("QuizResults", quizTry);
+                } catch (IOException ex) {
+                    Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                choicesGridPane.getChildren().clear();
+                currentQuestionIndex++;
+                fillGridPane(questionsList.get(currentQuestionIndex));
+                if (currentQuestionIndex == questionsList.size() - 1) {
+                    nextQuestion.setText("Submit");
+                }
+            }
+        });
+        previousQuestion.setOnAction((previous) -> {
+            currentQuestionIndex--;
+            fillGridPane(questionsList.get(currentQuestionIndex));
+
+        });
+
+        //TIMER
+        setTimer();
+
+        candidateAnswers = new HashMap<>();
+    }
+
+    public void setTimer() {
+        IntegerProperty duration = new SimpleIntegerProperty((int) Duration.minutes(quiz.getDuration()).toSeconds());
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (duration.get() > 0) {
+                    String timeLeft = DurationFormatUtils.formatDuration((long) Duration.seconds(duration.get()).toMillis(), "HH:mm:ss", true);
+                    Platform.runLater(() -> timeLabel.setText("Time left: " + timeLeft));
+                    duration.setValue(duration.get() - 1);
+                } else {
+                    timer.cancel();
+                }
+            }
+        }, 1000, 1000);
+    }
+
+    public void fillGridPane(Question questionToDisplay) {
+        question.setText("Question : " + questionToDisplay.getQuestionText());
+        choicesGridPane.setPadding(new Insets(5));
+        int index = 0;
+        System.out.println("Choices for question: " + questionToDisplay.getQuestionText() + " : ");
+        ToggleGroup tg = new ToggleGroup();
+        for (Choice c : questionToDisplay.getChoices()) {
+            System.out.println("choice: " + c.getChoiceText());
+            RadioButton rb = new RadioButton();
+            rb.setToggleGroup(tg);
+            choicesGridPane.add(rb, 0, index);
+            choicesGridPane.add(new Label(c.getChoiceText()), 1, index);
+            index++;
+            rb.setOnAction((rbClickedEvent) -> {
+                QuestionType qType = questionToDisplay.getQuestionType();
+                switch (qType) {
+                    case SINGLE_ANSWER:
+                        candidateAnswers.put(questionToDisplay, c);
+                        break;
+                    case MULTI_ANSWER:
+                        if (candidateAnswers.containsKey(questionToDisplay)) {
+                            // TO DO
+                        }
+                        break;
+                    case FILL_IN_BLANKS:
+                        break;
+                    case DRAG_AND_DROP:
+                        break;
+                    default:
+                        throw new AssertionError(qType.name());
+                }
+            });
+        }
     }
 
     public void detectFaces(BufferedImage imageToAnalyse) {
@@ -109,7 +258,7 @@ public class TryQuizController implements Initializable {
             int y = (int) bounds.y - dy;
             int w = (int) bounds.width + 2 * dx;
             int h = (int) bounds.height + dy;
-            Graphics g = capture.getGraphics();
+            Graphics g = imageToAnalyse.getGraphics();
             g.drawRect(x, y, w, h);
         }
     }
@@ -131,6 +280,24 @@ public class TryQuizController implements Initializable {
         IConverter converter = ConverterFactory.createConverter(videoImage, IPixelFormat.Type.YUV420P);
         IVideoPicture frame = converter.toPicture(videoImage, (System.currentTimeMillis() - start) * 1000);
         writer.encodeVideo(0, frame);
+    }
+
+    private float calculateQuizScore() {
+        float score = 0f;
+        float pointsSum = 0f;
+        float correctAnswersScore = 0f;
+        for (Map.Entry<Question, Choice> entry : candidateAnswers.entrySet()) {
+            Question workingQuestion = entry.getKey();
+            Choice workingChoice = entry.getValue();
+            float questionPoints = workingQuestion.getQuestionPoints();
+            pointsSum += questionPoints;
+            if (workingChoice.getIsCorrectChoice()) {
+                correctAnswersScore += questionPoints;
+            }
+        }
+        System.out.println("Points Sum : " + pointsSum);
+        System.out.println("Correct Answers Score : " + correctAnswersScore);
+        return (float) (correctAnswersScore / pointsSum) * 100;
     }
 
 }
