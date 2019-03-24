@@ -7,19 +7,23 @@ package tn.esprit.overpowered.pijavafx.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
+import javafx.util.converter.LocalTimeStringConverter;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import util.factories.CreateAlert;
 import util.routers.FXRouter;
@@ -50,6 +54,10 @@ public class CreateQuizController implements Initializable {
     private AnchorPane baseCentralAnchorPane;
     @FXML
     private AnchorPane mainAnchorPane;
+    @FXML
+    private Spinner<Integer> hoursSpinner;
+    @FXML
+    private Spinner<Integer> minutesSpinner;
 
     /**
      * Initializes the controller class.
@@ -57,6 +65,21 @@ public class CreateQuizController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        SpinnerValueFactory<Integer> hoursValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 0);
+        hoursSpinner.setValueFactory(hoursValueFactory);
+        SpinnerValueFactory<Integer> minutesValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
+        minutesSpinner.setValueFactory(minutesValueFactory);
+        // Using the focused property because the spinner doesn't take manual user input by default
+        hoursSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                hoursSpinner.increment(0); // won't change value, but will commit editor
+            }
+        });
+        minutesSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                minutesSpinner.increment(0); // won't change value, but will commit editor
+            }
+        });
         nameValid = false;
         detailsValid = false;
         percentageValid = false;
@@ -79,8 +102,8 @@ public class CreateQuizController implements Initializable {
 
         // Quiz name textfield length input control
         quizNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 30) {
-                CreateAlert.CreateAlert(Alert.AlertType.ERROR, "Error!", "Input Error!", "Length needs to be < 30 chars");
+            if (newValue.length() > 50) {
+                CreateAlert.CreateAlert(Alert.AlertType.ERROR, "Error!", "Input Error!", "Length needs to be < 50 chars");
                 quizNameTextField.setText(quizNameTextField.getText().substring(0, 30));
             }
             nameValid = true;
@@ -111,9 +134,10 @@ public class CreateQuizController implements Initializable {
 
     @FXML
     private void onSubmitBtnClicked(ActionEvent event) throws IOException {
-        FXRouter.goTo("CreateQuestions");
+        Quiz quiz = new Quiz(quizNameTextField.getText(), quizDetailsTextArea.getText(), Float.parseFloat(quizScoreTextField.getText()));
+        double minutes = Duration.hours(hoursSpinner.getValue()).add(Duration.minutes(minutesSpinner.getValue())).toMinutes();
+        quiz.setDuration((int) Math.round(minutes));
+        System.out.println("quiz duration: " + quiz.getDuration());
+        FXRouter.goTo("CreateQuestions", quiz);
     }
-
-    
-
 }

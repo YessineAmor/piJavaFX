@@ -7,6 +7,8 @@ package tn.esprit.overpowered.pijavafx.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +16,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import tn.esprit.overpowered.byusforus.entities.quiz.Question;
+import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
+import tn.esprit.overpowered.byusforus.services.quiz.ChoiceFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
 import util.routers.FXRouter;
 
 /**
@@ -48,9 +57,12 @@ public class BaseController implements Initializable {
     }
 
     @FXML
-    private void onCreateQuizBtnClicked(ActionEvent event) throws IOException {
-        //FXRouter.goTo("CreateQuiz");
-        FXRouter.goTo("QuizInfo");
+    private void onCreateQuizBtnClicked(ActionEvent event) throws IOException, NamingException {
+//        FXRouter.goTo("CreateQuiz");
+        String jndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
+        Context context = new InitialContext();
+        QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(jndiName);
+        FXRouter.goTo("QuizInfo", quizFacadeProxy.findAll().get(0));
     }
 
     public AnchorPane getCentralAnchorPane() {

@@ -215,7 +215,7 @@ public final class FXRouter {
 //        String pathRef = mainRef.getClass().getPackage().getName();
 //
 //        // set FXRouter current route reference
-//        currentRoute = route;
+        currentRoute = route;
 //
 //        // create correct file path.  "/" doesn't affect any OS
 //        String scenePath = "/" + pathRef + "/" + route.scenePath;
