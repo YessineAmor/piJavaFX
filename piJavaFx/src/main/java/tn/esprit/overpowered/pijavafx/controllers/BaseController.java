@@ -52,13 +52,20 @@ public class BaseController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        FXRouter.setBaseCenterAnchorPane(centralAnchorPane);
+        // First register a new RouteScene
+        // Then bind that RouteScene to its container
+        FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
+        FXRouter.when("CreateQuestions", "CreateQuestions.fxml");
+        FXRouter.when("TryQuiz", "TryQuiz.fxml");
+        FXRouter.when("QuizInfo", "QuizInfo.fxml");
+        FXRouter.when("QuizResults", "QuizResults.fxml");
+        FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
+        
     }
 
     @FXML
     private void onCreateQuizBtnClicked(ActionEvent event) throws IOException, NamingException {
-//        FXRouter.goTo("CreateQuiz");
+//       FXRouter.goTo("CreateQuiz");
         String jndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
         Context context = new InitialContext();
         QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(jndiName);
