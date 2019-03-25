@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -9,11 +9,12 @@
 
 <AnchorPane id="AnchorPane" fx:id="generalAnchorPane" minHeight="400.0" minWidth="647.21" prefHeight="400.0" prefWidth="647.21" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.BaseController">
    <children>
-      <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="73.0" style="-fx-background-color: gray;">
+      <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="63.0" style="-fx-background-color: gray;">
          <children>
-            <Label layoutX="20.0" layoutY="39.0" text="Profile" />
-            <Label layoutX="12.0" layoutY="74.0" text="Messages" />
-            <Button fx:id="createQuizBtn" layoutX="16.0" layoutY="108.0" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" text="Quiz" />
+            <Button fx:id="createQuizBtn" layoutX="9.0" layoutY="163.0" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" text="Quiz" />
+            <JFXButton fx:id="profileButton" layoutX="-2.0" layoutY="7.0" prefHeight="44.0" prefWidth="63.0" stylesheets="@../styles/button-styles.css" text="" />
+            <JFXButton fx:id="messagesButton" layoutX="-2.0" layoutY="51.0" prefHeight="44.0" prefWidth="63.0" stylesheets="@../styles/button-styles.css" text="" />
+            <JFXButton fx:id="messagesButton1" layoutX="-2.0" layoutY="95.0" prefHeight="44.0" prefWidth="63.0" stylesheets="@../styles/button-styles.css" text="" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="centralAnchorPane" layoutX="73.0" layoutY="20.0" prefHeight="382.0" prefWidth="575.0" />
