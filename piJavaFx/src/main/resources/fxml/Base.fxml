@@ -11,10 +11,11 @@
    <children>
       <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="63.0" style="-fx-background-color: gray;">
          <children>
-            <Button fx:id="createQuizBtn" layoutX="9.0" layoutY="163.0" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" text="Quiz" />
-            <JFXButton fx:id="profileButton" layoutX="-2.0" layoutY="7.0" prefHeight="44.0" prefWidth="63.0" stylesheets="@../styles/button-styles.css" text="" />
-            <JFXButton fx:id="messagesButton" layoutX="-2.0" layoutY="51.0" prefHeight="44.0" prefWidth="63.0" stylesheets="@../styles/button-styles.css" text="" />
-            <JFXButton fx:id="messagesButton1" layoutX="-2.0" layoutY="95.0" prefHeight="44.0" prefWidth="63.0" stylesheets="@../styles/button-styles.css" text="" />
+            <Button fx:id="createQuizBtn" layoutX="7.0" layoutY="199.0" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" text="Quiz" />
+            <JFXButton fx:id="profileButton" layoutX="-2.0" layoutY="51.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+            <JFXButton fx:id="messagesButton" layoutY="95.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+            <JFXButton fx:id="messagesButton1" layoutX="-2.0" layoutY="139.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+            <JFXButton fx:id="notificationsButton" layoutX="-2.0" layoutY="7.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="centralAnchorPane" layoutX="73.0" layoutY="20.0" prefHeight="382.0" prefWidth="575.0" />
