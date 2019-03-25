@@ -1,4 +1,4 @@
-/* Application wide styles */
+/* Don't use application wide css, attach a .css file to every widget'*/
 
 .label {
     -fx-font-size: 12px;
@@ -7,7 +7,7 @@
     -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
 }
 
-.button {
+#createQuizBtn {
     -fx-text-fill: white;
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
@@ -15,7 +15,7 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
-.button:hover{
+#createQuizBtn:hover{
     -fx-base: #395bae;
 }
 
