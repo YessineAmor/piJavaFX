@@ -49,7 +49,7 @@ public class MainApp extends Application {
           AuthenticationFacadeRemote authenticator = (AuthenticationFacadeRemote) context.lookup(jndiName);
           System.out.println(authenticator.login("u2", "password") != null);
           System.out.println("Done");
-       // launch(args);
+       launch(args);
     }
 
     @Override
@@ -73,11 +73,6 @@ public class MainApp extends Application {
         stage.setMinWidth(600);
 
         FXRouter.bind(this, stage, "By Us For Us", WIN_WIDTH, WIN_HEIGHT);
-        FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
-        FXRouter.when("CreateQuestions", "CreateQuestions.fxml");
-        FXRouter.when("TryQuiz", "TryQuiz.fxml");
-        FXRouter.when("QuizInfo", "QuizInfo.fxml");
-        FXRouter.when("QuizResults", "QuizResults.fxml");
 
         // registering listeners for resize
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
