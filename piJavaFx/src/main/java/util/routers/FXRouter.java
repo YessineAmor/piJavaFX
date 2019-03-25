@@ -60,15 +60,27 @@ public final class FXRouter {
     private static AbstractMap<String, RouteScene> routes = new HashMap<>();
     // FXRouter current route
     private static RouteScene currentRoute;
-    
-    private static AnchorPane baseCenterAnchorPane;
+
+    public static void setRouteContainer(String routeLabel, AnchorPane containerAnchorPane) {
+        RouteScene route = routes.get(routeLabel);
+        route.setContainerAnchorPane(containerAnchorPane);
+    }
 
     /**
      * FXRouter Inner Class used into routes map
      */
     private static class RouteScene {
+
+        public AnchorPane getContainerAnchorPane() {
+            return containerAnchorPane;
+        }
+
+        public void setContainerAnchorPane(AnchorPane containerAnchorPane) {
+            this.containerAnchorPane = containerAnchorPane;
+        }
         // route .fxml Scene path
         private String scenePath;
+        private AnchorPane containerAnchorPane;
         // Scene (Stage) title
         private String windowTitle;
         private double sceneWidth;
@@ -82,6 +94,15 @@ public final class FXRouter {
 
         private RouteScene(String scenePath, String windowTitle) {
             this(scenePath, windowTitle, getWindowWidth(), getWindowHeight());
+        }
+        
+        private RouteScene(String scenePath, AnchorPane containerAnchorPane, String windowTitle,
+                double sceneWidth, double sceneHeight) {
+            this.scenePath = scenePath;
+            this.containerAnchorPane = containerAnchorPane;
+            this.windowTitle = windowTitle;
+            this.sceneHeight = sceneHeight;
+            this.sceneWidth = sceneWidth;
         }
 
         private RouteScene(String scenePath, double sceneWidth, double sceneHeight) {
@@ -231,9 +252,9 @@ public final class FXRouter {
 
         // Overpowered starts here
         Node targetNode;
-        String customScenePath = "/fxml/" + route.scenePath; 
+        String customScenePath = "/fxml/" + route.scenePath;
         targetNode = (Node) FXMLLoader.load(new Object() { }.getClass().getResource(customScenePath));
-        baseCenterAnchorPane.getChildren().setAll(targetNode);
+        route.getContainerAnchorPane().getChildren().setAll(targetNode);
         // set scene animation
        // routeAnimation(resource);
     }
@@ -285,11 +306,5 @@ public final class FXRouter {
      */
     public static Object getData() {
         return currentRoute.data;
-    }
-
-    public static void setBaseCenterAnchorPane(AnchorPane baseCenterAnchorPane) {
-        FXRouter.baseCenterAnchorPane = baseCenterAnchorPane;
-    }
-
-    
+    }  
 }
