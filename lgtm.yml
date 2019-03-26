@@ -1,0 +1,9 @@
+extraction:
+  java:
+    after_prepare:
+    - git clone https://github.com/amine177/piJEE
+    - cd piJEE/piJEE/
+    - mvn clean install
+    - mvn package
+    - cd ../..
+    
