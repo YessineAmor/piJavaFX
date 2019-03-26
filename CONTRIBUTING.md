@@ -1,0 +1,3 @@
+- Do small commits
+- If it doesn't pass travis it doesn't get merged
+- I would tolerate logic errors, if you don't mind losing marks
