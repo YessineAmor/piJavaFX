@@ -44,18 +44,13 @@ public class MainApp extends Application {
 //        choice1.setIsCorrectChoice(Boolean.TRUE);
 //        choiceFacadeProxy.create(choice1);
 //        System.out.println("Completed choice creation");
-          String jndiName = "piJEE-ejb-1.0/AuthenticationFacade!tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote";
-          Context context = new InitialContext();
-          AuthenticationFacadeRemote authenticator = (AuthenticationFacadeRemote) context.lookup(jndiName);
-          System.out.println(authenticator.login("u2", "password") != null);
-          System.out.println("Done");
-       launch(args);
+        launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        log.info("Starting Hello JavaFX and Maven demonstration application");
+        /*log.info("Starting Hello JavaFX and Maven demonstration application");
         String fxmlFile = "/fxml/Base.fxml";
         log.debug("Loading FXML for main view from: {}", fxmlFile);
         FXMLLoader loader = new FXMLLoader();
@@ -74,19 +69,19 @@ public class MainApp extends Application {
 
         FXRouter.bind(this, stage, "By Us For Us", WIN_WIDTH, WIN_HEIGHT);
 
-        // registering listeners for resize
-        ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
-        ChangeListener<Number> sideMenuChangeListener = cFactory.createListener(
-                rootNode, "#rightMenuAnchorPane", 1, ChangeDimensions.HEIGHT);
-        ChangeListener<Number> topMenuAnchorPaneListener = cFactory.createListener(
-                rootNode, "#topMenuAnchorPane", 1, ChangeDimensions.WIDTH);
-        ChangeListener<Number> topMenuChangeListener = cFactory.createListener(
-                rootNode, "#topMenu", 1, ChangeDimensions.WIDTH);
-        stage.heightProperty().addListener(sideMenuChangeListener);
-        stage.widthProperty().addListener(topMenuChangeListener);
-        stage.widthProperty().addListener(topMenuAnchorPaneListener);
 
-        // Destroy everything on close request
+         */
+        String loginFxmlFile = "/fxml/Login.fxml";
+        FXMLLoader loader = new FXMLLoader();
+        final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(loginFxmlFile));
+        Scene scene = new Scene(rootNode);
+        FXRouter.scene = scene;
+        stage.setScene(scene);
+        stage.show();
+        stage.setMinHeight(430);
+        stage.setMinWidth(600);
+
+        // Destroy everything on close requestp
         stage.setOnCloseRequest((event) -> {
             Platform.exit();
             System.exit(0);
