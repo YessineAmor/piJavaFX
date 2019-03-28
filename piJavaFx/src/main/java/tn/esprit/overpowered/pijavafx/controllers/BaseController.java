@@ -10,12 +10,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -23,6 +28,10 @@ import tn.esprit.overpowered.byusforus.entities.quiz.Question;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.services.quiz.ChoiceFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
+import util.exceptions.InvalidArgumentException;
+import util.exceptions.WidgetNotFoundException;
+import util.factories.ChangeDimensions;
+import util.factories.ChangeDimensionsFactory;
 import util.routers.FXRouter;
 
 /**
@@ -60,7 +69,44 @@ public class BaseController implements Initializable {
         FXRouter.when("QuizInfo", "QuizInfo.fxml");
         FXRouter.when("QuizResults", "QuizResults.fxml");
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
-        
+        // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
+        ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
+        ChangeListener<Number> sideMenuChangeListener;
+                    Scene s = FXRouter.scene;
+
+        try {
+            sideMenuChangeListener = cFactory.createListener(
+                    generalAnchorPane, "#rightMenuAnchorPane", 1, ChangeDimensions.HEIGHT);
+            s.getWindow().heightProperty().addListener(sideMenuChangeListener);
+
+        } catch (WidgetNotFoundException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidArgumentException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ChangeListener<Number> topMenuAnchorPaneListener;
+        try {
+            topMenuAnchorPaneListener = cFactory.createListener(
+                    generalAnchorPane, "#topMenuAnchorPane", 1, ChangeDimensions.WIDTH);
+            s.getWindow().widthProperty().addListener(topMenuAnchorPaneListener);
+
+        } catch (WidgetNotFoundException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidArgumentException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ChangeListener<Number> topMenuChangeListener;
+        try {
+            topMenuChangeListener = cFactory.createListener(
+                    generalAnchorPane, "#topMenu", 1, ChangeDimensions.WIDTH);
+            s.getWindow().widthProperty().addListener(topMenuChangeListener);
+
+        } catch (WidgetNotFoundException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidArgumentException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @FXML

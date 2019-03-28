@@ -24,6 +24,7 @@ import javafx.util.Duration;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
 
@@ -60,6 +61,7 @@ public final class FXRouter {
     private static AbstractMap<String, RouteScene> routes = new HashMap<>();
     // FXRouter current route
     private static RouteScene currentRoute;
+    public static Scene scene;
 
     public static void setRouteContainer(String routeLabel, AnchorPane containerAnchorPane) {
         RouteScene route = routes.get(routeLabel);
