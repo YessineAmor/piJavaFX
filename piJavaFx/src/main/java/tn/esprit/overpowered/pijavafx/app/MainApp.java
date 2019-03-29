@@ -1,10 +1,7 @@
 package tn.esprit.overpowered.pijavafx.app;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,11 +10,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tn.esprit.overpowered.byusforus.entities.users.User;
-import tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
-import util.factories.ChangeDimensions;
-import util.factories.ChangeDimensionsFactory;
+import tn.esprit.overpowered.byusforus.entities.candidat.Experience;
+import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.util.Skill;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import util.routers.FXRouter;
 
 // *** User as ref ****
@@ -33,17 +29,26 @@ public class MainApp extends Application {
     private static final String FXML_PATH = "/fxml/";
 
     public static void main(String[] args) throws Exception {
-// **** Use as ref ****
-//        String jndiName = "piJEE-ejb-1.0/ChoiceFacade!tn.esprit.overpowered.byusforus.services.ChoiceFacadeRemote";
-//        Context context = new InitialContext();
-//        ChoiceFacadeRemote choiceFacadeProxy = (ChoiceFacadeRemote) context.lookup(jndiName);
-//        System.out.println("Starting choice creation...");
-//        Choice choice1 = new Choice();
-//        choice1.setChoicePoints(1);
-//        choice1.setChoiceText("Your choice");
-//        choice1.setIsCorrectChoice(Boolean.TRUE);
-//        choiceFacadeProxy.create(choice1);
-//        System.out.println("Completed choice creation");
+
+       String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+      Context context = new InitialContext();
+       CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+       System.out.println("Starting choice creation...");
+       Candidate cdt = new Candidate();
+       cdt.setEmail("motaz@esprit.tn");
+       cdt.setIntroduction("Intro");
+       cdt.setPassword("password".getBytes());
+       cdt.setUsername("Skeez");
+       
+       Long candidateId = candidateProxy.createCandidate(cdt);
+       cdt.setId(candidateId);
+       
+       Experience exp = new Experience();
+       exp.setPosition("Ingenieur");
+       Long expId = candidateProxy.createExperience(exp);
+       exp.setId(expId);
+       candidateProxy.affecterExperienceCandidate(expId, candidateId);
+
         launch(args);
     }
 
