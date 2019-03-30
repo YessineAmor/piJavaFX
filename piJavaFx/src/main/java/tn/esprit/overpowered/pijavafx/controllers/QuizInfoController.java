@@ -5,6 +5,7 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import com.github.sarxos.webcam.Webcam;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -60,9 +61,14 @@ public class QuizInfoController implements Initializable {
 
     @FXML
     private void onStartQuizBtnClicked(ActionEvent event) throws IOException {
-        Optional<ButtonType> alertResult = CreateAlert.CreateAlert(Alert.AlertType.CONFIRMATION, "Confirmation", "We need your permission.", "In order to take the quiz, we need access to your webcam feed. Do you accept?");
-        if (alertResult.isPresent() && alertResult.get() == ButtonType.OK) {
-            FXRouter.goTo("TryQuiz", quiz);
+        if (Webcam.getWebcams().isEmpty()) {
+            CreateAlert.CreateAlert(Alert.AlertType.ERROR, "Error!", "You need to have a webcam to continue.",
+                    "We we weren't able to detect a webcam on your system. Please add a webcam then retry.");
+        } else {
+            Optional<ButtonType> alertResult = CreateAlert.CreateAlert(Alert.AlertType.CONFIRMATION, "Confirmation", "We need your permission.", "In order to take the quiz, we need access to your webcam feed. Do you accept?");
+            if (alertResult.isPresent() && alertResult.get() == ButtonType.OK) {
+                FXRouter.goTo("TryQuiz", quiz);
+            }
         }
     }
 
