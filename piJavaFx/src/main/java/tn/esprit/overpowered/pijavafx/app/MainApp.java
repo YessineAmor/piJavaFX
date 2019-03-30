@@ -13,11 +13,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tn.esprit.overpowered.byusforus.entities.users.User;
-import tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
-import util.factories.ChangeDimensions;
-import util.factories.ChangeDimensionsFactory;
 import util.routers.FXRouter;
 
 // *** User as ref ****
