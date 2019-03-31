@@ -20,7 +20,6 @@
                   <JFXButton fx:id="messagesButton1" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
                </children>
             </VBox>
-            <Button fx:id="createQuizBtn" layoutX="7.0" layoutY="199.0" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" text="Quiz" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="centralAnchorPane" layoutX="65.0" layoutY="20.0" prefHeight="382.0" prefWidth="583.0" />
