@@ -5,6 +5,7 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,6 +56,14 @@ public class BaseController implements Initializable {
     private AnchorPane rightMenuAnchorPane;
     @FXML
     private Button createQuizBtn;
+    @FXML
+    private JFXButton profileButton;
+    @FXML
+    private JFXButton messagesButton;
+    @FXML
+    private JFXButton messagesButton1;
+    @FXML
+    private JFXButton notificationsButton;
 
     /**
      * Initializes the controller class.
@@ -68,6 +77,8 @@ public class BaseController implements Initializable {
         FXRouter.when("TryQuiz", "TryQuiz.fxml");
         FXRouter.when("QuizInfo", "QuizInfo.fxml");
         FXRouter.when("QuizResults", "QuizResults.fxml");
+        FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.setRouteContainer("Profile", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
@@ -124,6 +135,11 @@ public class BaseController implements Initializable {
 
     public void setCentralAnchorPane(AnchorPane centralAnchorPane) {
         this.centralAnchorPane = centralAnchorPane;
+    }
+
+    @FXML
+    private void profileButtonAction(ActionEvent event) throws IOException {
+        FXRouter.goTo("Profile");
     }
 
 }
