@@ -5,6 +5,7 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,6 +56,14 @@ public class BaseController implements Initializable {
     private AnchorPane rightMenuAnchorPane;
     @FXML
     private Button createQuizBtn;
+    @FXML
+    private JFXButton notificationsButton;
+    @FXML
+    private JFXButton profileButton;
+    @FXML
+    private JFXButton messagesButton;
+    @FXML
+    private JFXButton messagesButton1;
 
     /**
      * Initializes the controller class.
@@ -128,6 +137,13 @@ public class BaseController implements Initializable {
 
     public void setCentralAnchorPane(AnchorPane centralAnchorPane) {
         this.centralAnchorPane = centralAnchorPane;
+    }
+
+    @FXML
+    private void goToInbox(ActionEvent event) throws IOException {
+        FXRouter.when("inboxView", "Inbox.fxml");
+        FXRouter.setRouteContainer("inboxView", centralAnchorPane);
+        FXRouter.goTo("inboxView");
     }
 
 }
