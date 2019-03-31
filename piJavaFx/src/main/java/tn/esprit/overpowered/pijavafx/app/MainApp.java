@@ -15,20 +15,6 @@ import javax.naming.InitialContext;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<<<<<<< HEAD
-import tn.esprit.overpowered.byusforus.entities.candidat.Experience;
-import tn.esprit.overpowered.byusforus.entities.users.Candidate;
-import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
-import tn.esprit.overpowered.byusforus.entities.users.HRManager;
-import tn.esprit.overpowered.byusforus.entities.users.User;
-import tn.esprit.overpowered.byusforus.entities.util.Skill;
-import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.users.CompanyAdminFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
-import tn.esprit.overpowered.byusforus.util.Role;
-=======
->>>>>>> 7988fda1e63ee4dc7d4bdf1379a100890ab5d552
 import util.routers.FXRouter;
 
 // *** User as ref ****
