@@ -12,7 +12,7 @@
       <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="63.0" style="-fx-background-color: gray;">
          <children>
             <Button fx:id="createQuizBtn" layoutX="7.0" layoutY="199.0" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" text="Quiz" />
-            <JFXButton fx:id="profileButton" layoutX="-2.0" layoutY="51.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+            <JFXButton fx:id="profileButton" layoutX="-2.0" layoutY="51.0" onAction="#profileButtonAction" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
             <JFXButton fx:id="messagesButton" layoutY="95.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
             <JFXButton fx:id="messagesButton1" layoutX="-2.0" layoutY="139.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
             <JFXButton fx:id="notificationsButton" layoutX="-2.0" layoutY="7.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
