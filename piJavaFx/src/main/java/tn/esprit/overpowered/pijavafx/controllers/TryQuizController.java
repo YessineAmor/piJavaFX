@@ -62,6 +62,7 @@ import tn.esprit.overpowered.byusforus.entities.quiz.Question;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuestionType;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
+import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
 import util.routers.FXRouter;
 
@@ -100,10 +101,8 @@ public class TryQuizController /*implements Initializable*/ {
     private Button previousQuestion;
     @FXML
     private Label timeLabel;
-
     private Map<Question, Choice> candidateAnswers;
     private List<Answer> answers;
-    private QuizTryFacadeRemote quizTryFacadeProxy;
 
     /**
      * Initializes the controller class.
@@ -111,14 +110,6 @@ public class TryQuizController /*implements Initializable*/ {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        String jndiName = "piJEE-ejb-1.0/QuizTryFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote";
-        Context context = null;
-        try {
-            context = new InitialContext();
-            QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) context.lookup(jndiName);
-        } catch (NamingException ex) {
-            System.out.println(ex.getExplanation());
-        }
         System.out.println("alert accepted - TryQuizController");
         answers = new ArrayList<>();
         quiz = (Quiz) FXRouter.getData();
@@ -158,17 +149,38 @@ public class TryQuizController /*implements Initializable*/ {
         fillGridPane(questionsList.get(0));
         nextQuestion.setOnAction((event) -> {
             if (nextQuestion.getText().equals("Submit")) {
-                quizTry.setFinishDate(new Date());
-                for (Map.Entry<Question, Choice> entry : candidateAnswers.entrySet()) {
-                    Answer answer = new Answer(entry.getKey(), entry.getValue());
-                    answers.add(answer);
-                }
-                quizTry.setAnswers(answers);
-                quizTry.setPercentage(calculateQuizScore());
-                quizTryFacadeProxy.create(quizTry);
                 try {
-                    FXRouter.goTo("QuizResults", quizTry);
-                } catch (IOException ex) {
+                    quizTry.setFinishDate(new Date());
+                    Context context = null;
+                    try {
+                        context = new InitialContext();
+                    } catch (NamingException ex) {
+                        System.out.println(ex.getExplanation());
+                    }
+                    String answerFacadejndiName = "piJEE-ejb-1.0/AnswerFacade!tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote";
+                    AnswerFacadeRemote answerFacadeProxy = (AnswerFacadeRemote) context.lookup(answerFacadejndiName);
+                    for (Map.Entry<Question, Choice> entry : candidateAnswers.entrySet()) {
+//                        Answer candidateAnswer = new Answer(entry.getKey(), entry.getValue());
+                        Answer candidateAnswer = new Answer(entry.getValue());
+                        answers.add(candidateAnswer);
+//                        answerFacadeProxy.create(candidateAnswer);
+                    }
+                    quizTry.setAnswers(answers);
+                    quizTry.setPercentage(calculateQuizScore());
+                    String jndiName = "piJEE-ejb-1.0/QuizTryFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote";
+                    String quizFacadejndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
+
+                    QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) context.lookup(jndiName);
+//                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
+                    quizTryFacadeProxy.create(quizTry);
+//                    quiz.getQuizTries().add(quizTry);
+//                    quizFacadeProxy.edit(quiz);
+                    try {
+                        FXRouter.goTo("QuizResults", quizTry);
+                    } catch (IOException ex) {
+                        Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } catch (NamingException ex) {
                     Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
@@ -181,6 +193,7 @@ public class TryQuizController /*implements Initializable*/ {
             }
         });
         previousQuestion.setOnAction((previous) -> {
+            choicesGridPane.getChildren().clear();
             currentQuestionIndex--;
             fillGridPane(questionsList.get(currentQuestionIndex));
 
@@ -264,7 +277,7 @@ public class TryQuizController /*implements Initializable*/ {
     }
 
     public void initCam() {
-        webcam = Webcam.getWebcams().get(1);
+        webcam = Webcam.getDefault();
         webcam.setViewSize(new Dimension(640, 480));
         webcam.open();
     }

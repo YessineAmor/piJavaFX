@@ -80,10 +80,14 @@ public class BaseController implements Initializable {
         FXRouter.when("Profile", "Profile.fxml");
         FXRouter.setRouteContainer("Profile", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
+        FXRouter.setRouteContainer("TryQuiz", centralAnchorPane);
+        FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
+        FXRouter.setRouteContainer("CreateQuiz", centralAnchorPane);
+        FXRouter.setRouteContainer("CreateQuestions", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener;
-                    Scene s = FXRouter.scene;
+        Scene s = FXRouter.scene;
 
         try {
             sideMenuChangeListener = cFactory.createListener(
