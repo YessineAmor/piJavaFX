@@ -9,13 +9,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.mail.MessagingException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tn.esprit.overpowered.byusforus.entities.users.Employee;
 import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.entrepriseprofile.EmployeeFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
+import tn.esprit.overpowered.byusforus.util.MailSender;
 import util.factories.ChangeDimensions;
 import util.factories.ChangeDimensionsFactory;
 import util.routers.FXRouter;
@@ -44,7 +48,26 @@ public class MainApp extends Application {
 //        choice1.setIsCorrectChoice(Boolean.TRUE);
 //        choiceFacadeProxy.create(choice1);
 //        System.out.println("Completed choice creation");
+
+        /*String jndiName = "piJEE-ejb-1.0/UserFacade!tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote";
+        Context context = new InitialContext();
+        UserFacadeRemote userProxy = (UserFacadeRemote)context.lookup(jndiName);
+        System.out.println("Starting Employee creation...");
+        User user = new User();
+        user.setUsername("kdlt");
+        user.setPassword("laurel".getBytes());
+        user.setEmail("toussaint.kebou@gmail.com");
+        
+        userProxy.create(user);
+        */
+        
+         try {
+            MailSender.sendMail("smtp.gmail.com", "587",
+                    "pidevnoreply@gmail.com", "pidevnoreply",
+                    "pidevpidev", "toussaint.kebou@gmail.com", "test", "hi");
+        } catch (MessagingException e) {
         launch(args);
+    }
     }
 
     @Override
@@ -70,7 +93,7 @@ public class MainApp extends Application {
         FXRouter.bind(this, stage, "By Us For Us", WIN_WIDTH, WIN_HEIGHT);
 
 
-         */
+         *//*
         String loginFxmlFile = "/fxml/Login.fxml";
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(loginFxmlFile));
@@ -86,6 +109,6 @@ public class MainApp extends Application {
             Platform.exit();
             System.exit(0);
         });
-
+*/
     }
 }
