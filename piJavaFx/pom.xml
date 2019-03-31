@@ -272,6 +272,20 @@
             <artifactId>jfoenix</artifactId>
             <version>8.0.8</version>
         </dependency>
+        <!-- Font Awesome-->
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx</artifactId>
+            <version>8.2</version>
+        </dependency>
+        
+        <!-- Font Awesome good -->
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx-commons</artifactId>
+            <version>9.1.2</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
     
     <!--repositories>
