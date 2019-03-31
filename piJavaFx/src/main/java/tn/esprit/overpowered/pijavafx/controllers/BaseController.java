@@ -57,13 +57,13 @@ public class BaseController implements Initializable {
     @FXML
     private Button createQuizBtn;
     @FXML
-    private JFXButton notificationsButton;
-    @FXML
     private JFXButton profileButton;
     @FXML
     private JFXButton messagesButton;
     @FXML
     private JFXButton messagesButton1;
+    @FXML
+    private JFXButton notificationsButton;
 
     /**
      * Initializes the controller class.
@@ -77,6 +77,8 @@ public class BaseController implements Initializable {
         FXRouter.when("TryQuiz", "TryQuiz.fxml");
         FXRouter.when("QuizInfo", "QuizInfo.fxml");
         FXRouter.when("QuizResults", "QuizResults.fxml");
+        FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.setRouteContainer("Profile", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
         FXRouter.setRouteContainer("TryQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
@@ -145,6 +147,8 @@ public class BaseController implements Initializable {
     @FXML
     private void goToInbox(ActionEvent event) throws IOException {
         FXRouter.goTo("inbox");
+    private void profileButtonAction(ActionEvent event) throws IOException {
+        FXRouter.goTo("Profile");
     }
 
 }
