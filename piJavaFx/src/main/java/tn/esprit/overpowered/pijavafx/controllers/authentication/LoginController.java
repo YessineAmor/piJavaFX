@@ -23,6 +23,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javax.naming.NamingException;
 import util.authentication.Authenticator;
@@ -99,6 +100,13 @@ public class LoginController implements Initializable {
         new Thread(authTask)
                 .start();
 
+    }
+
+    @FXML
+    private void createAccountClicked(MouseEvent event) throws IOException {
+        FXRouter.when("SignUpView", "SignUp.fxml","Sign Up");
+        FXRouter.setRouteContainer("SignUpView", parentAnchorPane);
+        FXRouter.goTo("SignUpView",parentAnchorPane);
     }
 
 }

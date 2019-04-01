@@ -220,7 +220,7 @@ public final class FXRouter {
     /** Switch between FXRouter route and show corresponding scenes
      * @param routeLabel: Route label identifier
      * @param data: Data passed to route
-     * @throws Exception: throw FXMLLoader exception if file is not loaded correctly
+     * @throws java.io.IOException
      */
     public static void goTo(String routeLabel, Object data) throws IOException {
         // get corresponding route
