@@ -15,6 +15,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -22,6 +25,7 @@ import tn.esprit.overpowered.byusforus.entities.reclamation.EtatReclamation;
 import tn.esprit.overpowered.byusforus.entities.reclamation.Reclamation;
 import tn.esprit.overpowered.byusforus.entities.reclamation.TypeReclamation;
 import tn.esprit.overpowered.byusforus.services.Reclamation.ReclamationRemote;
+import util.authentication.Authenticator;
 import util.proxies.claim.Claim;
 
 /**
@@ -35,6 +39,20 @@ public class CreateClaimController implements Initializable {
     private Button addButton;
     @FXML
     private JFXTextField nameLabel;
+    @FXML
+    private ChoiceBox<?> etat;
+    @FXML
+    private DatePicker datetime;
+    @FXML
+    private ChoiceBox<?> type;
+    @FXML
+    private TableColumn<?, ?> descriptionview;
+    @FXML
+    private TableColumn<?, ?> typeview;
+    @FXML
+    private TableColumn<?, ?> Etatview;
+    @FXML
+    private TableColumn<?, ?> fichierview;
 
     /**
      * Initializes the controller class.
@@ -58,6 +76,7 @@ public class CreateClaimController implements Initializable {
             r.setDateReclamation(new Date());
             r.setEtat(EtatReclamation.Traite);
             r.setType(TypeReclamation.Autre);
+            r.setUser(Authenticator.currentUser);
             Claim.createClaim(r);
         }
         

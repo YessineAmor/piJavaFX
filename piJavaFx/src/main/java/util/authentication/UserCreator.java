@@ -24,9 +24,9 @@ public class UserCreator {
         Context context = new InitialContext();
         UserFacadeRemote uF = (UserFacadeRemote) context.lookup(jndiName);
         User u = new User();
-        u.setEmail("Amine.skhiri@protonmail.com");
+        u.setEmail("mohamedamine.skhiri@esprit.tn");
         u.setPassword("1234@".getBytes(StandardCharsets.UTF_8));
-        u.setUsername("amine");
+        u.setUsername("aminesk");
         uF.create(u);
         System.out.println("Done");
     }
