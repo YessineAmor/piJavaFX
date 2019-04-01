@@ -113,6 +113,7 @@ public class MainApp extends Application {
 
 
 
+
         /*log.info("Starting Hello JavaFX and Maven demonstration application");
         String fxmlFile = "/fxml/Base.fxml";
         log.debug("Loading FXML for main view from: {}", fxmlFile);
@@ -136,7 +137,12 @@ public class MainApp extends Application {
 
          */
 
+
+
         String loginFxmlFile = "/fxml/Login.fxml";
+
+
+
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(loginFxmlFile));
         Scene scene = new Scene(rootNode);
