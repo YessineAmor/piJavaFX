@@ -268,12 +268,6 @@
             <version>8.0.8</version>
         </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>piJEE-ejb</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- ControlsFX -->
         <dependency>
             <groupId>org.controlsfx</groupId>
@@ -286,6 +280,11 @@
             <artifactId>fontawesomefx-commons</artifactId>
             <version>9.1.2</version>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>piJEE-ejb</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     
