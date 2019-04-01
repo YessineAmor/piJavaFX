@@ -5,42 +5,47 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="AnchorPane" fx:id="generalAnchorPane" minHeight="400.0" minWidth="647.21" prefHeight="400.0" prefWidth="647.21" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.BaseController">
-   <children>
-      <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="63.0" style="-fx-background-color: gray;">
-         <children>
-            <JFXButton fx:id="profileButton" layoutX="-2.0" layoutY="51.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
-            <JFXButton fx:id="messagesButton" layoutY="95.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
-            <JFXButton fx:id="messagesButton1" layoutX="-2.0" layoutY="139.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
-            <JFXButton fx:id="notificationsButton" layoutX="-2.0" layoutY="7.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
-            <JFXButton fx:id="createQuizBtn" layoutX="11.0" layoutY="191.0" onAction="#onCreateQuizBtnClicked" text="Quiz" />
-            <JFXButton fx:id="manageCandidacy" layoutX="8.0" layoutY="226.0" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="41.0" text="Candidacy" wrapText="true" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="centralAnchorPane" layoutX="73.0" layoutY="20.0" prefHeight="382.0" prefWidth="575.0" />
-      <AnchorPane id="topMenuAnchorPane" fx:id="topMenuAnchorPane" prefHeight="25.0" prefWidth="647.0">
-         <children>
-            <MenuBar id="topMenu" fx:id="topMenu" prefHeight="29.0" prefWidth="403.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </children>
-      </AnchorPane>
-   </children>
+    <children>
+        <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="382.0" prefWidth="63.0" style="-fx-background-color: gray;">
+            <children>
+                <VBox prefHeight="200.0" prefWidth="63.0">
+                    <children>
+                        <JFXButton fx:id="notificationsButton" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+                        <JFXButton fx:id="profileButton" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+                        <JFXButton fx:id="messagesButton" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+                        <JFXButton fx:id="messagesButton1" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
+                        <JFXButton fx:id="manageCandidacy" layoutX="8.0" layoutY="226.0" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="41.0" text="Candidacy" wrapText="true" />
+                        <JFXButton fx:id="createQuizBtn" layoutX="11.0" layoutY="191.0" onAction="#onCreateQuizBtnClicked" text="Quiz" />
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="centralAnchorPane" layoutX="65.0" layoutY="20.0" prefHeight="382.0" prefWidth="583.0" />
+        <AnchorPane id="topMenuAnchorPane" fx:id="topMenuAnchorPane" prefHeight="25.0" prefWidth="647.0">
+            <children>
+                <MenuBar id="topMenu" fx:id="topMenu" prefHeight="29.0" prefWidth="403.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Close" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Delete" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>

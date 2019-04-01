@@ -87,6 +87,8 @@ public class BaseController implements Initializable {
         FXRouter.when("QuizResults", "QuizResults.fxml");
         FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
         FXRouter.when("JobOfferCandidateDetails", "JobOfferCandidateDetails.fxml");
+        FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.setRouteContainer("Profile", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
         FXRouter.setRouteContainer("TryQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
@@ -184,6 +186,10 @@ public class BaseController implements Initializable {
         jobOfferFacade.create(jobOffer);
 
         FXRouter.goTo("ListJobOfferCandidates", jobOffer);
+    }
+
+    private void profileButtonAction(ActionEvent event) throws IOException {
+        FXRouter.goTo("Profile");
     }
 
 }
