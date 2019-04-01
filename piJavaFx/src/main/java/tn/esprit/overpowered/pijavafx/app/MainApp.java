@@ -134,7 +134,7 @@ public class MainApp extends Application {
 
 
          */
-        String signUpFxmlFile = "/fxml/CreateJobOffer.fxml";
+        String signUpFxmlFile = "/fxml/Login.fxml";
 
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(signUpFxmlFile));
