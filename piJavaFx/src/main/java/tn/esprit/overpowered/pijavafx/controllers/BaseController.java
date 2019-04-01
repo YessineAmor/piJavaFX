@@ -20,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.naming.Context;
@@ -55,15 +56,9 @@ public class BaseController implements Initializable {
     @FXML
     private AnchorPane rightMenuAnchorPane;
     @FXML
-    private Button createQuizBtn;
+    private Button profileButton;
     @FXML
-    private JFXButton profileButton;
-    @FXML
-    private JFXButton messagesButton;
-    @FXML
-    private JFXButton messagesButton1;
-    @FXML
-    private JFXButton notificationsButton;
+    private Button contactsButton;
 
     /**
      * Initializes the controller class.
@@ -124,7 +119,6 @@ public class BaseController implements Initializable {
 
     }
 
-    @FXML
     private void onCreateQuizBtnClicked(ActionEvent event) throws IOException, NamingException {
 //       FXRouter.goTo("CreateQuiz");
         String jndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
@@ -139,11 +133,18 @@ public class BaseController implements Initializable {
 
     public void setCentralAnchorPane(AnchorPane centralAnchorPane) {
         this.centralAnchorPane = centralAnchorPane;
+    
+    }
+    @FXML
+    private void profileButtonClicked(ActionEvent event) throws IOException {
+        FXRouter.goTo("Profile");
     }
 
     @FXML
-    private void profileButtonAction(ActionEvent event) throws IOException {
-        FXRouter.goTo("Profile");
+    private void contactsButtonClicked(MouseEvent event) throws IOException {
+       FXRouter.when("CandidateListView", "CandidateList.fxml","Candidate List", 889, 543);
+                 FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.goTo("CandidateListView");
     }
 
 }
