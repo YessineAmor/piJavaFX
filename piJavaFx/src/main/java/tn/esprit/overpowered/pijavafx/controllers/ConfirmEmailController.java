@@ -38,7 +38,7 @@ public class ConfirmEmailController implements Initializable {
     @FXML
     private JFXTextField confirmCode;
 
-    private int count =0;
+    private int count = 0;
     @FXML
     private Hyperlink resendCodeLink;
     @FXML
@@ -65,7 +65,7 @@ public class ConfirmEmailController implements Initializable {
         count += 1;
         Candidate myData = (Candidate) FXRouter.getData();
         //garbage.setText(myData.getIntroduction());
-        
+        System.out.println("CODE : " + myData.getIntroduction());
         if (confirmCode.getText().equals(myData.getIntroduction()) && count <= 1) {
             confirmButton.setDisable(true);
             myData.setIntroduction("");

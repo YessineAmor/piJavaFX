@@ -71,7 +71,8 @@ public class BaseController implements Initializable {
     private JFXButton notificationsButton;
     @FXML
     private JFXButton createQuizBtn;
-
+    @FXML
+    private JFXButton manageCandidacyBtn;
 
     /**
      * Initializes the controller class.
@@ -82,7 +83,6 @@ public class BaseController implements Initializable {
         // Then bind that RouteScene to its container
         FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
         FXRouter.when("CreateQuestions", "CreateQuestions.fxml");
-        FXRouter.when("TryQuiz", "TryQuiz.fxml");
         FXRouter.when("QuizInfo", "QuizInfo.fxml");
         FXRouter.when("QuizResults", "QuizResults.fxml");
         FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
@@ -90,16 +90,14 @@ public class BaseController implements Initializable {
         FXRouter.when("ProfileView", "Profile.fxml");
         FXRouter.setRouteContainer("ProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
-        FXRouter.setRouteContainer("TryQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuestions", centralAnchorPane);
-        
-        
+
         FXRouter.setRouteContainer("ListJobOfferCandidates", centralAnchorPane);
         FXRouter.setRouteContainer("JobOfferCandidateDetails", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
-       ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
+        ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener;
         Scene s = FXRouter.scene;
 
@@ -136,7 +134,6 @@ public class BaseController implements Initializable {
             Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
     }
 
     @FXML
@@ -154,8 +151,9 @@ public class BaseController implements Initializable {
 
     public void setCentralAnchorPane(AnchorPane centralAnchorPane) {
         this.centralAnchorPane = centralAnchorPane;
-    
+
     }
+
     @FXML
 
     private void goToInbox(ActionEvent event) throws IOException {
@@ -164,8 +162,9 @@ public class BaseController implements Initializable {
         FXRouter.when("inboxView", "Inbox.fxml");
         FXRouter.setRouteContainer("inboxView", centralAnchorPane);
         FXRouter.goTo("inboxView");
-}
-  
+    }
+
+    @FXML
     private void onManageCandidacyBtnClicked(ActionEvent event) throws NamingException, IOException, NamingException, NoSuchAlgorithmException {
         String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
                 + "entrepriseprofile.JobOfferFacadeRemote";
@@ -201,8 +200,8 @@ public class BaseController implements Initializable {
     }
 
     private void contactsButtonClicked(MouseEvent event) throws IOException {
-       FXRouter.when("CandidateListView", "CandidateList.fxml","Candidate List", 889, 543);
-                 FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.when("CandidateListView", "CandidateList.fxml", "Candidate List", 889, 543);
+        FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
         FXRouter.goTo("CandidateListView");
     }
 
