@@ -9,7 +9,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,83 +17,75 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javax.naming.NamingException;
-import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import util.authentication.SignUp;
 import util.routers.FXRouter;
 
 /**
  * FXML Controller class
  *
- * @author EliteBook
+ * @author pc
  */
-public class ConfirmEmailController implements Initializable {
+public class PMConfirmEmailController implements Initializable {
 
+    @FXML
+    private AnchorPane parentAnchorPane;
+    @FXML
+    private JFXTextField confirmCode;
     @FXML
     private JFXButton confirmButton;
     @FXML
     private Hyperlink goBackLink;
     @FXML
-    private AnchorPane parentAnchorPane;
-    @FXML
-    private JFXTextField confirmCode;
-
-    private int count =0;
-    @FXML
     private Hyperlink resendCodeLink;
     @FXML
     private Label garbage;
 
+    private int count=0;
     /**
      * Initializes the controller class.
-     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        FXRouter.when("SignUpView", "SignUp.fxml");
-        FXRouter.setRouteContainer("SignUpView", parentAnchorPane);
-        /*FXRouter.when("CandidateHomeView", "CandidateHome.fxml");
-        FXRouter.setRouteContainer("CandidateHomeView", parentAnchorPane);*/
-
+        FXRouter.when("LoginView", "Login.fxml");
+        FXRouter.setRouteContainer("LoginView", parentAnchorPane);
     }
 
     @FXML
-    private void confirmButton(MouseEvent event) throws IOException, NamingException {
+    private void confirmButton(MouseEvent event) throws NamingException, IOException {
         count += 1;
-        Candidate myData = (Candidate) FXRouter.getData();
-        //garbage.setText(myData.getIntroduction());
-        
-        if (confirmCode.getText().equals(myData.getIntroduction()) && count <= 1) {
+        ProjectManager pManager = (ProjectManager) FXRouter.getData();
+
+        if (confirmCode.getText().equals(pManager.getIntroduction()) && count <= 1) {
             confirmButton.setDisable(true);
-            myData.setIntroduction("");
-            SignUp.finishCreation(myData);
-            FXRouter.goTo("SignUpView", myData);
+            FXRouter.goTo("LoginView", pManager);
+            SignUp.finishPManagerCreation( pManager);
         } else if (confirmCode.getText().equals(garbage.getText())) {
             confirmButton.setDisable(true);
-            myData.setIntroduction("");
-            SignUp.finishCreation(myData);
-            FXRouter.goTo("SignUpView", myData);
+            FXRouter.goTo("LoginView", pManager);
+            SignUp.finishPManagerCreation(pManager);
+            
 
         } else {
             confirmCode.setText("WRONG CODE ");
         }
-
     }
 
     @FXML
     private void goBackLink(MouseEvent event) throws IOException {
+        FXRouter.when("SignUpView", "SignUp.fxml");
+        FXRouter.setRouteContainer("SignUpView", parentAnchorPane);
         FXRouter.goTo("SignUpView");
-
     }
 
     @FXML
-    private void resendCodeLink(MouseEvent event) throws NamingException, NoSuchAlgorithmException {
-        Candidate myData = (Candidate) FXRouter.getData();
-        String code = SignUp.ContinueAsCandidate(myData.getEmail());
+    private void resendCodeLink(MouseEvent event) throws NamingException {
+        ProjectManager pManager = (ProjectManager) FXRouter.getData();
+        String code = SignUp.ContinueAsPManager(pManager.getEmail());
         garbage.setText(code);
-        confirmCode.setPromptText(garbage.getText());
     }
-
+    
 }
