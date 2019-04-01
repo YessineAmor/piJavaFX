@@ -42,6 +42,10 @@ public class Auth2FAController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         FXRouter.when("baseView", "Base.fxml");
         FXRouter.setRouteContainer("baseView", parentAnchorPane);
+        
+        FXRouter.setRouteContainer("baseView", parentAnchorPane);
+        FXRouter.when("ProfileView", "Profile.fxml");
+        FXRouter.setRouteContainer("ProfileView", parentAnchorPane);
     }
 
     @FXML
@@ -52,6 +56,7 @@ public class Auth2FAController implements Initializable {
             if (s != null) {
                 Authenticator.currentSession = s;
                 Authenticator.currentUser = s.getUser();
+                
                 FXRouter.goTo("baseView");
             } else // err
                 ;
