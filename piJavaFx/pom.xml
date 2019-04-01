@@ -216,11 +216,11 @@
             </exclusions>
         </dependency>
         
-        <dependency>
+        <!--dependency>
             <groupId>xuggle</groupId>
             <artifactId>xuggle-xuggler</artifactId>
             <version>5.4</version>
-        </dependency>
+        </dependency-->
         <!-- MigLayout -->
 
         <dependency>
@@ -267,18 +267,32 @@
             <artifactId>jfoenix</artifactId>
             <version>8.0.8</version>
         </dependency>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>piJEE-ejb</artifactId>
             <version>${project.version}</version>
+
+        <!-- ControlsFX -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.14</version>
+      </dependency>
+        <!-- Font Awesome -->
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx-commons</artifactId>
+            <version>9.1.2</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
     
-    <repositories>
+    <!--repositories>
         <repository>
             <id>xuggle repo</id>
             <url>http://www.dcm4che.org/maven2/</url>
         </repository>
-    </repositories>
+    </repositories-->
    
 </project>
