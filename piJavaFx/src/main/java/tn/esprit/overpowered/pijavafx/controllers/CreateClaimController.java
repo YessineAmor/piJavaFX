@@ -51,15 +51,12 @@ public class CreateClaimController implements Initializable {
         }
 
         @FXML
-        private void onAddButtonClicked
-        (ActionEvent event
-        
-            ) throws NamingException {
+        private void onAddButtonClicked  (ActionEvent event) throws NamingException {
                 Reclamation r = new Reclamation();
             r.setFichier_a_joindre("fichier");
             r.setDescription(nameLabel.getText());
             r.setDateReclamation(new Date());
-            r.setEtat(EtatReclamation.Traité);
+            r.setEtat(EtatReclamation.Traite);
             r.setType(TypeReclamation.Autre);
             Claim.createClaim(r);
         }
