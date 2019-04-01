@@ -44,6 +44,7 @@ import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -64,6 +65,7 @@ import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
 import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
+import util.factories.CreateAlert;
 import util.routers.FXRouter;
 
 /**
@@ -114,6 +116,7 @@ public class TryQuizController implements Initializable {
         answers = new ArrayList<>();
         quiz = (Quiz) FXRouter.getData();
         QuizTry quizTry = new QuizTry();
+        System.out.println("quiz try serial" + QuizTry.getSerialVersionUID());
         long start = System.currentTimeMillis();
         quizTry.setStartDate(new Date());
         quizTry.setQuiz(quiz);
@@ -152,8 +155,10 @@ public class TryQuizController implements Initializable {
                 try {
                     quizTry.setFinishDate(new Date());
                     Context context = null;
+                    Context secondContext = null;
                     try {
                         context = new InitialContext();
+                        secondContext = new InitialContext();
                     } catch (NamingException ex) {
                         System.out.println(ex.getExplanation());
                     }
@@ -170,13 +175,17 @@ public class TryQuizController implements Initializable {
                     String jndiName = "piJEE-ejb-1.0/QuizTryFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote";
                     String quizFacadejndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
 
-                    QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) context.lookup(jndiName);
+                    QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) secondContext.lookup(jndiName);
 //                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
+                    System.out.println("quiz try serial" + quizTry.getSerialVersionUID());
                     quizTryFacadeProxy.create(quizTry);
 //                    quiz.getQuizTries().add(quizTry);
 //                    quizFacadeProxy.edit(quiz);
                     try {
                         FXRouter.goTo("QuizResults", quizTry);
+                        stopCamera = true;
+//                        writer.close();
+//                        webcam.close();
                     } catch (IOException ex) {
                         Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
                     }
