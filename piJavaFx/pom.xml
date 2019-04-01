@@ -260,11 +260,6 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>piJEE-ejb</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         
         <!-- JFoenix -->
         <dependency>
@@ -272,14 +267,20 @@
             <artifactId>jfoenix</artifactId>
             <version>8.0.8</version>
         </dependency>
-        <!-- Font Awesome-->
+
         <dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx</artifactId>
-            <version>8.2</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>piJEE-ejb</artifactId>
+            <version>${project.version}</version>
         </dependency>
-        
-        <!-- Font Awesome good -->
+
+        <!-- ControlsFX -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.14</version>
+      </dependency>
+        <!-- Font Awesome -->
         <dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx-commons</artifactId>

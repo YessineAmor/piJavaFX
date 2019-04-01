@@ -24,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -61,9 +62,7 @@ public class BaseController implements Initializable {
     @FXML
     private AnchorPane rightMenuAnchorPane;
     @FXML
-    private Button createQuizBtn;
-    @FXML
-    private JFXButton profileButton;
+    private Button profileButton;
     @FXML
     private JFXButton messagesButton;
     @FXML
@@ -71,7 +70,8 @@ public class BaseController implements Initializable {
     @FXML
     private JFXButton notificationsButton;
     @FXML
-    private JFXButton manageCandidacy;
+    private JFXButton createQuizBtn;
+
 
     /**
      * Initializes the controller class.
@@ -87,17 +87,19 @@ public class BaseController implements Initializable {
         FXRouter.when("QuizResults", "QuizResults.fxml");
         FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
         FXRouter.when("JobOfferCandidateDetails", "JobOfferCandidateDetails.fxml");
-        FXRouter.when("Profile", "Profile.fxml");
-        FXRouter.setRouteContainer("Profile", generalAnchorPane);
+        FXRouter.when("ProfileView", "Profile.fxml");
+        FXRouter.setRouteContainer("ProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
         FXRouter.setRouteContainer("TryQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuestions", centralAnchorPane);
+        
+        
         FXRouter.setRouteContainer("ListJobOfferCandidates", centralAnchorPane);
         FXRouter.setRouteContainer("JobOfferCandidateDetails", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
-        ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
+       ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener;
         Scene s = FXRouter.scene;
 
@@ -134,6 +136,7 @@ public class BaseController implements Initializable {
             Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+
     }
 
     @FXML
@@ -151,9 +154,18 @@ public class BaseController implements Initializable {
 
     public void setCentralAnchorPane(AnchorPane centralAnchorPane) {
         this.centralAnchorPane = centralAnchorPane;
+    
     }
-
     @FXML
+
+    private void goToInbox(ActionEvent event) throws IOException {
+
+        FXRouter.goTo("inbox");
+        FXRouter.when("inboxView", "Inbox.fxml");
+        FXRouter.setRouteContainer("inboxView", centralAnchorPane);
+        FXRouter.goTo("inboxView");
+}
+  
     private void onManageCandidacyBtnClicked(ActionEvent event) throws NamingException, IOException, NamingException, NoSuchAlgorithmException {
         String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
                 + "entrepriseprofile.JobOfferFacadeRemote";
@@ -172,7 +184,7 @@ public class BaseController implements Initializable {
         registeredCandidates.add(c);
         registeredCandidates.add(c);
         JobOffer jobOffer = new JobOffer();
-        jobOffer.setTitle("Développeur JAVA");
+        jobOffer.setTitle("DÃ©veloppeur JAVA");
         Set<Skill> skillSet = new HashSet<>();
         skillSet.add(Skill.JAVA);
         skillSet.add(Skill.PYTHON);
@@ -188,8 +200,15 @@ public class BaseController implements Initializable {
         FXRouter.goTo("ListJobOfferCandidates", jobOffer);
     }
 
-    private void profileButtonAction(ActionEvent event) throws IOException {
-        FXRouter.goTo("Profile");
+    private void contactsButtonClicked(MouseEvent event) throws IOException {
+       FXRouter.when("CandidateListView", "CandidateList.fxml","Candidate List", 889, 543);
+                 FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void profileButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.goTo("ProfileView");
     }
 
 }

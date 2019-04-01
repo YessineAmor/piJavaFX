@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.util.Random;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,6 +16,10 @@ import javax.naming.InitialContext;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.users.User;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
 import util.routers.FXRouter;
 
 // *** User as ref ****
@@ -51,14 +56,19 @@ public class MainApp extends Application {
        Long expId = candidateProxy.createExperience(exp);
        exp.setId(expId);
        candidateProxy.affecterExperienceCandidate(expId, candidateId);*/
-
+      /*
         int length = 5;
         boolean useLetters = true;
         boolean useNumbers = false;
         String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
 
         System.out.println(generatedString);
-
+*//*
+      String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+            Context context = new InitialContext();
+            CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+            ObservableList<Candidate> list = candidateProxy.getObservableCandidate();
+      */
         //TESTING LICENCE SERVICE
        /* String jndiName = "piJEE-ejb-1.0/LicenceFacade!LicenceManager.LicenceFacadeRemote";
         Context context = new InitialContext();
@@ -108,6 +118,17 @@ public class MainApp extends Application {
         Long hrmId = hrManagerProxy.createHRManager(hrm);
         //hrManagerProxy.affecterHRtoCompany(hrmId, companyId);
 */
+       
+       //TRYING TO GET DISCRIMINATOR VALUE COLUMN FROM THE DATABASE
+      /* 
+       User user = new User();
+       Candidate cdt = new Candidate();
+       String jndiName = "piJEE-ejb-1.0/UserFacade!tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote";
+       Context context = new InitialContext();
+       UserFacadeRemote userProxy = (UserFacadeRemote) context.lookup(jndiName);
+        System.out.println(userProxy.getUserDiscriminatorValue(1L));
+        System.out.println(user.getDiscriminatorValue());
+        System.out.println(cdt.getDiscriminatorValue()); */
         launch(args);
     }
 
@@ -135,7 +156,7 @@ public class MainApp extends Application {
 
 
          */
-        String signUpFxmlFile = "/fxml/Login.fxml";
+        String signUpFxmlFile = "/fxml/CandidateList.fxml";
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(signUpFxmlFile));
         Scene scene = new Scene(rootNode);
