@@ -42,6 +42,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -70,7 +71,7 @@ import util.routers.FXRouter;
  *
  * @author Yassine
  */
-public class TryQuizController /*implements Initializable*/ {
+public class TryQuizController implements Initializable {
 
     @FXML
     private AnchorPane anchorPane;
@@ -106,6 +107,7 @@ public class TryQuizController /*implements Initializable*/ {
     /**
      * Initializes the controller class.
      */
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         System.out.println("alert accepted - TryQuizController");
