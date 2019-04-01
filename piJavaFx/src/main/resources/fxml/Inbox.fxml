@@ -14,7 +14,7 @@
          </children></VBox>
       <VBox fx:id="messageList" layoutX="171.0" layoutY="33.0" prefHeight="273.0" prefWidth="356.0" />
       <JFXTextArea fx:id="enterMessageArea" layoutX="171.0" layoutY="306.0" prefHeight="89.0" prefWidth="289.0" />
-      <JFXButton fx:id="sendButton" layoutX="460.0" layoutY="310.0" prefHeight="89.0" prefWidth="68.0" text="Send" />
+      <JFXButton fx:id="sendButton" layoutX="460.0" layoutY="310.0" onAction="#sendMessage" prefHeight="89.0" prefWidth="68.0" text="Send" />
       <JFXTextField fx:id="userNameText" layoutX="177.0" />
    </children>
 </AnchorPane>
