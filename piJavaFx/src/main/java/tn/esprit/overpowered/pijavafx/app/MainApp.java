@@ -113,8 +113,6 @@ public class MainApp extends Application {
 
 
 
-        //Testing candidate registration 
-        String loginFxmlFile = "/fxml/Login.fxml";
 
         /*log.info("Starting Hello JavaFX and Maven demonstration application");
         String fxmlFile = "/fxml/Base.fxml";
@@ -140,11 +138,13 @@ public class MainApp extends Application {
          */
 
 
-        String signUpFxmlFile = "/fxml/Login.fxml";
+
+        String loginFxmlFile = "/fxml/Login.fxml";
+
 
 
         FXMLLoader loader = new FXMLLoader();
-        final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(signUpFxmlFile));
+        final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(loginFxmlFile));
         Scene scene = new Scene(rootNode);
         FXRouter.scene = scene;
         stage.setScene(scene);
