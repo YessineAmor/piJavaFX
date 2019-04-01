@@ -7,7 +7,6 @@ package util.factories;
 
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Parent;
-import javafx.scene.layout.Region;
 import util.exceptions.InvalidArgumentException;
 import util.exceptions.WidgetNotFoundException;
 
