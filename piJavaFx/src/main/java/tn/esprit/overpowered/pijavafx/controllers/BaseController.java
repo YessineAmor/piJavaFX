@@ -8,9 +8,13 @@ package tn.esprit.overpowered.pijavafx.controllers;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
@@ -21,13 +25,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import tn.esprit.overpowered.byusforus.entities.quiz.Question;
-import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
-import tn.esprit.overpowered.byusforus.services.quiz.ChoiceFacadeRemote;
+import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
+import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
+import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
+import tn.esprit.overpowered.byusforus.entities.util.Skill;
+import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
 import util.exceptions.InvalidArgumentException;
 import util.exceptions.WidgetNotFoundException;
@@ -64,6 +70,8 @@ public class BaseController implements Initializable {
     private JFXButton messagesButton1;
     @FXML
     private JFXButton notificationsButton;
+    @FXML
+    private JFXButton manageCandidacy;
 
     /**
      * Initializes the controller class.
@@ -77,6 +85,8 @@ public class BaseController implements Initializable {
         FXRouter.when("TryQuiz", "TryQuiz.fxml");
         FXRouter.when("QuizInfo", "QuizInfo.fxml");
         FXRouter.when("QuizResults", "QuizResults.fxml");
+        FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
+        FXRouter.when("JobOfferCandidateDetails", "JobOfferCandidateDetails.fxml");
         FXRouter.when("Profile", "Profile.fxml");
         FXRouter.setRouteContainer("Profile", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
@@ -85,8 +95,9 @@ public class BaseController implements Initializable {
         FXRouter.setRouteContainer("CreateQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuestions", centralAnchorPane);
         
-        FXRouter.when("inbox", "Inbox.fxml");
-        FXRouter.setRouteContainer("inbox", centralAnchorPane);
+        
+        FXRouter.setRouteContainer("ListJobOfferCandidates", centralAnchorPane);
+        FXRouter.setRouteContainer("JobOfferCandidateDetails", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
         ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener;
@@ -146,7 +157,47 @@ public class BaseController implements Initializable {
 
     @FXML
     private void goToInbox(ActionEvent event) throws IOException {
+
         FXRouter.goTo("inbox");
+        FXRouter.when("inboxView", "Inbox.fxml");
+        FXRouter.setRouteContainer("inboxView", centralAnchorPane);
+        FXRouter.goTo("inboxView");
+}
+  
+    private void onManageCandidacyBtnClicked(ActionEvent event) throws NamingException, IOException, NamingException, NoSuchAlgorithmException {
+        String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
+                + "entrepriseprofile.JobOfferFacadeRemote";
+        Context context = new InitialContext();
+        JobOfferFacadeRemote jobOfferFacade = (JobOfferFacadeRemote) context.lookup(jndiName);
+
+        CompanyProfile company = new CompanyProfile();
+        company.setName("Facebook");
+        List<Candidate> registeredCandidates = new ArrayList<>();
+        Candidate c = new Candidate();
+        c.setFirstName("Yassine");
+        c.setLastName("Amor");
+        c.setSkills(new HashSet<Skill>(Arrays.asList(Skill.JAVA)));
+        c.setPassword("123456".getBytes());
+        c.setUsername("pidevcandidate");
+        registeredCandidates.add(c);
+        registeredCandidates.add(c);
+        JobOffer jobOffer = new JobOffer();
+        jobOffer.setTitle("Développeur JAVA");
+        Set<Skill> skillSet = new HashSet<>();
+        skillSet.add(Skill.JAVA);
+        skillSet.add(Skill.PYTHON);
+        jobOffer.setSkills(skillSet);
+        jobOffer.setPeopleNeeded(3);
+        jobOffer.setExpertiseLevel(ExpertiseLevel.JUNIOR);
+        jobOffer.setDescription("The candidate will help us work on JavaEE projects.");
+        jobOffer.setCity("Tunis");
+        jobOffer.setCompany(company);
+        jobOffer.setRegisteredCandidates(registeredCandidates);
+        jobOfferFacade.create(jobOffer);
+
+        FXRouter.goTo("ListJobOfferCandidates", jobOffer);
+    }
+
     private void profileButtonAction(ActionEvent event) throws IOException {
         FXRouter.goTo("Profile");
     }
