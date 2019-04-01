@@ -1,10 +1,10 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package tn.esprit.overpowered.pijavafx.controllers;
-/*
+
 import com.github.sarxos.webcam.Webcam;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -16,13 +16,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.openimaj.image.processing.face.detection.DetectedFace;
 import org.openimaj.image.processing.face.detection.HaarCascadeDetector;
+
+/*
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.ICodec;
@@ -30,6 +31,8 @@ import com.xuggle.xuggler.IPixelFormat;
 import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
+
+*/
 import java.awt.Graphics;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,8 +46,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -65,7 +68,6 @@ import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
 import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
-import util.factories.CreateAlert;
 import util.routers.FXRouter;
 
 /**
@@ -73,7 +75,7 @@ import util.routers.FXRouter;
  *
  * @author Yassine
  */
-public class TryQuizController /*implements Initializable*/ {
+public class TryQuizController implements Initializable {
 /*
     @FXML
     private AnchorPane anchorPane;
@@ -108,10 +110,13 @@ public class TryQuizController /*implements Initializable*/ {
 
     /**
      * Initializes the controller class.
-     *//*
+     */
+    
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+/*
         System.out.println("alert accepted - TryQuizController");
         answers = new ArrayList<>();
         quiz = (Quiz) FXRouter.getData();
@@ -177,7 +182,7 @@ public class TryQuizController /*implements Initializable*/ {
 
                     QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) secondContext.lookup(jndiName);
 //                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
-                    System.out.println("quiz try serial" + quizTry.getSerialVersionUID());
+                    System.out.println("quiz try serial" + QuizTry.getSerialVersionUID());
                     quizTryFacadeProxy.create(quizTry);
 //                    quiz.getQuizTries().add(quizTry);
 //                    quizFacadeProxy.edit(quiz);
@@ -321,5 +326,8 @@ public class TryQuizController /*implements Initializable*/ {
         System.out.println("Correct Answers Score : " + correctAnswersScore);
         return (float) (correctAnswersScore / pointsSum) * 100;
     }
+
+
 */
+}
 }
