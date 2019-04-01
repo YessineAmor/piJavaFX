@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package tn.esprit.overpowered.pijavafx.controllers;
-
+/*
 import com.github.sarxos.webcam.Webcam;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -73,8 +73,8 @@ import util.routers.FXRouter;
  *
  * @author Yassine
  */
-public class TryQuizController implements Initializable {
-
+public class TryQuizController /*implements Initializable*/ {
+/*
     @FXML
     private AnchorPane anchorPane;
     private Boolean stopCamera = false;
@@ -106,6 +106,9 @@ public class TryQuizController implements Initializable {
     private Map<Question, Choice> candidateAnswers;
     private List<Answer> answers;
 
+    /**
+     * Initializes the controller class.
+     *//*
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -318,5 +321,5 @@ public class TryQuizController implements Initializable {
         System.out.println("Correct Answers Score : " + correctAnswersScore);
         return (float) (correctAnswersScore / pointsSum) * 100;
     }
-
+*/
 }

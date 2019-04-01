@@ -216,11 +216,11 @@
             </exclusions>
         </dependency>
         
-        <dependency>
+        <!--dependency>
             <groupId>xuggle</groupId>
             <artifactId>xuggle-xuggler</artifactId>
             <version>5.4</version>
-        </dependency>
+        </dependency-->
         <!-- MigLayout -->
 
         <dependency>
@@ -289,11 +289,11 @@
         </dependency>
     </dependencies>
     
-    <repositories>
+    <!--repositories>
         <repository>
             <id>xuggle repo</id>
             <url>http://www.dcm4che.org/maven2/</url>
         </repository>
-    </repositories>
+    </repositories-->
    
 </project>
