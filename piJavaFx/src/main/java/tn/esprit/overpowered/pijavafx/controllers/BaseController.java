@@ -71,6 +71,8 @@ public class BaseController implements Initializable {
     private JFXButton notificationsButton;
     @FXML
     private JFXButton createQuizBtn;
+    @FXML
+    private JFXButton manageCandidacyBtn;
 
     /**
      * Initializes the controller class.
@@ -162,6 +164,7 @@ public class BaseController implements Initializable {
         FXRouter.goTo("inboxView");
     }
 
+    @FXML
     private void onManageCandidacyBtnClicked(ActionEvent event) throws NamingException, IOException, NamingException, NoSuchAlgorithmException {
         String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
                 + "entrepriseprofile.JobOfferFacadeRemote";
