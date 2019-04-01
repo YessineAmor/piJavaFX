@@ -154,6 +154,12 @@ public class BaseController implements Initializable {
     }
 
     @FXML
+    private void goToInbox(ActionEvent event) throws IOException {
+        FXRouter.when("inboxView", "Inbox.fxml");
+        FXRouter.setRouteContainer("inboxView", centralAnchorPane);
+        FXRouter.goTo("inboxView");
+}
+  
     private void onManageCandidacyBtnClicked(ActionEvent event) throws NamingException, IOException, NamingException, NoSuchAlgorithmException {
         String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
                 + "entrepriseprofile.JobOfferFacadeRemote";
@@ -172,7 +178,7 @@ public class BaseController implements Initializable {
         registeredCandidates.add(c);
         registeredCandidates.add(c);
         JobOffer jobOffer = new JobOffer();
-        jobOffer.setTitle("Développeur JAVA");
+        jobOffer.setTitle("DÃ©veloppeur JAVA");
         Set<Skill> skillSet = new HashSet<>();
         skillSet.add(Skill.JAVA);
         skillSet.add(Skill.PYTHON);
