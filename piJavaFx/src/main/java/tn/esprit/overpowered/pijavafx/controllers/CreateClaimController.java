@@ -22,6 +22,7 @@ import tn.esprit.overpowered.byusforus.entities.reclamation.EtatReclamation;
 import tn.esprit.overpowered.byusforus.entities.reclamation.Reclamation;
 import tn.esprit.overpowered.byusforus.entities.reclamation.TypeReclamation;
 import tn.esprit.overpowered.byusforus.services.Reclamation.ReclamationRemote;
+import util.claim.Claim;
 
 /**
  * FXML Controller class
@@ -37,35 +38,30 @@ public class CreateClaimController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            // TODO
-            String jndiName = "piJEE-ejb-1.0/ReclamationService!tn.esprit.overpowered.byusforus.services.Reclamation.ReclamationRemote";
-            Context context = null;
-            try {
-                context = new InitialContext();
-            } catch (NamingException ex) {
-                Logger.getLogger(CreateClaimController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            ReclamationRemote reclamationRemote = (ReclamationRemote) context.lookup(jndiName);
-            addButton.setOnAction((event) -> {
-                Reclamation r = new Reclamation();
-                r.setFichier_a_joindre("fichier");
-                r.setDescription(nameLabel.getText());
-                r.setDateReclamation(new Date());
-                r.setEtat(EtatReclamation.Traité);
-                r.setType(TypeReclamation.Autre);
-                reclamationRemote.addReclamation(r);
-            });
-        } catch (NamingException ex) {
-            Logger.getLogger(CreateClaimController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+       
+            // TODO// let me give u and advice. its better to do the jndi thing else where. cause i dont like being obliged to use the try and catch thing
 
-    @FXML
-    private void onAddButtonClicked(ActionEvent event) {
-    }
+
+
+        }
+
+        @FXML
+        private void onAddButtonClicked
+        (ActionEvent event
+        
+            ) throws NamingException {
+                Reclamation r = new Reclamation();
+            r.setFichier_a_joindre("fichier");
+            r.setDescription(nameLabel.getText());
+            r.setDateReclamation(new Date());
+            r.setEtat(EtatReclamation.Traité);
+            r.setType(TypeReclamation.Autre);
+            Claim.createClaim(r);
+        }
 
 }

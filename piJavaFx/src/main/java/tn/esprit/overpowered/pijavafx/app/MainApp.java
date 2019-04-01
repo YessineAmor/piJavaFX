@@ -71,7 +71,7 @@ public class MainApp extends Application {
 
 
          */
-        String loginFxmlFile = "/fxml/Login.fxml";
+        String loginFxmlFile = "/fxml/CreateClaim.fxml";
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(loginFxmlFile));
         Scene scene = new Scene(rootNode);
