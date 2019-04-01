@@ -34,8 +34,10 @@ import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
 import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
+import util.authentication.Authenticator;
 import util.exceptions.InvalidArgumentException;
 import util.exceptions.WidgetNotFoundException;
 import util.factories.ChangeDimensions;
@@ -207,7 +209,19 @@ public class BaseController implements Initializable {
 
     @FXML
     private void profileButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("ProfileView");
+        String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+        Context context;
+        try {
+            context = new InitialContext();
+             CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+        Candidate cdt = new Candidate();
+        cdt = candidateProxy.find(Authenticator.currentUser.getId());
+         FXRouter.goTo("ProfileView", cdt);
+        } catch (NamingException ex) {
+            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
+    
 
 }

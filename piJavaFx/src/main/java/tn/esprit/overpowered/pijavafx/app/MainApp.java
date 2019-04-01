@@ -112,6 +112,10 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
 
+
+        //Testing candidate registration 
+        String loginFxmlFile = "/fxml/Login.fxml";
+
         /*log.info("Starting Hello JavaFX and Maven demonstration application");
         String fxmlFile = "/fxml/Base.fxml";
         log.debug("Loading FXML for main view from: {}", fxmlFile);
@@ -134,7 +138,10 @@ public class MainApp extends Application {
 
 
          */
+
+
         String signUpFxmlFile = "/fxml/Login.fxml";
+
 
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(signUpFxmlFile));

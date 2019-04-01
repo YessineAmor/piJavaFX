@@ -114,9 +114,13 @@ public class CandidateListController implements Initializable {
 
 
     @FXML
-    private void viewProfileAction(MouseEvent event) throws IOException {
+    private void viewProfileAction(MouseEvent event) throws IOException, NamingException {
+        String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byus"
+                + "forus.services.candidat.CandidateFacadeRemote";
+            Context context = new InitialContext();
+            CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName); 
         Candidate cdt = candidateView.getSelectionModel().getSelectedItem();
-        cdt.setVisits(cdt.getVisits()+1);
+        cdt.setVisits(candidateProxy.incrementVisits(cdt.getId()));
         FXRouter.when("ProfileView", "ContactProfile.fxml", "Profile", 672, 417 );
         FXRouter.setRouteContainer("ProfileView", parentAnchorPane);
         FXRouter.goTo("ProfileView", cdt);
