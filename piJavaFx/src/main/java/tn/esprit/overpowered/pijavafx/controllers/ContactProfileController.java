@@ -5,6 +5,7 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -58,6 +59,8 @@ public class ContactProfileController implements Initializable {
     private MenuBar topMenu;
     @FXML
     private Button contactButton;
+    @FXML
+    private AnchorPane generalAnchorPane;
 
     /**
      * Initializes the controller class.
@@ -87,14 +90,22 @@ public class ContactProfileController implements Initializable {
             Candidate cdt = (Candidate) FXRouter.getData();
             System.out.println("The id of the data passed is: "+ cdt.getId());
             candidateProxy.recommend(cdt.getId());
+            recommendButton.setDisable(true);
+            recommendations.setText(Integer.toString(cdt.getRecommendations())+1);
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) {
+    private void profileButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("ProfileView", "Profile.fxml","Profile", 889, 543);
+                 FXRouter.setRouteContainer("ProfileView", generalAnchorPane);
+        FXRouter.goTo("ProfileView");
     }
 
     @FXML
-    private void contactButtonClicked(MouseEvent event) {
+    private void contactButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml","Candidate List", 889, 543);
+                 FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.goTo("CandidateListView");
     }
     
 }
