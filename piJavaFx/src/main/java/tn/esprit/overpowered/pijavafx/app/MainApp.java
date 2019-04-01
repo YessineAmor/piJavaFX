@@ -156,7 +156,7 @@ public class MainApp extends Application {
 
 
          */
-        String signUpFxmlFile = "/fxml/Login.fxml";
+        String signUpFxmlFile = "/fxml/Base.fxml";
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(signUpFxmlFile));
         Scene scene = new Scene(rootNode);

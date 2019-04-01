@@ -80,7 +80,7 @@ public class BaseController implements Initializable {
         FXRouter.setRouteContainer("CreateQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuestions", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
-        ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
+       /* ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener;
         Scene s = FXRouter.scene;
 
@@ -116,6 +116,7 @@ public class BaseController implements Initializable {
         } catch (InvalidArgumentException ex) {
             Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
         }
+*/
 
     }
 
