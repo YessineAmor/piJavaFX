@@ -5,6 +5,7 @@
  */
 package util.authentication;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,7 +23,7 @@ public class Authenticator {
     public static User currentUser;
     public static Session currentSession;
 
-    public static String authenticate(String username, String password) throws NamingException, NoSuchAlgorithmException {
+    public static String authenticate(String username, String password) throws NamingException, NoSuchAlgorithmException, IOException {
         String jndiName = "piJEE-ejb-1.0/AuthenticationFacade!tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote";
         Context context = new InitialContext();
         AuthenticationFacadeRemote authenticator = (AuthenticationFacadeRemote) context.lookup(jndiName);
