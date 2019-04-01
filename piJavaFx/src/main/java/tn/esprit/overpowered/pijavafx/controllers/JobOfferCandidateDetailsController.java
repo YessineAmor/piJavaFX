@@ -137,7 +137,7 @@ public class JobOfferCandidateDetailsController implements Initializable {
                     CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(candidate.getId(), jobOffer.getId());
                     cApp.setAdditionalInfo(refusalTextArea.getText());
                     cApp.setJobApplicationState(JobApplicationState.REFUSED);
-                    candidateApplicationFacade.edit(cApp);
+                    candidateApplicationFacade.updateCandidateApplication(cApp);
                 } catch (NamingException ex) {
                     Logger.getLogger(JobOfferCandidateDetailsController.class.getName()).log(Level.SEVERE, null, ex);
                 }
