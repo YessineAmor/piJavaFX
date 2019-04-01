@@ -94,6 +94,8 @@ public class BaseController implements Initializable {
         FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuestions", centralAnchorPane);
+        
+        
         FXRouter.setRouteContainer("ListJobOfferCandidates", centralAnchorPane);
         FXRouter.setRouteContainer("JobOfferCandidateDetails", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
@@ -155,6 +157,8 @@ public class BaseController implements Initializable {
 
     @FXML
     private void goToInbox(ActionEvent event) throws IOException {
+
+        FXRouter.goTo("inbox");
         FXRouter.when("inboxView", "Inbox.fxml");
         FXRouter.setRouteContainer("inboxView", centralAnchorPane);
         FXRouter.goTo("inboxView");
