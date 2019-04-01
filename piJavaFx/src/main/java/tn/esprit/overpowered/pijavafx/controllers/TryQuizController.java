@@ -176,7 +176,7 @@ public class TryQuizController implements Initializable {
                     QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) secondContext.lookup(jndiName);
 //                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
                     System.out.println("quiz try serial" + QuizTry.getSerialVersionUID());
-//                    quizTryFacadeProxy.create(quizTry);
+                    quizTryFacadeProxy.create(quizTry);
 //                    quiz.getQuizTries().add(quizTry);
 //                    quizFacadeProxy.edit(quiz);
                     try {
