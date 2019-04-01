@@ -60,5 +60,7 @@ public class CreateClaimController implements Initializable {
             r.setType(TypeReclamation.Autre);
             Claim.createClaim(r);
         }
+        
+        
 
 }
