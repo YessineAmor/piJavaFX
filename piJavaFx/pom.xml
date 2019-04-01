@@ -279,11 +279,6 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>piJEE-ejb</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         
         <!-- JFoenix -->
         <dependency>
@@ -292,30 +287,22 @@
             <version>8.0.8</version>
         </dependency>
 
+
+
         <dependency>
-            <groupId>xuggle</groupId>
-            <artifactId>xuggle-xuggler</artifactId>
-            <version>5.4</version>
-            <type>jar</type>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx -->
-        <dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx</artifactId>
-            <version>8.9</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>piJEE-ejb</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
+        <!-- ControlsFX -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.14</version>
+      </dependency>
+        <!-- Font Awesome -->
 
-
-        <!-- Font Awesome-->
-        <!--dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx</artifactId>
-            <version>8.2</version>
-        </dependency-->
-        
-        <!-- Font Awesome good -->
         <dependency>
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx-commons</artifactId>

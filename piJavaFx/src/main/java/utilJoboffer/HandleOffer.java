@@ -26,7 +26,7 @@ public class HandleOffer {
 
     public static void createJobOffer(String title,
             String location, ExpertiseLevel expertiseLevel,
-            List<Skill> skills,int nberOfpeopleNeeded) throws NamingException{
+            Set<Skill> skills,int nberOfpeopleNeeded) throws NamingException{
    String jndiName = "piJEE-ejb-1.0/HRManagerFacade!tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote";
     Context context = new InitialContext();
     HRManagerFacadeRemote hrManagerProxy = (HRManagerFacadeRemote)context.lookup(jndiName);
@@ -36,7 +36,7 @@ public class HandleOffer {
     jobOffer.setCity(location);
     jobOffer.setExpertiseLevel(expertiseLevel);
     jobOffer.setPeopleNeeded(nberOfpeopleNeeded);
-    jobOffer.setSkills((Set<Skill>) skills);
+    jobOffer.setSkills(skills);
     jobOffer.setOfferStatus(OfferStatus.AVAILABLE);
     Long hrId = Authenticator.currentUser.getId();
     hrManagerProxy.createOffer(hrId, jobOffer);

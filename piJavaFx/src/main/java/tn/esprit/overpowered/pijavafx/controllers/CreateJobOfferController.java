@@ -13,8 +13,10 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.Vector;
 import java.util.function.Consumer;
 import javafx.collections.FXCollections;
@@ -115,8 +117,8 @@ public class CreateJobOfferController implements Initializable {
     private void createOfferButtonOnClicked(MouseEvent event) throws NamingException {
         ObservableList<SkillView> selectSkills = FXCollections
                 .observableArrayList();
-        List<Skill> listofSkills = new ArrayList<>();
-        skills.stream().filter((skil) -> (skil.getSelect().isSelected())).forEachOrdered((skil) -> {
+        Set<Skill> listofSkills = new HashSet<>();
+        skills.stream().filter((skil) -> (skil.getSelect().isSelected())).forEachOrdered((SkillView skil) -> {
             listofSkills.add(Skill.valueOf(skil.getSkill()));
         });
         HandleOffer.createJobOffer(title.getText(), location.getText(),

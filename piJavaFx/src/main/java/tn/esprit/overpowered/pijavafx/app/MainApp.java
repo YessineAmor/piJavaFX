@@ -6,25 +6,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import org.apache.commons.lang.RandomStringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import util.routers.FXRouter;
 
-// *** User as ref ****
-//import javax.naming.Context;
-//import javax.naming.InitialContext;
-//import tn.esprit.overpowered.byusforus.entities.Choice;
-//import tn.esprit.overpowered.byusforus.services.ChoiceFacadeRemote;
 public class MainApp extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
-    private static final double WIN_WIDTH = 600;
-    private static final double WIN_HEIGHT = 400;
+    private static final double WIN_WIDTH = 800;
+    private static final double WIN_HEIGHT = 600;
     private static final String FXML_PATH = "/fxml/";
 
     public static void main(String[] args) throws Exception {
+
 
         /*
        //String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
@@ -105,12 +103,14 @@ public class MainApp extends Application {
         //hrManagerProxy.affecterHRtoCompany(hrmId, companyId);
 */
 
+
         launch(args);
     }
     
 
     @Override
     public void start(Stage stage) throws Exception {
+
 
         /*log.info("Starting Hello JavaFX and Maven demonstration application");
         String fxmlFile = "/fxml/Base.fxml";
@@ -134,7 +134,7 @@ public class MainApp extends Application {
 
 
          */
-        String signUpFxmlFile = "/fxml/Login.fxml";
+        String signUpFxmlFile = "/fxml/CreateJobOffer.fxml";
 
         FXMLLoader loader = new FXMLLoader();
         final Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(signUpFxmlFile));
@@ -142,7 +142,8 @@ public class MainApp extends Application {
         FXRouter.scene = scene;
         stage.setScene(scene);
         stage.show();
-        stage.setMinHeight(430);
+
+        stage.setMinHeight(400);
         stage.setMinWidth(600);
 
         // Destroy everything on close requestp
@@ -150,6 +151,5 @@ public class MainApp extends Application {
             Platform.exit();
             System.exit(0);
         });
-
     }
 }

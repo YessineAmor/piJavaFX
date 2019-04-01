@@ -6,8 +6,11 @@
 package tn.esprit.overpowered.pijavafx.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +25,7 @@ import tn.esprit.overpowered.byusforus.entities.authentication.Session;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import util.authentication.Authenticator;
+import util.routers.FXRouter;
 
 /**
  * FXML Controller class
@@ -59,21 +63,18 @@ public class ProfileController implements Initializable {
     @FXML
     private MenuBar topMenu;
     @FXML
-    private AnchorPane parentAnchorPane;
+    private AnchorPane generalAnchorPane;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-
-    @FXML
-    private void profileButtonClicked(ActionEvent event) throws NamingException {
         String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
-        Context context = new InitialContext();
-        CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+        Context context;
+        try {
+            context = new InitialContext();
+             CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
         Candidate cdt = new Candidate();
         cdt = candidateProxy.find(Authenticator.currentUser.getId());
         name.setText(cdt.getFirstName());
@@ -82,6 +83,17 @@ public class ProfileController implements Initializable {
         recommendations.setText(Integer.toString(cdt.getRecommendations()));
         visits.setText(Integer.toString(cdt.getVisits()));
         username.setText(cdt.getUsername());
+        } catch (NamingException ex) {
+            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }    
+
+    @FXML
+    private void profileButtonClicked(ActionEvent event) throws IOException {
+       FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.setRouteContainer("Profile", generalAnchorPane);
+        FXRouter.goTo("Profile");
     }
     
 }
