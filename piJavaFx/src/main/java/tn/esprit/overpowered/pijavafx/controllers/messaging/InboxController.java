@@ -29,6 +29,9 @@ import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote;
 import util.authentication.Authenticator;
+import util.cache.ContextCache;
+import util.messsages.MessageDelegate;
+import util.messsages.MessageSender;
 
 /**
  * FXML Controller class
@@ -58,17 +61,9 @@ public class InboxController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        String jndiName = "piJEE-ejb-1.0/Messaging!tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote";
-        Context context;
-        try {
-            context = new InitialContext();
-            messageContext = context;
-            MessagingRemote messenger = (MessagingRemote) context.lookup(jndiName);
-            ArrayList<Message> myMessages = messenger.getMyMessages(Authenticator.currentUser.getId());
-            updateMessageList(myMessages);
-        } catch (NamingException ex) {
-            Logger.getLogger(InboxController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ArrayList<Message> myMessages = MessageDelegate.getMyMessages(Authenticator.currentUser.getId());
+        updateMessageList(myMessages);
+
     }
 
     private void updateMessageList(ArrayList<Message> myMessages) {
@@ -81,7 +76,7 @@ public class InboxController implements Initializable {
         userNameText.setStyle("-fx-text-outer-color: red;");
         if (Authenticator.currentUser.getDiscriminatorValue().equals("CANDIDATE")) {
             ((Candidate) Authenticator.currentUser).getContacts().forEach((e) -> {
-                contacts.put(e.getFirstName() + " " + e.getLastName() + "@" + e.getUsername() , e);
+                contacts.put(e.getFirstName() + " " + e.getLastName() + "@" + e.getUsername(), e);
             });
             TextFields.bindAutoCompletion(userNameText, contacts.keySet());
         }
@@ -89,12 +84,15 @@ public class InboxController implements Initializable {
 
     @FXML
     private void sendMessage(ActionEvent event) throws NamingException {
-        String jndiName = "piJEE-ejb-1.0/Messaging!tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote";
-        MessagingRemote messenger = (MessagingRemote) this.messageContext.lookup(jndiName);
         Message m = new Message();
         m.setText(enterMessageArea.getText());
         m.setTo(contacts.get(userNameText.getText()));
-        messenger.sendMessage(m);
+        MessageDelegate.sendMessage(m);
+    }
+
+    @FXML
+    private void sendRandomMessage(ActionEvent event) throws NamingException {
+        MessageSender.send();
     }
 
 }
