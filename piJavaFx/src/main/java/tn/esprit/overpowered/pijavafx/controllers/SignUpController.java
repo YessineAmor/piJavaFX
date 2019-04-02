@@ -99,6 +99,7 @@ public class SignUpController implements Initializable {
                                 cdt.setEmail(email.getText());
                                 //!!!!!!!!!WATCH OUT!!!!!!!!!!!
                                 //!!!!!THIS IS A DANGEROUS TRICK TO COLLECT CONFIRMATION CODE SENT TO THE CANDIDATE!!!!
+                                System.out.println("The confirmation code is: "+myData);
                                 cdt.setIntroduction(myData);
                                 FXRouter.goTo("EmailConfirmView", cdt);
 

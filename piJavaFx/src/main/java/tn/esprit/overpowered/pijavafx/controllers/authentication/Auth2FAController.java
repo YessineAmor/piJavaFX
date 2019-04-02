@@ -53,6 +53,7 @@ public class Auth2FAController implements Initializable {
         uid = (String) FXRouter.getData();
         try {
             Session s = Authenticator.finalizeAuth(uid, auth2FAToken.getText());
+            System.out.println("Two factor authentication code: "+ auth2FAToken.getText());
             if (s != null) {
                 Authenticator.currentSession = s;
                 Authenticator.currentUser = s.getUser();

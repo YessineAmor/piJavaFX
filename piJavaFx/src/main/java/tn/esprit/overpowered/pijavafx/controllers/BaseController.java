@@ -77,8 +77,6 @@ public class BaseController implements Initializable {
     @FXML
     private JFXButton messagesButton;
     @FXML
-    private JFXButton messagesButton1;
-    @FXML
     private JFXButton notificationsButton;
     @FXML
     private JFXButton createQuizBtn;

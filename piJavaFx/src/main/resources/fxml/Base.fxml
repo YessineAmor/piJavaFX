@@ -13,6 +13,7 @@
             <children>
                 <VBox layoutY="14.0" prefHeight="288.0" prefWidth="49.0">
                     <children>
+
                         <JFXButton fx:id="notificationsButton" prefHeight="44.0" prefWidth="50.0" stylesheets="@../styles/button-styles.css" text="Notifications">
                         </JFXButton>
                         <JFXButton fx:id="profileButton" onMouseClicked="#profileButtonClicked" prefHeight="44.0" prefWidth="50" stylesheets="@../styles/button-styles.css" text="Profile">
@@ -24,6 +25,7 @@
                         </JFXButton>
                         <JFXButton fx:id="manageCandidacyBtn" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="50" text="Candidancies">
                         </JFXButton>
+
                   
                   
 
