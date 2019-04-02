@@ -29,8 +29,13 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
+import tn.esprit.overpowered.byusforus.entities.users.HRManager;
+import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
+import util.authentication.Authenticator;
+import util.information.tracker.InfoTracker;
 import util.routers.FXRouter;
 
 /**
@@ -87,6 +92,8 @@ public class OffersController implements Initializable {
         FXRouter.setRouteContainer("CreateJobOfferView", parentAnchorPane);
         FXRouter.when("CompanyHRProfileView", "CompanyHRProfile.fxml", "Profile", 600, 400);
         FXRouter.setRouteContainer("CompanyHRProfileView", parentAnchorPane);
+        FXRouter.when("CompanyPMProfileView", "CompanyPMProfile.fxml", "Profile", 600, 400);
+        FXRouter.setRouteContainer("CompanyPMProfileView", parentAnchorPane);
         FXRouter.when("BaseView", "Base.fxml", "HOME", 800, 600);
         FXRouter.setRouteContainer("BaseView", parentAnchorPane);
         try {
@@ -104,11 +111,11 @@ public class OffersController implements Initializable {
                 offerObs.add(o);
             }
             title.setCellValueFactory(new PropertyValueFactory<>("Title"));
-            offerStatus.setCellValueFactory(new PropertyValueFactory<>("Status"));
-            dateOfCreation.setCellValueFactory(new PropertyValueFactory<>("Created On"));
-            city.setCellValueFactory(new PropertyValueFactory<>("Location"));
-            dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("Expires On"));
-            peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("People Needed"));
+            offerStatus.setCellValueFactory(new PropertyValueFactory<>("offerStatus"));
+            dateOfCreation.setCellValueFactory(new PropertyValueFactory<>("dateOfCreation"));
+            city.setCellValueFactory(new PropertyValueFactory<>("city"));
+            dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
+            peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
             System.out.println("Still working at this point");
             jobsView.setItems(offerObs);
 
@@ -144,8 +151,27 @@ public class OffersController implements Initializable {
     }
 
     @FXML
-    private void myProfileButtonOnClicked(MouseEvent event) throws IOException {
-                FXRouter.goTo("CompanyHRProfileView");
+    private void myProfileButtonOnClicked(MouseEvent event) throws IOException, NamingException {
+ String type = Authenticator.currentUser.getDiscriminatorValue();
+        Long currentUserId = Authenticator.currentUser.getId();
+        switch (type) {
+            case "COMPANY_ADMIN":
+                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
+                FXRouter.goTo("CompanyAdminProfileView",compAdmin);
+                break;
+            case "HUMAN_RESOURCES_MANAGER":
+                System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
+                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
+                FXRouter.goTo("CompanyHRProfileView",hrManager);
+                break;
+            case "PROJECT_MANAGER":
+                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                FXRouter.goTo("CompanyPMProfileView",pManager);
+                break;
+            default:
+                break;
+        }
+
     }
 
 }
