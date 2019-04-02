@@ -31,7 +31,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
+import tn.esprit.overpowered.byusforus.entities.users.HRManager;
+import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
@@ -42,6 +45,7 @@ import util.exceptions.InvalidArgumentException;
 import util.exceptions.WidgetNotFoundException;
 import util.factories.ChangeDimensions;
 import util.factories.ChangeDimensionsFactory;
+import util.information.tracker.InfoTracker;
 import util.routers.FXRouter;
 
 /**
@@ -90,6 +94,12 @@ public class BaseController implements Initializable {
         FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
         FXRouter.when("JobOfferCandidateDetails", "JobOfferCandidateDetails.fxml");
         FXRouter.when("ProfileView", "Profile.fxml");
+        FXRouter.when("CompanyAdminProfileView", "CompanyAdminProfile.fxml");
+        FXRouter.when("CompanyHRProfileView", "CompanyHRProfile.fxml");
+        FXRouter.when("CompanyPMProfileView", "CompanyPMProfile.fxml");
+        FXRouter.setRouteContainer("CompanyAdminProfileView", generalAnchorPane);
+        FXRouter.setRouteContainer("CompanyHRProfileView", generalAnchorPane);
+        FXRouter.setRouteContainer("CompanyPMProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("ProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
         FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
@@ -206,20 +216,43 @@ public class BaseController implements Initializable {
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) throws IOException {
-        String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
-        Context context;
-        try {
-            context = new InitialContext();
-             CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
-        Candidate cdt = new Candidate();
-        cdt = candidateProxy.find(Authenticator.currentUser.getId());
-         FXRouter.goTo("ProfileView", cdt);
-        } catch (NamingException ex) {
-            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+
+
+
+    private void profileButtonClicked(MouseEvent event) throws IOException, NamingException {
+        String type = Authenticator.currentUser.getDiscriminatorValue();
+        Long currentUserId = Authenticator.currentUser.getId();
+        switch (type) {
+            case "CANDIDATE":
+                String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+                Context context;
+                try {
+                    context = new InitialContext();
+                    CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+                    Candidate cdt = new Candidate();
+                    cdt = candidateProxy.find(Authenticator.currentUser.getId());
+                    FXRouter.goTo("ProfileView", cdt);
+                } catch (NamingException ex) {
+                    Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //FXRouter.goTo("ProfileView");
+                break;
+            case "COMPANY_ADMIN":
+                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
+                FXRouter.goTo("CompanyAdminProfileView",compAdmin);
+                break;
+            case "HUMAN_RESOURCES_MANAGER":
+                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
+                FXRouter.goTo("CompanyHRProfileView",hrManager);
+                break;
+            case "PROJECT_MANAGER":
+                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                FXRouter.goTo("CompanyPMProfileView",pManager);
+                break;
+            default:
+                break;
         }
-       
+
     }
-    
 
 }

@@ -240,7 +240,7 @@
             <artifactId>xuggle-xuggler</artifactId>
             <version>5.4</version>
         </dependency>
-        
+
         <!-- MigLayout -->
 
         <dependency>

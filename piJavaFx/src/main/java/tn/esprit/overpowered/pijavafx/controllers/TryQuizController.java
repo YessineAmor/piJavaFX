@@ -106,11 +106,10 @@ public class TryQuizController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
-    
-    
-    
-    @Override
+
     public void initialize(URL url, ResourceBundle rb) {
 
         System.out.println("alert accepted - TryQuizController");
@@ -322,7 +321,6 @@ public class TryQuizController implements Initializable {
         System.out.println("Correct Answers Score : " + correctAnswersScore);
         return (float) (correctAnswersScore / pointsSum) * 100;
     }
-
 
 
 }
