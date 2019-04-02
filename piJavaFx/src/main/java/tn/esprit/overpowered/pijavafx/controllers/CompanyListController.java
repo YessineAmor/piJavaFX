@@ -81,6 +81,12 @@ public class CompanyListController implements Initializable {
     private TableColumn<?, ?> jobPositions;
     @FXML
     private Button jobOfferButton;
+    @FXML
+    private Button contactButton;
+    @FXML
+    private Button jobOffer;
+    @FXML
+    private Button companyButton;
 
     /**
      * Initializes the controller class.
@@ -195,6 +201,24 @@ public class CompanyListController implements Initializable {
         } catch (NamingException ex) {
             Logger.getLogger(CandidateListController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void contactButtonClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void jobOfferClicked(MouseEvent event) throws IOException {
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
+        FXRouter.setRouteContainer("JobOfferView", parentAnchorPane);
+        FXRouter.goTo("JobOfferView");
+    }
+
+    @FXML
+    private void companyButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml");
+        FXRouter.setRouteContainer("CandidateListView", parentAnchorPane);
+        FXRouter.goTo("CandidateListView");
     }
     
 }

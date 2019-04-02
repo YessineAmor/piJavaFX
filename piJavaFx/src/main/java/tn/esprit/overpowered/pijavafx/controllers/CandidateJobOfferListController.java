@@ -63,13 +63,19 @@ public class CandidateJobOfferListController implements Initializable {
     @FXML
     private TableColumn<?, ?> peopleNeeded;
     @FXML
-    private JFXButton viewProfile;
+    private Button viewProfile;
     @FXML
     private Label status;
     @FXML
     private Button searchButton;
     @FXML
     private AnchorPane parentAnchorPane;
+    @FXML
+    private Button contactButton;
+    @FXML
+    private Button jobOffer;
+    @FXML
+    private Button companyButton;
 
     /**
      * Initializes the controller class.
@@ -131,11 +137,35 @@ public class CandidateJobOfferListController implements Initializable {
     }
 
     @FXML
-    private void viewProfileAction(MouseEvent event) {
+    private void viewProfileAction(MouseEvent event) throws IOException {
+        FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.setRouteContainer("Profile", parentAnchorPane);
+        FXRouter.goTo("Profile");
     }
 
     @FXML
     private void searchButtonClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void contactButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml");
+        FXRouter.setRouteContainer("CandidateListView", parentAnchorPane);
+        FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void jobOfferClicked(MouseEvent event) throws IOException {
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
+        FXRouter.setRouteContainer("JobOfferView", parentAnchorPane);
+        FXRouter.goTo("JobOfferView");
+    }
+
+    @FXML
+    private void companyButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CompanyListView", "CompanyList.fxml" );
+        FXRouter.setRouteContainer("CompanyListView", parentAnchorPane);
+        FXRouter.goTo("CompanyListView");
     }
 
 }

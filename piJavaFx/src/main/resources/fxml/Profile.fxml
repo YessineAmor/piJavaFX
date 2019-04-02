@@ -24,13 +24,13 @@
                 <JFXButton fx:id="notificationsButton" layoutX="-2.0" layoutY="7.0" prefHeight="44.0" prefWidth="67.0" stylesheets="@../styles/button-styles.css" text="" />
             <VBox layoutY="7.0" prefHeight="288.0" prefWidth="90.0">
                <children>
-                  <Button fx:id="homeButton" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#homeButtonClicked" prefHeight="52.0" prefWidth="97.0" text="Home">
+                  <Button fx:id="homeButton" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#homeButtonClicked" prefHeight="55.0" prefWidth="100.0" text="Home">
                      </Button>
-                  <Button fx:id="profileButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#profileButtonClicked" prefHeight="52.0" prefWidth="97.0" text="Profile">
+                  <Button fx:id="profileButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#profileButtonClicked" prefHeight="55.0" prefWidth="97.0" text="Profile">
                      </Button>
                   <Button fx:id="contactsButtons" mnemonicParsing="false" onMouseClicked="#contactsButtonClicked" prefHeight="55.0" prefWidth="90.0" text="Contacts" />
-                  <Button fx:id="jobOfferButton" mnemonicParsing="false" onMouseClicked="#jobOfferButtonClicked" prefHeight="51.0" prefWidth="90.0" text="Job Offers" />
-                  <Button fx:id="companyButton" mnemonicParsing="false" onMouseClicked="#companyButtonClicked" prefHeight="52.0" prefWidth="119.0" text="Companies" />
+                  <Button fx:id="jobOfferButton" mnemonicParsing="false" onMouseClicked="#jobOfferButtonClicked" prefHeight="55.0" prefWidth="90.0" text="Job Offers" />
+                  <Button fx:id="companyButton" mnemonicParsing="false" onMouseClicked="#companyButtonClicked" prefHeight="55.0" prefWidth="119.0" text="Companies" />
                </children>
             </VBox>
             </children>

@@ -19,15 +19,14 @@
     <children>
         <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="581.0" prefWidth="90.0" style="-fx-background-color: gray;">
             <children>
-                <VBox layoutY="14.0" prefHeight="288.0" prefWidth="90.0">
-                    <children>
-                        <Button fx:id="homeButton" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#homeButtonOnClicked" prefHeight="52.0" prefWidth="97.0" text="Home">
-                  
-                        </Button>
-                        <Button fx:id="profileButton" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#profileButtonClicked" prefHeight="52.0" prefWidth="97.0" text="Profile">
-                     
-                        </Button>
-                    </children>
+                <VBox layoutY="7.0" prefHeight="295.0" prefWidth="90.0">
+               <children>
+                  <Button fx:id="homeButton" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#homeButtonOnClicked" prefHeight="55.0" prefWidth="97.0" text="Home" />
+                  <Button fx:id="profileButton" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#profileButtonClicked" prefHeight="55.0" prefWidth="97.0" text="Profile" />
+                  <Button fx:id="contactButton" mnemonicParsing="false" onMouseClicked="#contactButtonClicked" prefHeight="55.0" prefWidth="136.0" text="Contacts" />
+                  <Button fx:id="jobOffer" mnemonicParsing="false" onMouseClicked="#jobOfferClicked" prefHeight="55.0" prefWidth="128.0" text="Job Offers" />
+                  <Button fx:id="companyButton" mnemonicParsing="false" onMouseClicked="#companyButtonClicked" prefHeight="55.0" prefWidth="145.0" text="Companies" />
+               </children>
                 </VBox>
             </children>
         </AnchorPane>

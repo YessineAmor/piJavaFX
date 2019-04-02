@@ -86,11 +86,15 @@ public class CandidateListController implements Initializable {
     @FXML
     private JFXRadioButton emailRadio;
     @FXML
-    private Button jobOfferButton;
-    @FXML
     private Button homeButton;
     @FXML
     private Button friendsButton;
+    @FXML
+    private Button contactButton;
+    @FXML
+    private Button jobOffer;
+    @FXML
+    private Button companyButton;
 
     /**
      * Initializes the controller class.
@@ -153,7 +157,10 @@ public class CandidateListController implements Initializable {
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) {
+    private void profileButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.setRouteContainer("Profile", parentAnchorPane);
+        FXRouter.goTo("Profile");
     }
 
     @FXML
@@ -212,20 +219,6 @@ public class CandidateListController implements Initializable {
     }
 
     @FXML
-    private void jobOfferButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
-        FXRouter.setRouteContainer("JobOfferView", parentAnchorPane);
-        FXRouter.goTo("JobOfferView");
-    }
-
-    @FXML
-    private void homeButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.when("BaseView", "Base.fxml" );
-        FXRouter.setRouteContainer("BaseView", parentAnchorPane);
-        FXRouter.goTo("BaseView");
-    }
-
-    @FXML
     private void friendsButtonClicked(MouseEvent event) throws NamingException {
         String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
             Context context = new InitialContext();
@@ -245,6 +238,38 @@ public class CandidateListController implements Initializable {
             visits.setCellValueFactory(new PropertyValueFactory<>("Visits"));
             System.out.println("Still working at this point");
             candidateView.setItems(cdtObs);
+    }
+
+    @FXML
+    private void homeButtonOnClicked(MouseEvent event) throws IOException {
+        FXRouter.when("BaseView", "Base.fxml" );
+        FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+        FXRouter.goTo("BaseView");
+
+
+    }
+
+    @FXML
+    private void contactButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml");
+        FXRouter.setRouteContainer("CandidateListView", parentAnchorPane);
+        FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void jobOfferClicked(MouseEvent event) throws IOException {
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
+        FXRouter.setRouteContainer("JobOfferView", parentAnchorPane);
+        FXRouter.goTo("JobOfferView");
+
+    }
+
+    @FXML
+    private void companyButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CompanyListView", "CompanyList.fxml" );
+        FXRouter.setRouteContainer("CompanyListView", parentAnchorPane);
+        FXRouter.goTo("CompanyListView");
+
     }
 
 
