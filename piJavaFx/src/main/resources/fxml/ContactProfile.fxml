@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" fx:id="generalAnchorPane" prefHeight="543.0" prefWidth="889.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.ContactProfileController">
+<AnchorPane id="AnchorPane" fx:id="generalAnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.ContactProfileController">
     <children>
-        <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="524.0" prefWidth="90.0" style="-fx-background-color: gray;">
+        <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="583.0" prefWidth="90.0" style="-fx-background-color: gray;">
             <children>
             <VBox layoutY="7.0" prefHeight="288.0" prefWidth="90.0">
                <children>
@@ -60,18 +60,18 @@
                   <Label fx:id="visits" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
-            <VBox layoutX="203.0" layoutY="20.0" prefHeight="200.0" prefWidth="125.0" spacing="10.0">
+            <VBox layoutX="296.0" layoutY="20.0" prefHeight="200.0" prefWidth="125.0" spacing="10.0">
                <children>
                   <Button fx:id="addContactButton" mnemonicParsing="false" onMouseClicked="#addContactButtonClicked" text="Add Contact" />
                   <Button fx:id="recommendButton" mnemonicParsing="false" onMouseClicked="#recommendButtonClicked" text="Recommend" />
                </children>
             </VBox>
-            <Label layoutX="488.0" layoutY="35.0" text="About" textFill="RED" />
+            <Label layoutX="317.0" layoutY="262.0" text="About" textFill="RED" />
             <Label fx:id="about" layoutX="544.0" layoutY="35.0" />
          </children></AnchorPane>
         <AnchorPane id="topMenuAnchorPane" fx:id="topMenuAnchorPane" prefHeight="25.0" prefWidth="647.0">
             <children>
-                <MenuBar id="topMenu" fx:id="topMenu" prefHeight="32.0" prefWidth="889.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-242.0" AnchorPane.topAnchor="0.0">
+                <MenuBar id="topMenu" fx:id="topMenu" prefHeight="32.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-153.0" AnchorPane.topAnchor="0.0">
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>

@@ -71,6 +71,8 @@ public class ProfileController implements Initializable {
     private Button homeButton;
     @FXML
     private Button jobOfferButton;
+    @FXML
+    private Button companyButton;
 
     /**
      * Initializes the controller class.
@@ -140,9 +142,17 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void jobOfferButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.when("JobOfferView", "Offers.fxml" );
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
         FXRouter.setRouteContainer("JobOfferView", generalAnchorPane);
         FXRouter.goTo("JobOfferView");
+    }
+
+    @FXML
+    private void companyButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CompanyListView", "CompanyList.fxml" );
+        FXRouter.setRouteContainer("CompanyListView", generalAnchorPane);
+        FXRouter.goTo("CompanyListView");
+        
     }
     
 
