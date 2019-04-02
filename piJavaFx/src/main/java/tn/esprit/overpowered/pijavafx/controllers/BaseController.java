@@ -87,6 +87,8 @@ public class BaseController implements Initializable {
 
     private Context context;
 
+    private JobOfferFacadeRemote jobOfferFacade;
+
     /**
      * Initializes the controller class.
      */
@@ -197,32 +199,32 @@ public class BaseController implements Initializable {
         CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(cAppJndiName);
 
         CompanyProfile company = new CompanyProfile();
-        company.setName("Facebook");
+        company.setName("Google");
         List<Candidate> registeredCandidates = new ArrayList<>();
         Candidate c = new Candidate();
-        c.setFirstName("Yassine");
-        c.setLastName("Amor");
-        c.setSkills(new HashSet<Skill>(Arrays.asList(Skill.JAVA)));
-        c.setPassword("123456".getBytes());
-        c.setUsername("yazzaq");
-        c.setEmail("yessin.ssasq2841qsdwx@gmail.com");
+        c.setFirstName("Ahmed");
+        c.setLastName("Bacha");
+        c.setSkills(new HashSet<Skill>(Arrays.asList(Skill.PYTHON)));
+        c.setPassword("1234".getBytes());
+        c.setUsername("ahmedbacha");
+        c.setEmail("yassine.amor@esprit.tn");
         registeredCandidates.add(c);
         registeredCandidates.add(c);
         JobOffer jobOffer = new JobOffer();
-        jobOffer.setTitle("Developpeur JAVA");
+        jobOffer.setTitle("Developpeur FULLSTACK JS");
         Set<Skill> skillSet = new HashSet<>();
         skillSet.add(Skill.JAVA);
         skillSet.add(Skill.PYTHON);
         jobOffer.setSkills(skillSet);
         jobOffer.setPeopleNeeded(3);
-        jobOffer.setExpertiseLevel(ExpertiseLevel.JUNIOR);
-        jobOffer.setDescription("The candidate will help us work on JavaEE projects.");
+        jobOffer.setExpertiseLevel(ExpertiseLevel.EXPERT);
+        jobOffer.setDescription("The candidate will help us work on Fullstack JS projects.");
         jobOffer.setCity("Tunis");
         jobOffer.setCompany(company);
         jobOffer.setRegisteredCandidates(registeredCandidates);
 //        jobOfferFacade.create(jobOffer);
-        CandidateApplication candidateApplication = new CandidateApplication("motiv", "resume.pdf", jobOffer);
-        candidateApplication.setCandidate(c);
+//        CandidateApplication candidateApplication = new CandidateApplication("motiv", "resume.pdf", jobOffer);
+//        candidateApplication.setCandidate(c);
 //        candidateApplicationFacade.create(candidateApplication);
         Map<Context, JobOffer> dataMap = new HashMap<>();
         dataMap.put(context, jobOfferFacade.findAll().get(0));
@@ -236,8 +238,6 @@ public class BaseController implements Initializable {
     }
 
     @FXML
-
-
 
     private void profileButtonClicked(MouseEvent event) throws IOException, NamingException {
         String type = Authenticator.currentUser.getDiscriminatorValue();
@@ -259,20 +259,40 @@ public class BaseController implements Initializable {
                 break;
             case "COMPANY_ADMIN":
                 CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
-                FXRouter.goTo("CompanyAdminProfileView",compAdmin);
+                FXRouter.goTo("CompanyAdminProfileView", compAdmin);
                 break;
             case "HUMAN_RESOURCES_MANAGER":
                 HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
-                FXRouter.goTo("CompanyHRProfileView",hrManager);
+                FXRouter.goTo("CompanyHRProfileView", hrManager);
                 break;
             case "PROJECT_MANAGER":
-                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
-                FXRouter.goTo("CompanyPMProfileView",pManager);
+                ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                FXRouter.goTo("CompanyPMProfileView", pManager);
                 break;
             default:
                 break;
         }
 
+    }
+
+    @FXML
+    private void onApplyToJobBtnClicked(ActionEvent event) throws IOException, NamingException {
+        FXRouter.when("JobApplication", "JobApplication.fxml");
+        FXRouter.setRouteContainer("JobApplication", centralAnchorPane);
+        String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
+                + "entrepriseprofile.JobOfferFacadeRemote";
+        jobOfferFacade = (JobOfferFacadeRemote) context.lookup(jndiName);
+        Map<Context, JobOffer> dataMap = new HashMap<>();
+        JobOffer j = jobOfferFacade.findAll().get(0);
+        dataMap.put(context, j);
+        FXRouter.goTo("JobApplication", dataMap);
+    }
+
+    @FXML
+    private void onMyJobApplications(ActionEvent event) throws IOException {
+        FXRouter.when("CandidateAppliedJobs", "CandidateAppliedJobs.fxml");
+        FXRouter.setRouteContainer("CandidateAppliedJobs", centralAnchorPane);
+        FXRouter.goTo("CandidateAppliedJobs");
     }
 
 }
