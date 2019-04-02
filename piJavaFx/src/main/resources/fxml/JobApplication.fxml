@@ -46,8 +46,8 @@
                   </GridPane>
                   <HBox layoutX="268.0" layoutY="439.0" prefHeight="30.0" prefWidth="196.0" spacing="20.0">
                      <children>
-                        <JFXButton style="-fx-background-color: red;" text="Go Back" textFill="#ebebeb" />
-                        <JFXButton style="-fx-background-color: green;" text="Submit Application" textFill="WHITE" />
+                        <JFXButton fx:id="goBack" onAction="#onGoBackBtnClicked" style="-fx-background-color: red;" text="Go Back" textFill="#ebebeb" />
+                        <JFXButton fx:id="submitApp" onAction="#onSubmitAppBtnClicked" style="-fx-background-color: green;" text="Submit Application" textFill="WHITE" />
                      </children>
                   </HBox>
                </children>

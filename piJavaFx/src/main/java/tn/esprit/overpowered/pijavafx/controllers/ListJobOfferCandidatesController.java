@@ -108,10 +108,10 @@ public class ListJobOfferCandidatesController implements Initializable {
             Label stateLabel = new Label("Status: " + candidateApp.getJobApplicationState().name());
             JFXButton detailsBtn = new JFXButton("See More Details");
             detailsBtn.setStyle("-fx-background-color: white;");
-            nameLabel.setFont(Font.font("System", 23));
-            skillsLabel.setFont(Font.font("System", 23));
-            stateLabel.setFont(Font.font("System", 23));
-            detailsBtn.setFont(Font.font("System", 15));
+            nameLabel.setFont(Font.font("System", 17));
+            skillsLabel.setFont(Font.font("System", 17));
+            stateLabel.setFont(Font.font("System", 17));
+            detailsBtn.setFont(Font.font("System", 10));
             candidateHBox.getChildren().add(nameLabel);
             candidateHBox.getChildren().add(skillsLabel);
             candidateHBox.getChildren().add(stateLabel);

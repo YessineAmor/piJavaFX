@@ -10,12 +10,19 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="mainAnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CreateQuizController">
+<AnchorPane id="AnchorPane" fx:id="mainAnchorPane" prefHeight="570.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CreateQuizController">
    <children>
-      <Label layoutX="194.0" layoutY="54.0" text="Creating quiz for the following job offer:" />
-      <Label fx:id="jobOfferName" alignment="CENTER" layoutX="258.0" layoutY="76.0" text="Job Offer Name" textAlignment="CENTER" />
-      <GridPane fx:id="quizInputGridPane" layoutX="92.0" layoutY="137.0" prefHeight="149.0" prefWidth="417.0">
+      <Label layoutX="216.0" layoutY="59.0" text="Creating quiz for the following job offer:" textFill="#19102f">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="jobOfferName" alignment="CENTER" layoutX="319.0" layoutY="97.0" text="Job Offer Name" textAlignment="CENTER" textFill="#231c6b">
+         <font>
+            <Font name="BebasNeueRegular" size="23.0" />
+         </font></Label>
+      <GridPane fx:id="quizInputGridPane" layoutX="167.0" layoutY="220.0" prefHeight="149.0" prefWidth="417.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="0.0" prefWidth="62.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="349.0" minWidth="10.0" prefWidth="300.0" />
@@ -44,6 +51,6 @@
             </HBox>
          </children>
       </GridPane>
-      <Button fx:id="submitBtn" layoutX="224.0" layoutY="325.0" mnemonicParsing="false" onAction="#onSubmitBtnClicked" text="Add questions to the quiz" />
+      <Button fx:id="submitBtn" layoutX="299.0" layoutY="408.0" mnemonicParsing="false" onAction="#onSubmitBtnClicked" text="Add questions to the quiz" />
    </children>
 </AnchorPane>

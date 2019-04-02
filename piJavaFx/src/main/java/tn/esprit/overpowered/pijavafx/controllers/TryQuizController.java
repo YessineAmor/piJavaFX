@@ -1,4 +1,4 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -31,12 +31,12 @@ import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
 import java.awt.Graphics;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -47,29 +47,36 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.apache.commons.lang.time.DurationFormatUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.math.geometry.shape.Rectangle;
+import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.quiz.Answer;
 import tn.esprit.overpowered.byusforus.entities.quiz.Choice;
 import tn.esprit.overpowered.byusforus.entities.quiz.Question;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuestionType;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
+import tn.esprit.overpowered.byusforus.util.JobApplicationState;
 import util.authentication.Authenticator;
+import util.factories.CreateAlert;
 import util.routers.FXRouter;
 
 /**
@@ -117,13 +124,15 @@ public class TryQuizController implements Initializable {
     private ScrollPane scrollPane;
     @FXML
     private AnchorPane anchorScrollPane;
+    private List<Integer> lastFiveFaces = new ArrayList<>();
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
-
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
         FXRouter.when("QuizResults", "QuizResults.fxml");
         FXRouter.setRouteContainer("QuizResults", anchorPane);
@@ -159,12 +168,17 @@ public class TryQuizController implements Initializable {
         quizTry.setQuiz(quiz);
         initVideo(quizTry.getRecording());
         initCam();
+
 //        Button stopCapture = new Button("Stop capture");
 //        anchorPane.getChildren().add(stopCapture);
         Thread cameraThread = new Thread(() -> {
             while (!stopCamera) {
                 capture = webcam.getImage();
-                detectFaces(capture);
+                try {
+                    detectFaces(capture);
+                } catch (IOException ex) {
+                    Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 Image img = SwingFXUtils.toFXImage(capture, null);
                 imageProperty.set(img);
                 saveCaptureToVideo(capture, start);
@@ -214,23 +228,50 @@ public class TryQuizController implements Initializable {
                     quizTry.setAnswers(answers);
                     quizTry.setPercentage(calculateQuizScore());
                     String jndiName = "piJEE-ejb-1.0/QuizTryFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote";
+                    String jndiNamejo = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote";
                     String quizFacadejndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
-
+                    quiz.getJobOffer().setSkills(new HashSet<>());
+                    quiz.getJobOffer().getCompany().setListOfOffers(new ArrayList<>());
                     QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) secondContext.lookup(jndiName);
+                    JobOfferFacadeRemote jobOfferFacade = (JobOfferFacadeRemote) secondContext.lookup(jndiNamejo);
 //                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
                     System.out.println("quiz try serial" + QuizTry.getSerialVersionUID());
 //                    quizTryFacadeProxy.create(quizTry);
                     ObjectMapper mapper = new ObjectMapper();
                     quizTry.setIdQuizTry(250L);
-                    String fileName = quizTry.getQuiz().getId() + Authenticator.currentUser.getEmail();
-                    mapper.writeValue(new File(fileName + ".json"), quizTry);
+                    quiz.setJobOffer(jobOfferFacade.find(1L));
+                    String fileName = "quiz_try_" + quizTry.getQuiz().getId() + "_" + Authenticator.currentUser.getEmail();
+//                    mapper.writeValue(new File(fileName + ".json"), quizTry);
+                    String jndiName2 = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
+                    CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName2);
+                    CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(Authenticator.currentUser.getId(), quiz.getJobOffer().getId());
+                    JSONObject quizTryJSON = new JSONObject();
+                    quizTryJSON.put("quizId", quiz.getId());
+                    quizTryJSON.put("candidateId", Authenticator.currentUser.getId());
+                    quizTryJSON.put("score", quizTry.getPercentage());
+                    quizTryJSON.put("answers", candidateAnswers);
+                    JSONArray quizTryList = new JSONArray();
+                    quizTryList.add(quizTryJSON);
+                    try (FileWriter file = new FileWriter(fileName + ".json")) {
+                        file.write(quizTryList.toJSONString());
+                        file.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (quizTry.getPercentage() >= 80f) {
+                        cApp.setJobApplicationState(JobApplicationState.ACCEPTED_FOR_INTERVIEW);
+                        candidateApplicationFacade.updateCandidateApplication(cApp.getId(), cApp.getAdditionalInfo(), cApp.getJobApplicationState());
+                    } else {
+                        cApp.setJobApplicationState(JobApplicationState.REFUSED);
+                        candidateApplicationFacade.updateCandidateApplication(cApp.getId(), cApp.getAdditionalInfo(), cApp.getJobApplicationState());
 
+                    }
 //                    quiz.getQuizTries().add(quizTry);
 //                    quizFacadeProxy.edit(quiz);
                     try {
-                        QuizTry quizTry2 = mapper.readValue(new File(fileName + ".json"), QuizTry.class);
-                        System.out.println("this is quiz try from json : \n " + quizTry2);
-                        FXRouter.goTo("QuizResults", quizTry2);
+//                        QuizTry quizTry2 = mapper.readValue(new File(fileName + ".json"), QuizTry.class);
+//                        System.out.println("this is quiz try from json : \n " + quizTry2);
+                        FXRouter.goTo("QuizResults", quizTry);
                         stopCamera = true;
 //                        writer.close();
 //                        webcam.close();
@@ -238,8 +279,6 @@ public class TryQuizController implements Initializable {
                         Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } catch (NamingException ex) {
-                    Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
                     Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
@@ -319,9 +358,43 @@ public class TryQuizController implements Initializable {
         }
     }
 
-    public void detectFaces(BufferedImage imageToAnalyse) {
+    public Boolean checkLastFiveFaces() {
+        Boolean moreThan = true;
+        for (int a : lastFiveFaces) {
+            if (a < 2) {
+                moreThan = false;
+            }
+        }
+        return moreThan;
+    }
+
+    public void detectFaces(BufferedImage imageToAnalyse) throws IOException {
         HaarCascadeDetector detector = new HaarCascadeDetector();
         faces = detector.detectFaces(ImageUtilities.createFImage(imageToAnalyse));
+        lastFiveFaces.add(faces.size());
+        if (lastFiveFaces.size() >= 5) {
+            if (checkLastFiveFaces()) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Detected more than two faces!!!");
+                        CreateAlert.CreateAlert(Alert.AlertType.ERROR, "ERROR!", "Cheating detected.",
+                                "We have detected a cheating attempt from your part."
+                                + " An employee will review the incident and make a decision.");
+                        stopCamera = true;
+
+                        try {
+                            FXRouter.goTo("baseView");
+                        } catch (IOException ex) {
+                            Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+
+            } else {
+                lastFiveFaces.clear();
+            }
+        }
         facesList.clear();
         for (DetectedFace face : faces) {
             BufferedImage facePatch = ImageUtilities.createBufferedImage(face.getFacePatch());
@@ -339,7 +412,7 @@ public class TryQuizController implements Initializable {
     }
 
     public void initCam() {
-        webcam = Webcam.getDefault();
+        webcam = Webcam.getWebcams().get(1);
         webcam.setViewSize(new Dimension(640, 480));
         webcam.open();
     }
@@ -374,7 +447,4 @@ public class TryQuizController implements Initializable {
         System.out.println("Correct Answers Score : " + correctAnswersScore);
         return (float) (correctAnswersScore / pointsSum) * 100;
     }
-
-
 }
-
