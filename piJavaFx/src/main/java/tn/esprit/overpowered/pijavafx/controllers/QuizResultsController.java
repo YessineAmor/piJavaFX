@@ -36,17 +36,24 @@ public class QuizResultsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        double resultLabelLayoutX1 = (FXRouter.scene.widthProperty().doubleValue() / 2) - resultLabel.getWidth() / 2;
+        resultLabel.setLayoutX(resultLabelLayoutX1);
+        double infoLabelLayoutX1 = (FXRouter.scene.widthProperty().doubleValue() / 2) - infoLabel.getWidth() / 2;
+        infoLabel.setLayoutX(infoLabelLayoutX1);
+        confettiImageView.setPreserveRatio(true);
         confettiImageView.fitWidthProperty().bind(FXRouter.scene.widthProperty());
+        confettiImageView.fitHeightProperty().bind(FXRouter.scene.heightProperty());
         FXRouter.scene.widthProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("scene width changed: " + newValue);
-            resultLabel.setLayoutX(100);
-            resultLabel.relocate((double) newValue / 2, 200);
-            System.out.println("rseult label layout x " + resultLabel.getLayoutX());
-            infoLabel.setLayoutX((double) newValue / 2);
-            confettiImageView.setFitWidth((double) newValue);
+            double resultLabelLayoutX = (newValue.doubleValue() / 2) - resultLabel.getWidth() / 2;
+            resultLabel.setLayoutX(resultLabelLayoutX);
+            double infoLabelLayoutX = (newValue.doubleValue() / 2) - infoLabel.getWidth() / 2;
+            infoLabel.setLayoutX(infoLabelLayoutX);
+            confettiImageView.fitWidthProperty().bind(FXRouter.scene.widthProperty());
+        });
+        FXRouter.scene.heightProperty().addListener((observable, oldValue, newValue) -> {
+            confettiImageView.fitHeightProperty().bind(FXRouter.scene.heightProperty());
         });
         QuizTry quizTry = (QuizTry) FXRouter.getData();
-        System.out.println("quiz try serial" + QuizTry.getSerialVersionUID());
         float score = quizTry.getPercentage();
         float percentageToPass = quizTry.getQuiz().getPercentageToPass();
         System.out.println("Score user: " + score);

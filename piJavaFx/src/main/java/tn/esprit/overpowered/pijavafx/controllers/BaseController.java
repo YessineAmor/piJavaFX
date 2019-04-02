@@ -11,8 +11,10 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
@@ -29,7 +31,9 @@ import javafx.scene.layout.AnchorPane;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
+import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
@@ -37,6 +41,7 @@ import tn.esprit.overpowered.byusforus.entities.users.HRManager;
 import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
@@ -80,11 +85,18 @@ public class BaseController implements Initializable {
     @FXML
     private JFXButton manageCandidacyBtn;
 
+    private Context context;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            context = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // First register a new RouteScene
         // Then bind that RouteScene to its container
         FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
@@ -152,9 +164,10 @@ public class BaseController implements Initializable {
     private void onCreateQuizBtnClicked(ActionEvent event) throws IOException, NamingException {
 //       FXRouter.goTo("CreateQuiz");
         String jndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
-        Context context = new InitialContext();
         QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(jndiName);
-        FXRouter.goTo("QuizInfo", quizFacadeProxy.findAll().get(0));
+        Map<Context, Quiz> dataMap = new HashMap<>();
+        dataMap.put(context, quizFacadeProxy.findAll().get(0));
+        FXRouter.goTo("QuizInfo", dataMap);
     }
 
     public AnchorPane getCentralAnchorPane() {
@@ -178,8 +191,10 @@ public class BaseController implements Initializable {
     private void onManageCandidacyBtnClicked(ActionEvent event) throws NamingException, IOException, NamingException, NoSuchAlgorithmException {
         String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
                 + "entrepriseprofile.JobOfferFacadeRemote";
-        Context context = new InitialContext();
+        String cAppJndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered."
+                + "byusforus.services.candidat.CandidateApplicationFacadeRemote";
         JobOfferFacadeRemote jobOfferFacade = (JobOfferFacadeRemote) context.lookup(jndiName);
+        CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(cAppJndiName);
 
         CompanyProfile company = new CompanyProfile();
         company.setName("Facebook");
@@ -189,11 +204,12 @@ public class BaseController implements Initializable {
         c.setLastName("Amor");
         c.setSkills(new HashSet<Skill>(Arrays.asList(Skill.JAVA)));
         c.setPassword("123456".getBytes());
-        c.setUsername("pidevcandidate");
+        c.setUsername("yazzaq");
+        c.setEmail("yessin.ssasq2841qsdwx@gmail.com");
         registeredCandidates.add(c);
         registeredCandidates.add(c);
         JobOffer jobOffer = new JobOffer();
-        jobOffer.setTitle("Développeur JAVA");
+        jobOffer.setTitle("Developpeur JAVA");
         Set<Skill> skillSet = new HashSet<>();
         skillSet.add(Skill.JAVA);
         skillSet.add(Skill.PYTHON);
@@ -204,9 +220,13 @@ public class BaseController implements Initializable {
         jobOffer.setCity("Tunis");
         jobOffer.setCompany(company);
         jobOffer.setRegisteredCandidates(registeredCandidates);
-        jobOfferFacade.create(jobOffer);
-
-        FXRouter.goTo("ListJobOfferCandidates", jobOffer);
+//        jobOfferFacade.create(jobOffer);
+        CandidateApplication candidateApplication = new CandidateApplication("motiv", "resume.pdf", jobOffer);
+        candidateApplication.setCandidate(c);
+//        candidateApplicationFacade.create(candidateApplication);
+        Map<Context, JobOffer> dataMap = new HashMap<>();
+        dataMap.put(context, jobOfferFacade.findAll().get(0));
+        FXRouter.goTo("ListJobOfferCandidates", dataMap);
     }
 
     private void contactsButtonClicked(MouseEvent event) throws IOException {
