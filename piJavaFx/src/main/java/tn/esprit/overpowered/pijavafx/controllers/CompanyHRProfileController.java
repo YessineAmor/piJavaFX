@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import tn.esprit.overpowered.byusforus.entities.users.HRManager;
 import util.routers.FXRouter;
 
 /**
@@ -70,6 +71,13 @@ public class CompanyHRProfileController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        HRManager hrm = (HRManager) FXRouter.getData();
+        name.setText(hrm.getFirstName());
+        lastname.setText(hrm.getLastName());
+        email.setText(hrm.getEmail());
+        recommendations.setText(Integer.toString(hrm.getRecommendations()));
+        visits.setText(Integer.toString(hrm.getVisits()));
+        username.setText(hrm.getUsername());
         FXRouter.when("OffersView", "Offers.fxml", 889, 543);
         FXRouter.setRouteContainer("OffersView", parentAnchorPane);
         FXRouter.when("BaseView", "Base.fxml");
@@ -83,12 +91,14 @@ public class CompanyHRProfileController implements Initializable {
 
     @FXML
     private void homeButtonOnClicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("BaseView");
+        HRManager hrm = (HRManager) FXRouter.getData();
+        FXRouter.goTo("BaseView",hrm);
     }
 
     @FXML
     private void jobOffersButtonOnClicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("OffersView");
+        HRManager hrm = (HRManager) FXRouter.getData();
+        FXRouter.goTo("OffersView",hrm);
     }
 
 }

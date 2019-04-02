@@ -28,27 +28,20 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
-import tn.esprit.overpowered.byusforus.entities.users.Candidate;
-import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
-import tn.esprit.overpowered.byusforus.entities.users.HRManager;
-import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
-import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
-import util.authentication.Authenticator;
-import util.information.tracker.InfoTracker;
 import util.routers.FXRouter;
 
 /**
  * FXML Controller class
  *
- * @author pc
+ * @author EliteBook
  */
-public class OffersController implements Initializable {
+public class CandidateJobOfferListController implements Initializable {
 
     @FXML
-    private AnchorPane parentAnchorPane;
-    @FXML
     private AnchorPane rightMenuAnchorPane;
+    @FXML
+    private Button homeButton;
     @FXML
     private Button profileButton;
     @FXML
@@ -58,17 +51,17 @@ public class OffersController implements Initializable {
     @FXML
     private TableView<JobOffer> jobsView;
     @FXML
-    private TableColumn<JobOffer, String> title;
+    private TableColumn<?,? > title;
     @FXML
-    private TableColumn<JobOffer, String> offerStatus;
+    private TableColumn<?, ?> offerStatus;
     @FXML
-    private TableColumn<JobOffer, String> dateOfCreation;
+    private TableColumn<?, ?> dateOfCreation;
     @FXML
-    private TableColumn<JobOffer, String> city;
+    private TableColumn<?, ?> city;
     @FXML
-    private TableColumn<JobOffer, String> dateOfArchive;
+    private TableColumn<?, ?> dateOfArchive;
     @FXML
-    private TableColumn<JobOffer, String> peopleNeeded;
+    private TableColumn<?, ?> peopleNeeded;
     @FXML
     private JFXButton viewProfile;
     @FXML
@@ -76,19 +69,14 @@ public class OffersController implements Initializable {
     @FXML
     private Button searchButton;
     @FXML
-    private Button newOfferButton;
-    @FXML
-    private Button homeButton;
-    @FXML
-    private Button myProfileButton;
+    private AnchorPane parentAnchorPane;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        FXRouter.when("CreateJobOfferView", "CreateJobOffer.fxml", "JobOffer", 640, 425);
+     FXRouter.when("CreateJobOfferView", "CreateJobOffer.fxml", "JobOffer", 640, 425);
         FXRouter.setRouteContainer("CreateJobOfferView", parentAnchorPane);
         FXRouter.when("CompanyHRProfileView", "CompanyHRProfile.fxml", "Profile", 600, 400);
         FXRouter.setRouteContainer("CompanyHRProfileView", parentAnchorPane);
@@ -102,7 +90,7 @@ public class OffersController implements Initializable {
             JobOfferFacadeRemote jobOfferProxy = (JobOfferFacadeRemote) context.lookup(jndiName);
             List<JobOffer> list = jobOfferProxy.viewAllOffers();
             if (list.isEmpty()) {
-                System.out.println("EMPTYYYYYYYYYYYYYYYYYYYY");
+                System.out.println("EMPTY");
             }
             //System.out.println("THE LOCATION ISSSSSSSSSS: " + list.get(0).getCity());
             ObservableList<JobOffer> offerObs = FXCollections.observableArrayList();
@@ -117,15 +105,25 @@ public class OffersController implements Initializable {
             dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
             peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
             System.out.println("Still working at this point");
-            jobsView.setItems(offerObs);
+           jobsView.setItems(offerObs);
 
         } catch (NamingException ex) {
             Logger.getLogger(CandidateListController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }    
+
+    @FXML
+    private void homeButtonOnClicked(MouseEvent event) throws IOException {
+         FXRouter.when("BaseView", "Base.fxml");
+        FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+        FXRouter.goTo("BaseView");
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) {
+    private void profileButtonClicked(MouseEvent event) throws IOException {
+         FXRouter.when("ProfileViews", "Profile.fxml");
+        FXRouter.setRouteContainer("ProfileView", parentAnchorPane);
+        FXRouter.goTo("ProfileView");
     }
 
     @FXML
@@ -139,39 +137,5 @@ public class OffersController implements Initializable {
     @FXML
     private void searchButtonClicked(MouseEvent event) {
     }
-
-    @FXML
-    private void newOfferButtonOnclicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("CreateJobOfferView");
-    }
-
-    @FXML
-    private void homeButtonOnClicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("BaseView");
-    }
-
-    @FXML
-    private void myProfileButtonOnClicked(MouseEvent event) throws IOException, NamingException {
- String type = Authenticator.currentUser.getDiscriminatorValue();
-        Long currentUserId = Authenticator.currentUser.getId();
-        switch (type) {
-            case "COMPANY_ADMIN":
-                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
-                FXRouter.goTo("CompanyAdminProfileView",compAdmin);
-                break;
-            case "HUMAN_RESOURCES_MANAGER":
-                System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
-                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
-                FXRouter.goTo("CompanyHRProfileView",hrManager);
-                break;
-            case "PROJECT_MANAGER":
-                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
-                FXRouter.goTo("CompanyPMProfileView",pManager);
-                break;
-            default:
-                break;
-        }
-
-    }
-
+    
 }

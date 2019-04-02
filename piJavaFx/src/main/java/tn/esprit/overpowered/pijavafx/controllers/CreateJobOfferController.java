@@ -36,8 +36,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javax.naming.NamingException;
 import javax.swing.JCheckBox;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
+import tn.esprit.overpowered.byusforus.entities.users.HRManager;
+import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
+import util.authentication.Authenticator;
+import util.information.tracker.InfoTracker;
 import util.routers.FXRouter;
 import utilJoboffer.HandleOffer;
 import utilJoboffer.SkillView;
@@ -99,6 +104,8 @@ public class CreateJobOfferController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        FXRouter.when("OffersView", "Offers.fxml", 889, 543);
+        FXRouter.setRouteContainer("OffersView", parentAnchorPane);
         expertiseLevelComboBox.setValue("JUNIOR");
         expertiseLevelComboBox.setItems(expertiseLevels);
         TableColumn skillColumn = new TableColumn("SKILLS");
@@ -114,35 +121,64 @@ public class CreateJobOfferController implements Initializable {
     }
 
     @FXML
-    private void createOfferButtonOnClicked(MouseEvent event) throws NamingException {
-        ObservableList<SkillView> selectSkills = FXCollections
-                .observableArrayList();
+    private void createOfferButtonOnClicked(MouseEvent event) throws NamingException, IOException {
+        String type = Authenticator.currentUser.getDiscriminatorValue();
+        Long currentUserId = Authenticator.currentUser.getId();
         Set<Skill> listofSkills = new HashSet<>();
         skills.stream().filter((skil) -> (skil.getSelect().isSelected())).forEachOrdered((SkillView skil) -> {
             listofSkills.add(Skill.valueOf(skil.getSkill()));
         });
-        HandleOffer.createJobOffer(title.getText(), location.getText(),
-                ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
-                Integer.parseInt(neededCandidates.getText()));
+        switch (type) {
+            case "COMPANY_ADMIN":
+                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
+                FXRouter.goTo("OffersView", compAdmin);
+                HandleOffer.createJobOffer(title.getText(), location.getText(),
+                        ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
+                        Integer.parseInt(neededCandidates.getText()), description.getText());
+                break;
+            case "HUMAN_RESOURCES_MANAGER":
+                System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
+                HandleOffer.createJobOffer(title.getText(), location.getText(),
+                        ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
+                        Integer.parseInt(neededCandidates.getText()), description.getText());
+                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
+                FXRouter.goTo("OffersVieww", hrManager);
+                break;
+            case "PROJECT_MANAGER":
+                ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                HandleOffer.requestJobOfferCreation(title.getText(), location.getText(),
+                        ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
+                        Integer.parseInt(neededCandidates.getText()), description.getText());
+                FXRouter.goTo("OffersView", pManager);
+                break;
+            default:
+                break;
 
+        }
     }
 
     @FXML
-    private void homePageButton(MouseEvent event) {
+    private void homePageButton(MouseEvent event
+    ) throws IOException {
+        FXRouter.when("BaseView", "Base.fxml");
+        FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+        FXRouter.goTo("BaseView");
     }
 
     @FXML
-    private void myprofileButton(MouseEvent event) {
+    private void myprofileButton(MouseEvent event
+    ) {
     }
 
     @FXML
-    private void offersButtonOnClicked(MouseEvent event) {
+    private void offersButtonOnClicked(MouseEvent event
+    ) {
     }
 
     @FXML
     private void logoutButtonOnClicked(MouseEvent event) throws IOException {
-       FXRouter.when("LoginView", "Login.fxml","Login",600,400);
-        FXRouter.setRouteContainer("LoginView",parentAnchorPane);
+        FXRouter.when("LoginView", "Login.fxml", "Login", 600, 400);
+        FXRouter.setRouteContainer("LoginView", parentAnchorPane);
         FXRouter.goTo("LoginView");
     }
 

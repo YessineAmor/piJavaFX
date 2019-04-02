@@ -16,6 +16,7 @@ import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
 import tn.esprit.overpowered.byusforus.entities.util.OfferStatus;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
 import tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.users.ProjectManagerFacadeRemote;
 import util.authentication.Authenticator;
 
 /**
@@ -26,20 +27,39 @@ public class HandleOffer {
 
     public static void createJobOffer(String title,
             String location, ExpertiseLevel expertiseLevel,
-            Set<Skill> skills,int nberOfpeopleNeeded) throws NamingException{
-   String jndiName = "piJEE-ejb-1.0/HRManagerFacade!tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote";
-    Context context = new InitialContext();
-    HRManagerFacadeRemote hrManagerProxy = (HRManagerFacadeRemote)context.lookup(jndiName);
-    
-    JobOffer jobOffer = new JobOffer();
-    jobOffer.setTitle(title);
-    jobOffer.setCity(location);
-    jobOffer.setExpertiseLevel(expertiseLevel);
-    jobOffer.setPeopleNeeded(nberOfpeopleNeeded);
-    jobOffer.setSkills(skills);
-    jobOffer.setOfferStatus(OfferStatus.AVAILABLE);
-    Long hrId = Authenticator.currentUser.getId();
-    hrManagerProxy.createOffer(hrId, jobOffer);
+            Set<Skill> skills, int nberOfpeopleNeeded, String description) throws NamingException {
+        String jndiName = "piJEE-ejb-1.0/HRManagerFacade!tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote";
+        Context context = new InitialContext();
+        HRManagerFacadeRemote hrManagerProxy = (HRManagerFacadeRemote) context.lookup(jndiName);
+
+        JobOffer jobOffer = new JobOffer();
+        jobOffer.setTitle(title);
+        jobOffer.setCity(location);
+        jobOffer.setExpertiseLevel(expertiseLevel);
+        jobOffer.setPeopleNeeded(nberOfpeopleNeeded);
+        jobOffer.setSkills(skills);
+        jobOffer.setOfferStatus(OfferStatus.AVAILABLE);
+        jobOffer.setDescription(description);
+        Long hrId = Authenticator.currentUser.getId();
+        hrManagerProxy.createOffer(hrId, jobOffer);
     }
-    
+
+    public static boolean requestJobOfferCreation(String title,
+            String location, ExpertiseLevel expertiseLevel,
+            Set<Skill> skills, int nberOfpeopleNeeded, String description) throws NamingException {
+        String jndiName = "piJEE-ejb-1.0/ProjectManagerFacade!tn.esprit.overpowered.byusforus.services.users.ProjectManagerFacadeRemote";
+        Context context = new InitialContext();
+        ProjectManagerFacadeRemote pManagerProxy = (ProjectManagerFacadeRemote) context.lookup(jndiName);
+
+                JobOffer jobOffer = new JobOffer();
+        jobOffer.setTitle(title);
+        jobOffer.setCity(location);
+        jobOffer.setExpertiseLevel(expertiseLevel);
+        jobOffer.setPeopleNeeded(nberOfpeopleNeeded);
+        jobOffer.setSkills(skills);
+        jobOffer.setDescription(description);
+        Long pmId = Authenticator.currentUser.getId();
+        return pManagerProxy.createJobOfferRequest(jobOffer,pmId);
+    }
+
 }
