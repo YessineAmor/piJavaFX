@@ -140,7 +140,7 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void jobOfferButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.when("JobOfferView", "Offers.fxml" );
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
         FXRouter.setRouteContainer("JobOfferView", generalAnchorPane);
         FXRouter.goTo("JobOfferView");
     }

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="parentAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CreateJobOfferController">
+<AnchorPane id="AnchorPane" fx:id="parentAnchorPane" maxHeight="425.0" maxWidth="640.0" minHeight="425.0" minWidth="640.0" prefHeight="425.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CreateJobOfferController">
     <children>
         <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="404.0" prefWidth="94.0" style="-fx-background-color: gray;">
             <children>
