@@ -34,13 +34,13 @@ public class InfoTracker {
 
     public static HRManager getHRInformation(Long currentUserId) throws NamingException {
         Context context = new InitialContext();
-        HRManagerFacadeRemote hrProxy = (HRManagerFacadeRemote) context.lookup(jndiName2);
+        HRManagerFacadeRemote hrProxy = (HRManagerFacadeRemote) context.lookup(jndiName3);
         return hrProxy.find(currentUserId);
     }
 
     public static ProjectManager getPMInformation(Long currentUserId) throws NamingException {
         Context context = new InitialContext();
-        ProjectManagerFacadeRemote pmProxy = (ProjectManagerFacadeRemote) context.lookup(jndiName2);
+        ProjectManagerFacadeRemote pmProxy = (ProjectManagerFacadeRemote) context.lookup(jndiName4);
         return pmProxy.find(currentUserId);
     }
 
