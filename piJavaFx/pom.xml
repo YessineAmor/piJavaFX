@@ -44,7 +44,26 @@
 
                 </configuration>
             </plugin>
-
+            <!--plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeScope>system</excludeScope>
+                            <excludeGroupIds>junit,org.mockito,org.hamcrest</excludeGroupIds>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <excludeTypes>pom</excludeTypes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin-->
         </plugins>
     </build>
 
@@ -216,11 +235,17 @@
             </exclusions>
         </dependency>
         
-        <!--dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.8</version>
+        </dependency>
+        <dependency>
             <groupId>xuggle</groupId>
             <artifactId>xuggle-xuggler</artifactId>
             <version>5.4</version>
-        </dependency-->
+        </dependency>
+
         <!-- MigLayout -->
 
         <dependency>
@@ -267,20 +292,14 @@
             <artifactId>jfoenix</artifactId>
             <version>8.0.8</version>
         </dependency>
-
+      
         <!-- ControlsFX -->
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
             <version>8.40.14</version>
-      </dependency>
-        <!-- Font Awesome -->
-        <dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx-commons</artifactId>
-            <version>9.1.2</version>
-            <type>pom</type>
         </dependency>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>piJEE-ejb</artifactId>
@@ -288,11 +307,11 @@
         </dependency>
     </dependencies>
     
-    <!--repositories>
+    <repositories>
         <repository>
             <id>xuggle repo</id>
-            <url>http://www.dcm4che.org/maven2/</url>
+            <url>https://www.dcm4che.org/maven2/</url>
         </repository>
-    </repositories-->
+    </repositories>
    
 </project>

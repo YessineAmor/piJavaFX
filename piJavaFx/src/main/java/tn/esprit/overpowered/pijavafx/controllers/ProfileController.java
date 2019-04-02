@@ -17,13 +17,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.authentication.Session;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.users.CompanyAdminFacadeRemote;
 import util.authentication.Authenticator;
 import util.routers.FXRouter;
 
@@ -40,8 +43,6 @@ public class ProfileController implements Initializable {
     private Button profileButton;
     @FXML
     private JFXButton messagesButton;
-    @FXML
-    private JFXButton messagesButton1;
     @FXML
     private JFXButton notificationsButton;
     @FXML
@@ -64,36 +65,85 @@ public class ProfileController implements Initializable {
     private MenuBar topMenu;
     @FXML
     private AnchorPane generalAnchorPane;
+    @FXML
+    private Button contactsButtons;
+    @FXML
+    private Button homeButton;
+    @FXML
+    private Button jobOfferButton;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
-        Context context;
-        try {
-            context = new InitialContext();
-             CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
-        Candidate cdt = new Candidate();
-        cdt = candidateProxy.find(Authenticator.currentUser.getId());
-        name.setText(cdt.getFirstName());
-        lastname.setText(cdt.getLastName());
-        email.setText(cdt.getEmail());
-        recommendations.setText(Integer.toString(cdt.getRecommendations()));
-        visits.setText(Integer.toString(cdt.getVisits()));
-        username.setText(cdt.getUsername());
-        } catch (NamingException ex) {
-            Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+        String type = Authenticator.currentUser.getDiscriminatorValue();
+        if (type.equals("CANDIDATE")) {
+            String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+            Context context;
+            try {
+                context = new InitialContext();
+                CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+                Candidate cdt = new Candidate();
+                cdt = candidateProxy.find(Authenticator.currentUser.getId());
+                name.setText(cdt.getFirstName());
+                lastname.setText(cdt.getLastName());
+                email.setText(cdt.getEmail());
+                recommendations.setText(Integer.toString(cdt.getRecommendations()));
+                visits.setText(Integer.toString(cdt.getVisits()));
+                username.setText(cdt.getUsername());
+            } catch (NamingException ex) {
+                Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (type.equals("COMPANY_ADMIN")) {
+            try {
+                String jndiName = "piJEE-ejb-1.0/CompanyAdminFacade!tn.esprit.overpowered.byusforus.services.users.CompanyAdminFacadeRemote";
+                Context context;
+                context = new InitialContext();
+                CompanyAdminFacadeRemote adminProxy = (CompanyAdminFacadeRemote) context.lookup(jndiName);
+                CompanyAdmin admin = new CompanyAdmin();
+                admin = adminProxy.find(Authenticator.currentUser.getId());
+                name.setText(admin.getFirstName());
+                lastname.setText(admin.getLastName());
+                email.setText(admin.getEmail());
+                recommendations.setText(Integer.toString(admin.getRecommendations()));
+                visits.setText(Integer.toString(admin.getVisits()));
+                username.setText(admin.getUsername());
+            } catch (NamingException ex) {
+                Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-       
-    }    
+
+    }
 
     @FXML
     private void profileButtonClicked(ActionEvent event) throws IOException {
-       FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.when("Profile", "Profile.fxml");
         FXRouter.setRouteContainer("Profile", generalAnchorPane);
         FXRouter.goTo("Profile");
     }
+
+
+    @FXML
+    private void contactsButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml");
+        FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void homeButtonClicked(MouseEvent event) throws IOException {
+         FXRouter.when("BaseView", "Base.fxml" );
+        FXRouter.setRouteContainer("BaseView", generalAnchorPane);
+        FXRouter.goTo("BaseView");
+    }
+
+    @FXML
+    private void jobOfferButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("JobOfferView", "Offers.fxml" );
+        FXRouter.setRouteContainer("JobOfferView", generalAnchorPane);
+        FXRouter.goTo("JobOfferView");
+    }
     
+
 }

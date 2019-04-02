@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
+import util.cache.ContextCache;
 
 /**
  *
@@ -20,14 +21,17 @@ import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
 public class UserCreator {
 
     public static void main(String[] args) throws NamingException, NoSuchAlgorithmException {
-        String jndiName = "piJEE-ejb-1.0/UserFacade!tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote";
-        Context context = new InitialContext();
-        UserFacadeRemote uF = (UserFacadeRemote) context.lookup(jndiName);
         User u = new User();
         u.setEmail("mohamedamine.skhiri@esprit.tn");
         u.setPassword("1234@".getBytes(StandardCharsets.UTF_8));
-        u.setUsername("aminesk");
-        uF.create(u);
+        u.setUsername("amine");
+        getRemote().create(u);
         System.out.println("Done");
+    }
+    
+        public static UserFacadeRemote getRemote() {
+        return (UserFacadeRemote) ContextCache
+                .getInstance()
+                .getProxy("piJEE-ejb-1.0/UserFacade!tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote");
     }
 }

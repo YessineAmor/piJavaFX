@@ -16,10 +16,12 @@ import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
 import tn.esprit.overpowered.byusforus.entities.users.HRManager;
+import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.users.CompanyAdminFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.users.ProjectManagerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
 import tn.esprit.overpowered.byusforus.util.Role;
 import util.routers.FXRouter;
@@ -56,6 +58,13 @@ public class SignUp {
     }
 
     public static String ContinueAsHRManager(String email) throws NamingException {
+        String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+        Context context = new InitialContext();
+        CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+        return candidateProxy.accountCreationConfirmation(email);
+    }
+
+    public static String ContinueAsPManager(String email) throws NamingException {
         String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
         Context context = new InitialContext();
         CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
@@ -115,8 +124,21 @@ public class SignUp {
         hrManager.setCurriculumVitaes("");
         HRManagerFacadeRemote hrManagerProxy = (HRManagerFacadeRemote) context.lookup(jndiName);
         Long hrmId = hrManagerProxy.createHRManager(hrManager);
-        SignUp.bindHRtoCompany(compName,hrmId);
-        
+        SignUp.bindHRtoCompany(compName, hrmId);
+
+    }
+
+    //FINALIZING ENTREPRISE PROJECT MANAGER CREATION
+    public static void finishPManagerCreation(ProjectManager pManager) throws NamingException {
+        String jndiName = "piJEE-ejb-1.0/ProjectManagerFacade!tn.esprit.overpowered.byusforus.services.users.ProjectManagerFacadeRemote";
+        Context context = new InitialContext();
+        //This is the company name set in the curriculumVitae
+        String compName = pManager.getCurriculumVitaes();
+        pManager.setIntroduction("");
+        pManager.setCurriculumVitaes("");
+        ProjectManagerFacadeRemote pManagerProxy = (ProjectManagerFacadeRemote) context.lookup(jndiName);
+        Long pmId = pManagerProxy.createPManager(pManager);
+        SignUp.bindPMtoCompany(compName, pmId);
 
     }
 
@@ -196,11 +218,30 @@ public class SignUp {
 
     }
 
+    public static ProjectManager collectInfoPManager(String username, String email,
+            String password, String fisrtname, String lastname) throws NoSuchAlgorithmException {
+
+        ProjectManager pManager = new ProjectManager();
+        pManager.setUsername(username);
+        pManager.setEmail(email);
+        pManager.setFirstName(fisrtname);
+        pManager.setLastName(lastname);
+        pManager.setPassword(password.getBytes());
+        return pManager;
+
+    }
+
     public static boolean bindHRtoCompany(String compName, Long hrmId) throws NamingException {
         String jndiName = "piJEE-ejb-1.0/HRManagerFacade!tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote";
         Context context = new InitialContext();
         HRManagerFacadeRemote hrManagerProxy = (HRManagerFacadeRemote) context.lookup(jndiName);
-       return hrManagerProxy.affecterHRtoCompany(hrmId, compName);
+        return hrManagerProxy.affecterHRtoCompany(hrmId, compName);
     }
 
+    public static boolean bindPMtoCompany(String compName, Long hrmId) throws NamingException {
+        String jndiName = "piJEE-ejb-1.0/ProjectManagerFacade!tn.esprit.overpowered.byusforus.services.users.ProjectManagerFacadeRemote";
+        Context context = new InitialContext();
+        ProjectManagerFacadeRemote pManagerProxy = (ProjectManagerFacadeRemote) context.lookup(jndiName);
+        return pManagerProxy.affecterPMtoCompany(hrmId, compName);
+    }
 }

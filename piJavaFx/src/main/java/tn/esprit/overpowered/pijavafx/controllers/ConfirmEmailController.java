@@ -38,7 +38,7 @@ public class ConfirmEmailController implements Initializable {
     @FXML
     private JFXTextField confirmCode;
 
-    private int count =0;
+    private int count = 0;
     @FXML
     private Hyperlink resendCodeLink;
     @FXML
@@ -53,8 +53,11 @@ public class ConfirmEmailController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        FXRouter.when("CandidateHomeView", "CandidateHome.fxml");
-        FXRouter.setRouteContainer("CandidateHomeView", parentAnchorPane);
+        FXRouter.when("SignUpView", "SignUp.fxml");
+        FXRouter.setRouteContainer("SignUpView", parentAnchorPane);
+        FXRouter.when("LoginView", "Login.fxml", "Login");
+        FXRouter.setRouteContainer("LoginView", parentAnchorPane);
+        
         /*FXRouter.when("CandidateHomeView", "CandidateHome.fxml");
         FXRouter.setRouteContainer("CandidateHomeView", parentAnchorPane);*/
 
@@ -65,28 +68,26 @@ public class ConfirmEmailController implements Initializable {
         count += 1;
         Candidate myData = (Candidate) FXRouter.getData();
         //garbage.setText(myData.getIntroduction());
-        
+        System.out.println("CODE : " + myData.getIntroduction());
         if (confirmCode.getText().equals(myData.getIntroduction()) && count <= 1) {
             confirmButton.setDisable(true);
             myData.setIntroduction("");
             SignUp.finishCreation(myData);
-            FXRouter.goTo("CandidateHomeView", myData);
+            FXRouter.goTo("SignUpView", myData);
         } else if (confirmCode.getText().equals(garbage.getText())) {
             confirmButton.setDisable(true);
             myData.setIntroduction("");
             SignUp.finishCreation(myData);
-            FXRouter.goTo("CandidateHomeView", myData);
+            FXRouter.goTo("LoginView", myData);
 
         } else {
-            confirmCode.setText("WRONG CODE " + count);
+            confirmCode.setText("WRONG CODE ");
         }
 
     }
 
     @FXML
     private void goBackLink(MouseEvent event) throws IOException {
-        FXRouter.when("SignUpView", "SignUp.fxml");
-        FXRouter.setRouteContainer("SignUpView", parentAnchorPane);
         FXRouter.goTo("SignUpView");
 
     }
