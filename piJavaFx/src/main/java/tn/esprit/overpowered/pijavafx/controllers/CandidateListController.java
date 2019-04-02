@@ -107,7 +107,6 @@ public class CandidateListController implements Initializable {
             List<Candidate> list = candidateProxy.findAllCandidate();
             System.out.println("THE NAME ISSSSSSSSSS: " + list.get(0).getUsername());
             ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
-
             for (Candidate c : list) {
                 cdtObs.add(c);
             }
