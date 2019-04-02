@@ -30,6 +30,7 @@
                      </Button>
                   <Button fx:id="contactsButtons" mnemonicParsing="false" onMouseClicked="#contactsButtonClicked" prefHeight="55.0" prefWidth="90.0" text="Contacts" />
                   <Button fx:id="jobOfferButton" mnemonicParsing="false" onMouseClicked="#jobOfferButtonClicked" prefHeight="51.0" prefWidth="90.0" text="Job Offers" />
+                  <Button fx:id="companyButton" mnemonicParsing="false" onMouseClicked="#companyButtonClicked" prefHeight="52.0" prefWidth="119.0" text="Companies" />
                </children>
             </VBox>
             </children>
