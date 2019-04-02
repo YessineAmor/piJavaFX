@@ -51,7 +51,7 @@ public class CandidateJobOfferListController implements Initializable {
     @FXML
     private TableView<JobOffer> jobsView;
     @FXML
-    private TableColumn<?,? > title;
+    private TableColumn<?, ?> title;
     @FXML
     private TableColumn<?, ?> offerStatus;
     @FXML
@@ -63,20 +63,26 @@ public class CandidateJobOfferListController implements Initializable {
     @FXML
     private TableColumn<?, ?> peopleNeeded;
     @FXML
-    private JFXButton viewProfile;
+    private Button viewProfile;
     @FXML
     private Label status;
     @FXML
     private Button searchButton;
     @FXML
     private AnchorPane parentAnchorPane;
+    @FXML
+    private Button contactButton;
+    @FXML
+    private Button jobOffer;
+    @FXML
+    private Button companyButton;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-     FXRouter.when("CreateJobOfferView", "CreateJobOffer.fxml", "JobOffer", 640, 425);
+        FXRouter.when("CreateJobOfferView", "CreateJobOffer.fxml", "JobOffer", 640, 425);
         FXRouter.setRouteContainer("CreateJobOfferView", parentAnchorPane);
         FXRouter.when("CompanyHRProfileView", "CompanyHRProfile.fxml", "Profile", 600, 400);
         FXRouter.setRouteContainer("CompanyHRProfileView", parentAnchorPane);
@@ -105,23 +111,23 @@ public class CandidateJobOfferListController implements Initializable {
             dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
             peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
             System.out.println("Still working at this point");
-           jobsView.setItems(offerObs);
+            jobsView.setItems(offerObs);
 
         } catch (NamingException ex) {
             Logger.getLogger(CandidateListController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
 
     @FXML
     private void homeButtonOnClicked(MouseEvent event) throws IOException {
-         FXRouter.when("BaseView", "Base.fxml");
+        FXRouter.when("BaseView", "Base.fxml");
         FXRouter.setRouteContainer("BaseView", parentAnchorPane);
         FXRouter.goTo("BaseView");
     }
 
     @FXML
     private void profileButtonClicked(MouseEvent event) throws IOException {
-         FXRouter.when("ProfileViews", "Profile.fxml");
+        FXRouter.when("ProfileViews", "Profile.fxml");
         FXRouter.setRouteContainer("ProfileView", parentAnchorPane);
         FXRouter.goTo("ProfileView");
     }
@@ -131,11 +137,35 @@ public class CandidateJobOfferListController implements Initializable {
     }
 
     @FXML
-    private void viewProfileAction(MouseEvent event) {
+    private void viewProfileAction(MouseEvent event) throws IOException {
+        FXRouter.when("Profile", "Profile.fxml");
+        FXRouter.setRouteContainer("Profile", parentAnchorPane);
+        FXRouter.goTo("Profile");
     }
 
     @FXML
     private void searchButtonClicked(MouseEvent event) {
     }
-    
+
+    @FXML
+    private void contactButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml");
+        FXRouter.setRouteContainer("CandidateListView", parentAnchorPane);
+        FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void jobOfferClicked(MouseEvent event) throws IOException {
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
+        FXRouter.setRouteContainer("JobOfferView", parentAnchorPane);
+        FXRouter.goTo("JobOfferView");
+    }
+
+    @FXML
+    private void companyButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CompanyListView", "CompanyList.fxml" );
+        FXRouter.setRouteContainer("CompanyListView", parentAnchorPane);
+        FXRouter.goTo("CompanyListView");
+    }
+
 }
