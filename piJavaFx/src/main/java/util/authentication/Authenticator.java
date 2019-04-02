@@ -7,14 +7,11 @@ package util.authentication;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.authentication.Session;
 import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacade;
 import tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote;
 import util.cache.ContextCache;
 
 /**
@@ -33,9 +30,9 @@ public class Authenticator {
     public static Session finalizeAuth(String uid, String token) throws NamingException {
         return getRemote().finalizeLogin(uid, token);
     }
-    
-        public static AuthenticationFacadeRemote getRemote() {
-        return (AuthenticationFacade) ContextCache
+
+    public static AuthenticationFacadeRemote getRemote() {
+        return (AuthenticationFacadeRemote) ContextCache
                 .getInstance()
                 .getProxy("piJEE-ejb-1.0/AuthenticationFacade!tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote");
     }
