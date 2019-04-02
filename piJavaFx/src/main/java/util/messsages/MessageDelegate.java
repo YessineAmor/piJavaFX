@@ -5,7 +5,9 @@
  */
 package util.messsages;
 
+import java.util.ArrayList;
 import tn.esprit.overpowered.byusforus.entities.messaging.Message;
+import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote;
 import util.cache.ContextCache;
 
@@ -23,5 +25,17 @@ public class MessageDelegate {
     
     public static void sendMessage(Message m) {
         getRemote().sendMessage(m);
+    }
+    
+    public static void seen(Message m, User u) {
+        getRemote().seeMessage(u.getId(), m.getId());
+    }
+    
+    public static void delete(Message m, User u) {
+         getRemote().hideMessage(u.getId(), m.getId());
+    }
+
+    public static ArrayList<Message> getMyMessages(Long id) {
+        return getRemote().getMyMessages(id);
     }
 }
