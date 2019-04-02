@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -14,31 +13,16 @@
             <children>
                 <VBox layoutY="14.0" prefHeight="288.0" prefWidth="49.0">
                     <children>
-                        <JFXButton fx:id="notificationsButton" prefHeight="44.0" prefWidth="50.0" stylesheets="@../styles/button-styles.css" text="">
-                            <graphic>
-                                <FontAwesomeIconView glyphName="BELL" />
-                            </graphic>
+                        <JFXButton fx:id="notificationsButton" prefHeight="44.0" prefWidth="50.0" stylesheets="@../styles/button-styles.css" text="Notifications">
                         </JFXButton>
-                        <JFXButton fx:id="profileButton" onMouseClicked="#profileButtonClicked" prefHeight="44.0" prefWidth="50" stylesheets="@../styles/button-styles.css" text="">
-                            <graphic>
-                                <FontAwesomeIconView glyphName="USER" />
-                            </graphic>
+                        <JFXButton fx:id="profileButton" onMouseClicked="#profileButtonClicked" prefHeight="44.0" prefWidth="50" stylesheets="@../styles/button-styles.css" text="Profile">
                         </JFXButton>
-                        <JFXButton fx:id="messagesButton" onAction="#goToInbox" prefHeight="44.0" prefWidth="50" stylesheets="@../styles/button-styles.css" text="">
-                            <graphic>
-                                <FontAwesomeIconView glyphName="ENVELOPE" />
-                            </graphic>
+                        <JFXButton fx:id="messagesButton" onAction="#goToInbox" prefHeight="44.0" prefWidth="50" stylesheets="@../styles/button-styles.css" text="Inbox">
                         </JFXButton>
 
-                        <JFXButton fx:id="createQuizBtn" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" prefHeight="25.0" prefWidth="50" text="">
-                            <graphic>
-                                <FontAwesomeIconView glyphName="QUESTION" />
-                            </graphic>
+                        <JFXButton fx:id="createQuizBtn" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" prefHeight="25.0" prefWidth="50" text="Quiz">
                         </JFXButton>
-                        <JFXButton fx:id="manageCandidacyBtn" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="50" text="">
-                            <graphic>
-                                <FontAwesomeIconView glyphName="BRIEFCASE" />
-                            </graphic>
+                        <JFXButton fx:id="manageCandidacyBtn" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="50" text="Candidancies">
                         </JFXButton>
                   
                   
