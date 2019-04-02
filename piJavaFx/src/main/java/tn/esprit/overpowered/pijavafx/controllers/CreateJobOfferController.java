@@ -159,7 +159,10 @@ public class CreateJobOfferController implements Initializable {
 
     @FXML
     private void homePageButton(MouseEvent event
-    ) {
+    ) throws IOException {
+        FXRouter.when("BaseView", "Base.fxml");
+        FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+        FXRouter.goTo("BaseView");
     }
 
     @FXML
