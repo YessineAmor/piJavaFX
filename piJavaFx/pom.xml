@@ -305,14 +305,7 @@
             <artifactId>controlsfx</artifactId>
             <version>8.40.14</version>
         </dependency>
-        <!-- Font Awesome -->
 
-        <dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx</artifactId>
-            <version>8.9</version>
-            <type>pom</type>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>piJEE-ejb</artifactId>

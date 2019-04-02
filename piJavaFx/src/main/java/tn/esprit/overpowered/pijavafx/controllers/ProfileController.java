@@ -44,8 +44,6 @@ public class ProfileController implements Initializable {
     @FXML
     private JFXButton messagesButton;
     @FXML
-    private JFXButton messagesButton1;
-    @FXML
     private JFXButton notificationsButton;
     @FXML
     private AnchorPane centralAnchorPane;
@@ -69,6 +67,10 @@ public class ProfileController implements Initializable {
     private AnchorPane generalAnchorPane;
     @FXML
     private Button contactsButtons;
+    @FXML
+    private Button homeButton;
+    @FXML
+    private Button jobOfferButton;
 
     /**
      * Initializes the controller class.
@@ -127,6 +129,20 @@ public class ProfileController implements Initializable {
         FXRouter.when("CandidateListView", "CandidateList.fxml");
         FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
         FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void homeButtonClicked(MouseEvent event) throws IOException {
+         FXRouter.when("BaseView", "Base.fxml" );
+        FXRouter.setRouteContainer("BaseView", generalAnchorPane);
+        FXRouter.goTo("BaseView");
+    }
+
+    @FXML
+    private void jobOfferButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("JobOfferView", "Offers.fxml" );
+        FXRouter.setRouteContainer("JobOfferView", generalAnchorPane);
+        FXRouter.goTo("JobOfferView");
     }
     
 

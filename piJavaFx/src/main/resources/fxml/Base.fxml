@@ -25,7 +25,6 @@
                         </JFXButton>
                         <JFXButton fx:id="applyToJob" onAction="#onApplyToJobBtnClicked" text="APPLY" />
                         <JFXButton fx:id="myJobApplications" onAction="#onMyJobApplications" text="MYAPP" />
-
                     </children>
                 </VBox>
             </children>

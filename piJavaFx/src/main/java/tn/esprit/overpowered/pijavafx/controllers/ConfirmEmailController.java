@@ -55,6 +55,9 @@ public class ConfirmEmailController implements Initializable {
         // TODO
         FXRouter.when("SignUpView", "SignUp.fxml");
         FXRouter.setRouteContainer("SignUpView", parentAnchorPane);
+        FXRouter.when("LoginView", "Login.fxml", "Login");
+        FXRouter.setRouteContainer("LoginView", parentAnchorPane);
+        
         /*FXRouter.when("CandidateHomeView", "CandidateHome.fxml");
         FXRouter.setRouteContainer("CandidateHomeView", parentAnchorPane);*/
 
@@ -75,7 +78,7 @@ public class ConfirmEmailController implements Initializable {
             confirmButton.setDisable(true);
             myData.setIntroduction("");
             SignUp.finishCreation(myData);
-            FXRouter.goTo("SignUpView", myData);
+            FXRouter.goTo("LoginView", myData);
 
         } else {
             confirmCode.setText("WRONG CODE ");
