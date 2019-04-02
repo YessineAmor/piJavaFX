@@ -242,6 +242,7 @@ public class BaseController implements Initializable {
                 FXRouter.goTo("CompanyAdminProfileView",compAdmin);
                 break;
             case "HUMAN_RESOURCES_MANAGER":
+                System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
                 HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
                 FXRouter.goTo("CompanyHRProfileView",hrManager);
                 break;
