@@ -7,31 +7,24 @@ package tn.esprit.overpowered.pijavafx.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import tn.esprit.overpowered.byusforus.entities.reclamation.Reclamation;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
  *
  * @author amine
  */
-public class ReponseReclamationController implements Initializable {
+public class TraiterclaimsController implements Initializable {
 
     @FXML
-    private TableView<Reclamation> table;
+    private Button changeetat;
     @FXML
-    private TableColumn<Reclamation, String> name;
-    @FXML
-    private TableColumn<Reclamation, String> Type;
-    @FXML
-    private TableColumn<Reclamation, String> description;
-    @FXML
-    private TableColumn<Reclamation, String> fichier;
-    @FXML
-    private TableColumn<Reclamation, String> Etat;
+    private TextField etatchange;
+    private int idreclamation; 
 
     /**
      * Initializes the controller class.
@@ -39,6 +32,18 @@ public class ReponseReclamationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
     }    
+
+    @FXML
+    private void changeretat(ActionEvent event) {
+    }
+    
+    public void Setidreclamation(int id )
+     {
+         this.idreclamation=id; 
+         
+         
+     }
     
 }
