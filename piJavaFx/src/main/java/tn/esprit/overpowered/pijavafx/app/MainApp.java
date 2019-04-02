@@ -120,8 +120,8 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.show();
 
-        stage.setMinHeight(400);
-        stage.setMinWidth(600);
+        stage.setMinHeight(600);
+        stage.setMinWidth(800);
 
         // Destroy everything on close requestp
         stage.setOnCloseRequest((event) -> {
