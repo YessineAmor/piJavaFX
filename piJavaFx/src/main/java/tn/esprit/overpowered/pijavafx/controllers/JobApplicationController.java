@@ -90,7 +90,7 @@ public class JobApplicationController implements Initializable {
         cdt.setSubscribedCompanies(new ArrayList<>());
         cdt.setActivities(new ArrayList<>());
         cdt.setCertificates(new ArrayList<>());
-        cdt.setContacts(new HashSet<>());
+        cdt.setContacts(new ArrayList<>());
         cdt.setCursus(new ArrayList<>());
         cdt.setRegisteredOffers(new ArrayList<>());
         cdt.setSubscribedCompanies(new ArrayList<>());
