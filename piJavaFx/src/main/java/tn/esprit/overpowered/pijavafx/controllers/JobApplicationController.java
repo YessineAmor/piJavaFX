@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jfoenix.controls.JFXButton;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javax.naming.Context;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
@@ -108,9 +111,24 @@ public class JobApplicationController implements Initializable {
         mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
         mapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
         String fileName = "candidate_app_" + jobOffer.getId() + "_" + Authenticator.currentUser.getEmail();
-        mapper.writeValue(new File(fileName + ".json"), cApp);
-        CandidateApplication cApp2 = mapper.readValue(new File(fileName + ".json"), CandidateApplication.class);
-        System.out.println("this is quiz try from json : \n " + cApp2);
+
+        cApp.getCandidate().getId();
+//        mapper.writeValue(new File(fileName + ".json"), cApp);
+//        CandidateApplication cApp2 = mapper.readValue(new File(fileName + ".json"), CandidateApplication.class);
+//        System.out.println("this is quiz try from json : \n " + cApp2);
+        JSONObject cAppJSON = new JSONObject();
+        cAppJSON.put("jobOfferId", cApp.getJobOffer().getId());
+        cAppJSON.put("candidateId", Authenticator.currentUser.getId());
+        cAppJSON.put("motivation", cApp.getMotivationLetter());
+        cAppJSON.put("jobApplicationState", cApp.getJobApplicationState());
+        JSONArray cAppJSONList = new JSONArray();
+        cAppJSONList.add(cAppJSON);
+        try (FileWriter file = new FileWriter(fileName + ".json")) {
+            file.write(cAppJSONList.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 //        String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
 //        CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);

@@ -31,6 +31,7 @@ import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
 import java.awt.Graphics;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +59,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.apache.commons.lang.time.DurationFormatUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.math.geometry.shape.Rectangle;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
@@ -238,11 +241,23 @@ public class TryQuizController implements Initializable {
                     quizTry.setIdQuizTry(250L);
                     quiz.setJobOffer(jobOfferFacade.find(1L));
                     String fileName = "quiz_try_" + quizTry.getQuiz().getId() + "_" + Authenticator.currentUser.getEmail();
-                    mapper.writeValue(new File(fileName + ".json"), quizTry);
+//                    mapper.writeValue(new File(fileName + ".json"), quizTry);
                     String jndiName2 = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
                     CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName2);
                     CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(Authenticator.currentUser.getId(), quiz.getJobOffer().getId());
-
+                    JSONObject quizTryJSON = new JSONObject();
+                    quizTryJSON.put("quizId", quiz.getId());
+                    quizTryJSON.put("candidateId", Authenticator.currentUser.getId());
+                    quizTryJSON.put("score", quizTry.getPercentage());
+                    quizTryJSON.put("answers", candidateAnswers);
+                    JSONArray quizTryList = new JSONArray();
+                    quizTryList.add(quizTryJSON);
+                    try (FileWriter file = new FileWriter(fileName + ".json")) {
+                        file.write(quizTryList.toJSONString());
+                        file.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     if (quizTry.getPercentage() >= 80f) {
                         cApp.setJobApplicationState(JobApplicationState.ACCEPTED_FOR_INTERVIEW);
                         candidateApplicationFacade.updateCandidateApplication(cApp.getId(), cApp.getAdditionalInfo(), cApp.getJobApplicationState());
@@ -254,9 +269,9 @@ public class TryQuizController implements Initializable {
 //                    quiz.getQuizTries().add(quizTry);
 //                    quizFacadeProxy.edit(quiz);
                     try {
-                        QuizTry quizTry2 = mapper.readValue(new File(fileName + ".json"), QuizTry.class);
-                        System.out.println("this is quiz try from json : \n " + quizTry2);
-                        FXRouter.goTo("QuizResults", quizTry2);
+//                        QuizTry quizTry2 = mapper.readValue(new File(fileName + ".json"), QuizTry.class);
+//                        System.out.println("this is quiz try from json : \n " + quizTry2);
+                        FXRouter.goTo("QuizResults", quizTry);
                         stopCamera = true;
 //                        writer.close();
 //                        webcam.close();
@@ -264,8 +279,6 @@ public class TryQuizController implements Initializable {
                         Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } catch (NamingException ex) {
-                    Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
                     Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
