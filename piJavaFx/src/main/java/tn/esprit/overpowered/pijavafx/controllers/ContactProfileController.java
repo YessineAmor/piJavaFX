@@ -5,7 +5,9 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +23,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
+import util.authentication.Authenticator;
 import util.routers.FXRouter;
 
 /**
@@ -58,6 +61,12 @@ public class ContactProfileController implements Initializable {
     private MenuBar topMenu;
     @FXML
     private Button contactButton;
+    @FXML
+    private AnchorPane generalAnchorPane;
+    @FXML
+    private Label about;
+    @FXML
+    private Label idLabel;
 
     /**
      * Initializes the controller class.
@@ -65,17 +74,34 @@ public class ContactProfileController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        Candidate cdt = (Candidate) FXRouter.getData();
+      /* if(cdt.getCurriculumVitaes().equals("exists"))
+       {
+           addContactButton.setDisable(true);
+       }
+*/
        name.setText(cdt.getFirstName());
        lastname.setText(cdt.getLastName());
        email.setText(cdt.getEmail());
        visits.setText(Integer.toString(cdt.getVisits()));
        recommendations.setText(Integer.toString(cdt.getRecommendations()));
+       idLabel.setText(Long.toString(cdt.getId()));
        
     }    
 
 
     @FXML
-    private void addContactButtonClicked(MouseEvent event) {
+    private void addContactButtonClicked(MouseEvent event) throws NamingException {
+         String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byus"
+                + "forus.services.candidat.CandidateFacadeRemote";
+            Context context = new InitialContext();
+            CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) 
+                    context.lookup(jndiName); 
+          if(candidateProxy.addContact(Authenticator.currentUser.getId()
+                  ,Long.parseLong(idLabel.getText())).equals("Contact Added"))
+                  {
+                      addContactButton.setDisable(true);
+                  }
+            
     }
 
     @FXML
@@ -87,14 +113,22 @@ public class ContactProfileController implements Initializable {
             Candidate cdt = (Candidate) FXRouter.getData();
             System.out.println("The id of the data passed is: "+ cdt.getId());
             candidateProxy.recommend(cdt.getId());
+            recommendButton.setDisable(true);
+            recommendations.setText(Integer.toString(cdt.getRecommendations())+1);
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) {
+    private void profileButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("ProfileView", "Profile.fxml","Profile", 889, 543);
+                 FXRouter.setRouteContainer("ProfileView", generalAnchorPane);
+        FXRouter.goTo("ProfileView");
     }
 
     @FXML
-    private void contactButtonClicked(MouseEvent event) {
+    private void contactButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml","Candidate List", 889, 543);
+                 FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.goTo("CandidateListView");
     }
     
 }

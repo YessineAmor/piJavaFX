@@ -33,6 +33,7 @@
                      </Button>
                   <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="52.0" prefWidth="96.0" text="Quiz">
                      </Button>
+                  <Button fx:id="contactsButtons" mnemonicParsing="false" onMouseClicked="#contactsButtonClicked" prefHeight="50.0" prefWidth="90.0" text="Contacts" />
                </children>
             </VBox>
             </children>
@@ -81,7 +82,7 @@
             <SplitMenuButton layoutX="399.0" layoutY="24.0" mnemonicParsing="false" text="Options">
               <items>
                 <MenuItem mnemonicParsing="false" text="Edit Profile" />
-                <MenuItem mnemonicParsing="false" text="Contacts" />
+                <MenuItem mnemonicParsing="false" text="Followers" />
                   <MenuItem mnemonicParsing="false" text="Subscribtions" />
               </items>
             </SplitMenuButton>

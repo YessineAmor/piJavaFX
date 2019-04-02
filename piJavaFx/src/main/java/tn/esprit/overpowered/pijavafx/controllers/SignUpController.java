@@ -19,15 +19,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.HRManager;
-import tn.esprit.overpowered.byusforus.entities.users.User;
-import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
+import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import util.authentication.SignUp;
 import util.routers.FXRouter;
 
@@ -55,8 +51,6 @@ public class SignUpController implements Initializable {
     @FXML
     private ToggleGroup userType;
     @FXML
-    private JFXRadioButton radioEmployee;
-    @FXML
     private JFXRadioButton radioCompanyAdmin;
     @FXML
     private Button continueAs;
@@ -66,6 +60,10 @@ public class SignUpController implements Initializable {
     private JFXPasswordField password_prime;
     @FXML
     private Button goback;
+    @FXML
+    private JFXRadioButton radioHRManager;
+    @FXML
+    private JFXRadioButton radioPRManager;
 
     /**
      * Initializes the controller class.
@@ -85,51 +83,64 @@ public class SignUpController implements Initializable {
 
         JFXRadioButton rb = (JFXRadioButton) userType.getSelectedToggle();
         String decision;
-        System.out.println("this is the email " + email.getText());
         if (SignUp.isAlphanumeric(username.getText())) {
             if (!email.getText().isEmpty() && SignUp.emailInputSanitization(email.getText())) {
                 if (!password.getText().isEmpty()) {
                     if (password.getText().equals(password_prime.getText())) {
-                        decision = SignUp.CheckSignUp(email.getText(), username.getText());
-                        if (decision.equals("OK") && rb.getText().equals(radioCandidate.getText())) {
-                            String myData = SignUp.ContinueAsCandidate(email.getText());
-                            Candidate cdt = new Candidate();
-                            cdt.setUsername(username.getText());
-                            cdt.setFirstName(firstname.getText());
-                            cdt.setLastName(lastname.getText());
-                            cdt.setPassword(password.getText().getBytes());
-                            cdt.setEmail(email.getText());
-                            //!!!!!!!!!WATCH OUT!!!!!!!!!!!
-                            //!!!!!THIS IS A DANGEROUS TRICK TO COLLECT CONFIRMATION CODE SENT TO THE CANDIDATE!!!!
-                            cdt.setIntroduction(myData);
-                            FXRouter.goTo("EmailConfirmView", cdt);
+                        if (!rb.getText().isEmpty()) {
+                            decision = SignUp.CheckSignUp(email.getText(), username.getText());
+                            if (decision.equals("OK") && rb.getText().equals(radioCandidate.getText())) {
+                                String myData = SignUp.ContinueAsCandidate(email.getText());
+                                Candidate cdt = new Candidate();
+                                cdt.setUsername(username.getText());
+                                cdt.setFirstName(firstname.getText());
+                                cdt.setLastName(lastname.getText());
+                                cdt.setPassword(password.getText().getBytes());
+                                cdt.setEmail(email.getText());
+                                //!!!!!!!!!WATCH OUT!!!!!!!!!!!
+                                //!!!!!THIS IS A DANGEROUS TRICK TO COLLECT CONFIRMATION CODE SENT TO THE CANDIDATE!!!!
+                                cdt.setIntroduction(myData);
+                                FXRouter.goTo("EmailConfirmView", cdt);
 
-                        } else if (decision.equals("OK") && rb.getText().equals(radioCompanyAdmin.getText())) {
-                            FXRouter.when("CompanyAdminVerifyView", "AdminEntrepriseVerif.fxml");
-                            FXRouter.setRouteContainer("CompanyAdminVerifyView", parentAnchorPane);
-                            CompanyAdmin companyAdmin = SignUp.collectInfoAsCompanyAdmin(username.getText(),
-                                    email.getText(), password.getText(),
-                                    firstname.getText(), lastname.getText());
-                            FXRouter.goTo("CompanyAdminVerifyView", companyAdmin);
-                        } else if (decision.equals("OK") && rb.getText().equals(radioEmployee.getText())) {
-                            FXRouter.when("HRVerifyView", "HREntrepriseVerif.fxml");
-                            FXRouter.setRouteContainer("HRVerifyView", parentAnchorPane);
-                            HRManager hrManager = SignUp.collectInfoHRManager(username.getText(),
-                                    email.getText(), password.getText(),
-                                    firstname.getText(), lastname.getText());
-                            FXRouter.goTo("HRVerifyView", hrManager);
+                            } else if (decision.equals("OK") && rb.getText().equals(radioCompanyAdmin.getText())) {
+                                FXRouter.when("CompanyAdminVerifyView", "AdminEntrepriseVerif.fxml", "CompanyAdminCheck");
+                                FXRouter.setRouteContainer("CompanyAdminVerifyView", parentAnchorPane);
+                                CompanyAdmin companyAdmin = SignUp.collectInfoAsCompanyAdmin(username.getText(),
+                                        email.getText(), password.getText(),
+                                        firstname.getText(), lastname.getText());
+                                FXRouter.goTo("CompanyAdminVerifyView", companyAdmin);
+                            } else if (decision.equals("OK") && rb.getText().equals(radioHRManager.getText())) {
+                                FXRouter.when("HRVerifyView", "HREntrepriseVerif.fxml","HRManagerCheck");
+                                FXRouter.setRouteContainer("HRVerifyView", parentAnchorPane);
+                                HRManager hrManager = SignUp.collectInfoHRManager(username.getText(),
+                                        email.getText(), password.getText(),
+                                        firstname.getText(), lastname.getText());
+                                FXRouter.goTo("HRVerifyView", hrManager);
+                            } else if (decision.equals("OK") && rb.getText().equals(radioPRManager.getText())) {
+                                FXRouter.when("PMVerifyView", "PMEntrepriseVerif.fxml","PManagerCheck");
+                                FXRouter.setRouteContainer("PMVerifyView", parentAnchorPane);
+                                ProjectManager pManager = SignUp.collectInfoPManager(username.getText(),
+                                        email.getText(), password.getText(),
+                                        firstname.getText(), lastname.getText());
+                                FXRouter.goTo("PMVerifyView", pManager);
+
+                            } else {
+                                signUpLabel.setText(decision);
+                            }
+
+                        } else {
+                            signUpLabel.setText("Select SignUp Type");
                         }
-
                     } else {
                         signUpLabel.setText("Passwords do not match");
                     }
-
                 } else {
                     signUpLabel.setText("The password field is mandatory");
                 }
             } else {
-                signUpLabel.setText("The Email field is mandatory");
+                signUpLabel.setText("Check Email field");
             }
+
         } else {
             signUpLabel.setText("The username must be alplanumeric");
         }
