@@ -6,10 +6,12 @@
 package tn.esprit.overpowered.pijavafx.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXRadioButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -20,8 +22,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -71,6 +77,16 @@ public class CandidateListController implements Initializable {
     private Button searchButton;
     @FXML
     private TableColumn<Candidate, Long> id;
+    @FXML
+    private TextField searchText;
+    @FXML
+    private ToggleGroup searchOption;
+    @FXML
+    private JFXRadioButton radioName;
+    @FXML
+    private JFXRadioButton lastNameRadio;
+    @FXML
+    private JFXRadioButton emailRadio;
 
     /**
      * Initializes the controller class.
@@ -80,7 +96,6 @@ public class CandidateListController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         try {
             String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
             Context context = new InitialContext();
@@ -104,7 +119,6 @@ public class CandidateListController implements Initializable {
         } catch (NamingException ex) {
             Logger.getLogger(CandidateListController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
 
@@ -121,6 +135,15 @@ public class CandidateListController implements Initializable {
             CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName); 
         Candidate cdt = candidateView.getSelectionModel().getSelectedItem();
         cdt.setVisits(candidateProxy.incrementVisits(cdt.getId()));
+        Candidate test = (Candidate) Authenticator.currentUser;
+         Set<Candidate> cdtList =  cdt.getContacts();
+/*        if(candidateProxy.checkContacts(cdt.getId(), test))
+        {
+            cdt.setCurriculumVitaes("notexists");
+        }
+        else 
+            cdt.setCurriculumVitaes("exists");
+*/     
         FXRouter.when("ProfileView", "ContactProfile.fxml", "Profile", 672, 417 );
         FXRouter.setRouteContainer("ProfileView", parentAnchorPane);
         FXRouter.goTo("ProfileView", cdt);
@@ -131,7 +154,59 @@ public class CandidateListController implements Initializable {
     }
 
     @FXML
-    private void searchButtonClicked(MouseEvent event) {
+    private void searchButtonClicked(MouseEvent event) throws NamingException {
+        String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+            Context context = new InitialContext();
+            CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+            if(radioName.isSelected())
+            {
+                List<Candidate> list = candidateProxy.searchByName(searchText.getText());
+            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
+
+            for (Candidate c : list) {
+                cdtObs.add(c);
+            }
+            id.setCellValueFactory(new PropertyValueFactory<>("Id"));
+            name.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            lastname.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+            type.setCellValueFactory(new PropertyValueFactory<>("Type"));
+            recommendations.setCellValueFactory(new PropertyValueFactory<>("Recommendations"));
+            visits.setCellValueFactory(new PropertyValueFactory<>("Visits"));
+            System.out.println("Still working at this point");
+            candidateView.setItems(cdtObs);
+            } else if(lastNameRadio.isSelected()){
+                   List<Candidate> list = candidateProxy.searchByLastname(searchText.getText());
+            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
+
+            for (Candidate c : list) {
+                cdtObs.add(c);
+            }
+            id.setCellValueFactory(new PropertyValueFactory<>("Id"));
+            name.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            lastname.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+            type.setCellValueFactory(new PropertyValueFactory<>("Type"));
+            recommendations.setCellValueFactory(new PropertyValueFactory<>("Recommendations"));
+            visits.setCellValueFactory(new PropertyValueFactory<>("Visits"));
+            System.out.println("Still working at this point");
+            candidateView.setItems(cdtObs);         
+        } else if(emailRadio.isSelected())
+        {
+            List<Candidate> list = candidateProxy.searchByEmail(searchText.getText());
+            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
+
+            for (Candidate c : list) {
+                cdtObs.add(c);
+            }
+            id.setCellValueFactory(new PropertyValueFactory<>("Id"));
+            name.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            lastname.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+            type.setCellValueFactory(new PropertyValueFactory<>("Type"));
+            recommendations.setCellValueFactory(new PropertyValueFactory<>("Recommendations"));
+            visits.setCellValueFactory(new PropertyValueFactory<>("Visits"));
+            System.out.println("Still working at this point");
+            candidateView.setItems(cdtObs);   
+        }
     }
+
 
 }
