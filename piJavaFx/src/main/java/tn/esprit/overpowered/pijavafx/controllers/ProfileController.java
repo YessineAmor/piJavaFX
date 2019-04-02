@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -66,6 +67,8 @@ public class ProfileController implements Initializable {
     private MenuBar topMenu;
     @FXML
     private AnchorPane generalAnchorPane;
+    @FXML
+    private Button contactsButtons;
 
     /**
      * Initializes the controller class.
@@ -117,5 +120,14 @@ public class ProfileController implements Initializable {
         FXRouter.setRouteContainer("Profile", generalAnchorPane);
         FXRouter.goTo("Profile");
     }
+
+
+    @FXML
+    private void contactsButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("CandidateListView", "CandidateList.fxml");
+        FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.goTo("CandidateListView");
+    }
+    
 
 }

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.QuizInfoController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.QuizInfoController">
    <children>
       <Button fx:id="startQuizBtn" layoutX="260.0" layoutY="293.0" mnemonicParsing="false" onAction="#onStartQuizBtnClicked" text="Start Quiz" />
       <GridPane layoutX="107.0" layoutY="94.0" prefHeight="145.0" prefWidth="376.0">

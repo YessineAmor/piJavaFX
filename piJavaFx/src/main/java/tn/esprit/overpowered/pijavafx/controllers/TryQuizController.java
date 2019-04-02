@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -16,7 +16,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -43,8 +42,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -65,7 +64,6 @@ import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
 import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
-import util.factories.CreateAlert;
 import util.routers.FXRouter;
 
 /**
@@ -111,7 +109,7 @@ public class TryQuizController implements Initializable {
      * @param url
      * @param rb
      */
-    @Override
+
     public void initialize(URL url, ResourceBundle rb) {
 
         System.out.println("alert accepted - TryQuizController");
@@ -179,7 +177,7 @@ public class TryQuizController implements Initializable {
 
                     QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) secondContext.lookup(jndiName);
 //                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
-                    System.out.println("quiz try serial" + quizTry.getSerialVersionUID());
+                    System.out.println("quiz try serial" + QuizTry.getSerialVersionUID());
                     quizTryFacadeProxy.create(quizTry);
 //                    quiz.getQuizTries().add(quizTry);
 //                    quizFacadeProxy.edit(quiz);
@@ -324,4 +322,6 @@ public class TryQuizController implements Initializable {
         return (float) (correctAnswersScore / pointsSum) * 100;
     }
 
+
 }
+

@@ -38,7 +38,6 @@ import tn.esprit.overpowered.byusforus.entities.util.Skill;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.users.CompanyAdminFacadeRemote;
 import util.authentication.Authenticator;
 import util.exceptions.InvalidArgumentException;
 import util.exceptions.WidgetNotFoundException;
@@ -75,7 +74,8 @@ public class BaseController implements Initializable {
     private JFXButton notificationsButton;
     @FXML
     private JFXButton createQuizBtn;
-
+    @FXML
+    private JFXButton manageCandidacyBtn;
 
     /**
      * Initializes the controller class.
@@ -86,7 +86,6 @@ public class BaseController implements Initializable {
         // Then bind that RouteScene to its container
         FXRouter.when("CreateQuiz", "CreateQuiz.fxml");
         FXRouter.when("CreateQuestions", "CreateQuestions.fxml");
-        FXRouter.when("TryQuiz", "TryQuiz.fxml");
         FXRouter.when("QuizInfo", "QuizInfo.fxml");
         FXRouter.when("QuizResults", "QuizResults.fxml");
         FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
@@ -100,16 +99,14 @@ public class BaseController implements Initializable {
         FXRouter.setRouteContainer("CompanyPMProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("ProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
-        FXRouter.setRouteContainer("TryQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("QuizResults", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuiz", centralAnchorPane);
         FXRouter.setRouteContainer("CreateQuestions", centralAnchorPane);
-        
-        
+
         FXRouter.setRouteContainer("ListJobOfferCandidates", centralAnchorPane);
         FXRouter.setRouteContainer("JobOfferCandidateDetails", centralAnchorPane);
         // registering listeners for resizehttps://docs.oracle.com/javafx/2/threads/jfxpub-threads.htm
-       ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
+        ChangeDimensionsFactory cFactory = new ChangeDimensionsFactory();
         ChangeListener<Number> sideMenuChangeListener;
         Scene s = FXRouter.scene;
 
@@ -146,7 +143,6 @@ public class BaseController implements Initializable {
             Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
     }
 
     @FXML
@@ -164,18 +160,18 @@ public class BaseController implements Initializable {
 
     public void setCentralAnchorPane(AnchorPane centralAnchorPane) {
         this.centralAnchorPane = centralAnchorPane;
-    
+
     }
+
     @FXML
 
     private void goToInbox(ActionEvent event) throws IOException {
-
-        FXRouter.goTo("inbox");
         FXRouter.when("inboxView", "Inbox.fxml");
         FXRouter.setRouteContainer("inboxView", centralAnchorPane);
         FXRouter.goTo("inboxView");
-}
-  
+    }
+
+    @FXML
     private void onManageCandidacyBtnClicked(ActionEvent event) throws NamingException, IOException, NamingException, NoSuchAlgorithmException {
         String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services."
                 + "entrepriseprofile.JobOfferFacadeRemote";
@@ -211,16 +207,30 @@ public class BaseController implements Initializable {
     }
 
     private void contactsButtonClicked(MouseEvent event) throws IOException {
-       FXRouter.when("CandidateListView", "CandidateList.fxml","Candidate List", 889, 543);
-                 FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
+        FXRouter.when("CandidateListView", "CandidateList.fxml", "Candidate List", 889, 543);
+        FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
         FXRouter.goTo("CandidateListView");
     }
 
     @FXML
+
+
+
     private void profileButtonClicked(MouseEvent event) throws IOException, NamingException {
-                String type = Authenticator.currentUser.getDiscriminatorValue();
+        String type = Authenticator.currentUser.getDiscriminatorValue();
         switch (type) {
             case "CANDIDATE":
+                String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+                Context context;
+                try {
+                    context = new InitialContext();
+                    CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+                    Candidate cdt = new Candidate();
+                    cdt = candidateProxy.find(Authenticator.currentUser.getId());
+                    FXRouter.goTo("ProfileView", cdt);
+                } catch (NamingException ex) {
+                    Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 FXRouter.goTo("ProfileView");
                 break;
             case "COMPANY_ADMIN":
@@ -235,6 +245,7 @@ public class BaseController implements Initializable {
             default:
                 break;
         }
+
     }
 
 }
