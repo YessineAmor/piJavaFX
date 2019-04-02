@@ -159,8 +159,6 @@ public class BaseController implements Initializable {
     @FXML
 
     private void goToInbox(ActionEvent event) throws IOException {
-
-        FXRouter.goTo("inbox");
         FXRouter.when("inboxView", "Inbox.fxml");
         FXRouter.setRouteContainer("inboxView", centralAnchorPane);
         FXRouter.goTo("inboxView");
