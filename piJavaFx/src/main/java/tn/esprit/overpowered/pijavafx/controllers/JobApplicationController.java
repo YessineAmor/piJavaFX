@@ -110,12 +110,12 @@ public class JobApplicationController implements Initializable {
         mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
         mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
         mapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
-        String fileName = "candidate_app_" + jobOffer.getId() + "_" + Authenticator.currentUser.getEmail();
 
         cApp.getCandidate().getId();
 //        mapper.writeValue(new File(fileName + ".json"), cApp);
 //        CandidateApplication cApp2 = mapper.readValue(new File(fileName + ".json"), CandidateApplication.class);
 //        System.out.println("this is quiz try from json : \n " + cApp2);
+        String fileName = "candidate_app_" + jobOffer.getId() + "_" + Authenticator.currentUser.getEmail();
         JSONObject cAppJSON = new JSONObject();
         cAppJSON.put("jobOfferId", cApp.getJobOffer().getId());
         cAppJSON.put("candidateId", Authenticator.currentUser.getId());

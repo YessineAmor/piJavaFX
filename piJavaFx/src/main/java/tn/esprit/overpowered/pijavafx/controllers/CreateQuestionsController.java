@@ -5,10 +5,18 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -27,6 +35,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import tn.esprit.overpowered.byusforus.entities.quiz.Choice;
 import tn.esprit.overpowered.byusforus.entities.quiz.Question;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuestionType;
@@ -64,13 +76,17 @@ public class CreateQuestionsController implements Initializable {
     private ChoiceFacadeRemote choiceFacadeProxy;
     @FXML
     private Button submitQuizBtn;
+    private Context context;
+    private Quiz quiz;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        Map<Context, Quiz> dataMap = (HashMap) FXRouter.getData();
+        context = dataMap.keySet().stream().findFirst().get();
+        quiz = dataMap.values().stream().findFirst().get();
         choicesList = new ArrayList<>();
         questionsList = new ArrayList<>();
         pointsTextField = new TextField();
@@ -108,8 +124,8 @@ public class CreateQuestionsController implements Initializable {
         // Quiz name textfield length input control
         questionTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 100) {
-                CreateAlert.CreateAlert(Alert.AlertType.ERROR, "Error!", "Input Error!", "Length needs to be < 30 chars");
-                questionTextField.setText(questionTextField.getText().substring(0, 30));
+                CreateAlert.CreateAlert(Alert.AlertType.ERROR, "Error!", "Input Error!", "Length needs to be < 100 chars");
+                questionTextField.setText(questionTextField.getText().substring(0, 100));
             }
             questionValid = true;
             updateBtnState(submitBtn);
@@ -179,7 +195,7 @@ public class CreateQuestionsController implements Initializable {
                     question.setChoices(choicesList);
                     questionsList.add(question);
                     System.out.println("Question: " + questionTextField.getText());
-                    CreateAlert.CreateAlert(Alert.AlertType.INFORMATION, "", "", "Succes");
+                    CreateAlert.CreateAlert(Alert.AlertType.INFORMATION, "Success", "Successfull operation", "Question submitted successfully.");
                     questionTextField.setText("");
                     lv.getItems().removeAll(lv.getItems());
                     pointsTextField.setText("");
@@ -211,8 +227,31 @@ public class CreateQuestionsController implements Initializable {
 
     @FXML
     private void onSubmitQuizBtnClicked(ActionEvent event) {
-        Quiz quiz = (Quiz) FXRouter.getData();
         quiz.setQuestions(questionsList);
+        String fileName = "quiz_joboffer";
+        JSONParser jsonParser = new JSONParser();
+        JSONArray quizJList = null;
+        try (FileReader reader = new FileReader("quiz_joboffer.json")) {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+
+            quizJList = (JSONArray) obj;
+            System.out.println(quizJList);
+            JSONObject quizAppJSON = new JSONObject();
+            quizAppJSON.put("quizName", quiz.getName());
+            quizAppJSON.put("jobOfferId", quiz.getJobOffer().getId());
+            quizJList.add(quizAppJSON);
+
+        } catch (FileNotFoundException e) {
+        } catch (IOException | ParseException e) {
+        }
+
+        try (FileWriter file = new FileWriter(fileName + ".json")) {
+            file.write(quizJList.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+        }
+        quiz.setJobOffer(null);
         quizFacadeProxy.create(quiz);
     }
 

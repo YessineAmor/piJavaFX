@@ -21,7 +21,7 @@
                         </JFXButton>
                         <JFXButton fx:id="createQuizBtn" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" prefHeight="25.0" prefWidth="50" text="">
                         </JFXButton>
-                        <JFXButton fx:id="manageCandidacyBtn" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="50" text="">
+                        <JFXButton fx:id="manageCandidacyBtn" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="50" text="MC">
                         </JFXButton>
                         <JFXButton fx:id="applyToJob" onAction="#onApplyToJobBtnClicked" text="APPLY" />
                         <JFXButton fx:id="myJobApplications" onAction="#onMyJobApplications" text="MYAPP" />

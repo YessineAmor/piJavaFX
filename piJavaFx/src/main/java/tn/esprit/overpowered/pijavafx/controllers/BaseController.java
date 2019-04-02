@@ -162,7 +162,6 @@ public class BaseController implements Initializable {
 
     @FXML
     private void onCreateQuizBtnClicked(ActionEvent event) throws IOException, NamingException {
-//       FXRouter.goTo("CreateQuiz");
         String jndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
         QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(jndiName);
         Map<Context, Quiz> dataMap = new HashMap<>();
@@ -205,7 +204,7 @@ public class BaseController implements Initializable {
         c.setSkills(new HashSet<Skill>(Arrays.asList(Skill.PYTHON)));
         c.setPassword("1234".getBytes());
         c.setUsername("ahmedbacha");
-        c.setEmail("yassine.amor@esprit.tn");
+        c.setEmail("yessin.amor@gmail.tn");
         registeredCandidates.add(c);
         registeredCandidates.add(c);
         JobOffer jobOffer = new JobOffer();
@@ -220,7 +219,7 @@ public class BaseController implements Initializable {
         jobOffer.setCity("Tunis");
         jobOffer.setCompany(company);
         jobOffer.setRegisteredCandidates(registeredCandidates);
-//        jobOfferFacade.create(jobOffer);
+        jobOfferFacade.create(jobOffer);
 //        CandidateApplication candidateApplication = new CandidateApplication("motiv", "resume.pdf", jobOffer);
 //        candidateApplication.setCandidate(c);
 //        candidateApplicationFacade.create(candidateApplication);
