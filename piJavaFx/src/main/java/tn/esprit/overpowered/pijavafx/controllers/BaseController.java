@@ -33,6 +33,8 @@ import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
+import tn.esprit.overpowered.byusforus.entities.users.HRManager;
+import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
 import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
@@ -43,6 +45,7 @@ import util.exceptions.InvalidArgumentException;
 import util.exceptions.WidgetNotFoundException;
 import util.factories.ChangeDimensions;
 import util.factories.ChangeDimensionsFactory;
+import util.information.tracker.InfoTracker;
 import util.routers.FXRouter;
 
 /**
@@ -218,6 +221,7 @@ public class BaseController implements Initializable {
 
     private void profileButtonClicked(MouseEvent event) throws IOException, NamingException {
         String type = Authenticator.currentUser.getDiscriminatorValue();
+        Long currentUserId = Authenticator.currentUser.getId();
         switch (type) {
             case "CANDIDATE":
                 String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
@@ -231,16 +235,19 @@ public class BaseController implements Initializable {
                 } catch (NamingException ex) {
                     Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                FXRouter.goTo("ProfileView");
+                //FXRouter.goTo("ProfileView");
                 break;
             case "COMPANY_ADMIN":
-                FXRouter.goTo("CompanyAdminProfileView");
+                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
+                FXRouter.goTo("CompanyAdminProfileView",compAdmin);
                 break;
             case "HUMAN_RESOURCES_MANAGER":
-                FXRouter.goTo("CompanyHRProfileView");
+                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
+                FXRouter.goTo("CompanyHRProfileView",hrManager);
                 break;
             case "PROJECT_MANAGER":
-                FXRouter.goTo("CompanyPMProfileView");
+                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                FXRouter.goTo("CompanyPMProfileView",pManager);
                 break;
             default:
                 break;
