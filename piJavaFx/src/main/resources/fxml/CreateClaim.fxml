@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CreateClaimController">
+<AnchorPane id="AnchorPane" prefHeight="570.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CreateClaimController">
    <children>
       <Button fx:id="addButton" layoutX="67.0" layoutY="305.0" mnemonicParsing="false" onAction="#onAddButtonClicked" prefHeight="57.0" prefWidth="126.0" text="Create claim" />
       <JFXTextField fx:id="nameLabel" layoutX="97.0" layoutY="60.0" />

@@ -7,7 +7,11 @@ package tn.esprit.overpowered.pijavafx.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -16,12 +20,30 @@ import javafx.fxml.Initializable;
  */
 public class TraiterclaimsController implements Initializable {
 
+    @FXML
+    private Button changeetat;
+    @FXML
+    private TextField etatchange;
+    private int idreclamation; 
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
     }    
+
+    @FXML
+    private void changeretat(ActionEvent event) {
+    }
+    
+    public void Setidreclamation(int id )
+     {
+         this.idreclamation=id; 
+         
+         
+     }
     
 }

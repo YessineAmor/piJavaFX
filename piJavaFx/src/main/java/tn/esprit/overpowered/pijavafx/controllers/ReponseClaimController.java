@@ -5,6 +5,7 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -14,11 +15,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -83,6 +87,22 @@ public class ReponseClaimController implements Initializable {
                 
                 Reclamation r = table.getSelectionModel().getSelectedItem();
                 System.out.println(r);
+                    
+   FXMLLoader fxmlLoader = new FXMLLoader();
+   fxmlLoader.setLocation(getClass().getResource("Traiterclaims.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(ReponseClaimController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   TraiterclaimsController pop=fxmlLoader.getController();
+   pop.Setidreclamation(r.getIdReclamation());
+  
+   Stage stage =new Stage();
+   stage.setScene(new Scene(fxmlLoader.getRoot()));
+   stage.show();
+  
+                
             });
             this.afficherAction("service");
         } catch (NamingException ex) {
@@ -91,7 +111,7 @@ public class ReponseClaimController implements Initializable {
   
 
                    }
-@FXML
+    @FXML
     private void handleReclamationProduit(ActionEvent event){
         claimfinancier.setOnAction(e -> {
             System.out.println("clikced");
