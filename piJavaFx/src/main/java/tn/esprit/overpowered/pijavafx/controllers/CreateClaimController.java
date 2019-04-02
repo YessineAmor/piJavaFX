@@ -22,7 +22,7 @@ import tn.esprit.overpowered.byusforus.entities.reclamation.EtatReclamation;
 import tn.esprit.overpowered.byusforus.entities.reclamation.Reclamation;
 import tn.esprit.overpowered.byusforus.entities.reclamation.TypeReclamation;
 import tn.esprit.overpowered.byusforus.services.Reclamation.ReclamationRemote;
-import util.claim.Claim;
+import util.proxies.claim.Claim;
 
 /**
  * FXML Controller class
