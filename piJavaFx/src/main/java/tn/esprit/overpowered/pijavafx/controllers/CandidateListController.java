@@ -72,8 +72,6 @@ public class CandidateListController implements Initializable {
     @FXML
     private AnchorPane parentAnchorPane;
     @FXML
-    private Label status;
-    @FXML
     private Button searchButton;
     @FXML
     private TableColumn<Candidate, Long> id;
@@ -87,6 +85,12 @@ public class CandidateListController implements Initializable {
     private JFXRadioButton lastNameRadio;
     @FXML
     private JFXRadioButton emailRadio;
+    @FXML
+    private Button jobOfferButton;
+    @FXML
+    private Button homeButton;
+    @FXML
+    private Button friendsButton;
 
     /**
      * Initializes the controller class.
@@ -136,7 +140,7 @@ public class CandidateListController implements Initializable {
         Candidate cdt = candidateView.getSelectionModel().getSelectedItem();
         cdt.setVisits(candidateProxy.incrementVisits(cdt.getId()));
         Candidate test = (Candidate) Authenticator.currentUser;
-         Set<Candidate> cdtList =  cdt.getContacts();
+         List<Candidate> cdtList =  cdt.getContacts();
 /*        if(candidateProxy.checkContacts(cdt.getId(), test))
         {
             cdt.setCurriculumVitaes("notexists");
@@ -206,6 +210,42 @@ public class CandidateListController implements Initializable {
             System.out.println("Still working at this point");
             candidateView.setItems(cdtObs);   
         }
+    }
+
+    @FXML
+    private void jobOfferButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("JobOfferView", "Offers.fxml" );
+        FXRouter.setRouteContainer("JobOfferView", parentAnchorPane);
+        FXRouter.goTo("JobOfferView");
+    }
+
+    @FXML
+    private void homeButtonClicked(MouseEvent event) throws IOException {
+        FXRouter.when("BaseView", "Base.fxml" );
+        FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+        FXRouter.goTo("BaseView");
+    }
+
+    @FXML
+    private void friendsButtonClicked(MouseEvent event) throws NamingException {
+        String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+            Context context = new InitialContext();
+            CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+         
+                List<Candidate> cdtSet = candidateProxy.friendsList(Authenticator.currentUser.getId());
+            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
+
+            for (Candidate c : cdtSet) 
+                cdtObs.add(c);
+            
+            id.setCellValueFactory(new PropertyValueFactory<>("Id"));
+            name.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            lastname.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+            type.setCellValueFactory(new PropertyValueFactory<>("Type"));
+            recommendations.setCellValueFactory(new PropertyValueFactory<>("Recommendations"));
+            visits.setCellValueFactory(new PropertyValueFactory<>("Visits"));
+            System.out.println("Still working at this point");
+            candidateView.setItems(cdtObs);
     }
 
 

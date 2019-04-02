@@ -18,9 +18,9 @@
             <Image url="@../images/confetti.gif" />
          </image>
       </ImageView>
-      <Label fx:id="infoLabel" alignment="TOP_LEFT" layoutX="170.0" layoutY="197.0" prefHeight="189.0" prefWidth="387.0" text="Label" wrapText="true">
+      <Label fx:id="infoLabel" alignment="CENTER" layoutX="107.0" layoutY="186.0" prefHeight="189.0" prefWidth="387.0" text="Label" wrapText="true">
          <font>
-            <Font size="41.0" />
+            <Font size="29.0" />
          </font>
       </Label>
    </children>
