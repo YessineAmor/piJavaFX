@@ -213,7 +213,7 @@ public class CandidateListController implements Initializable {
 
     @FXML
     private void jobOfferButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.when("JobOfferView", "Offers.fxml" );
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
         FXRouter.setRouteContainer("JobOfferView", parentAnchorPane);
         FXRouter.goTo("JobOfferView");
     }

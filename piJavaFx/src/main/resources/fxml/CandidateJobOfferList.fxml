@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="parentAnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CandidateJobOfferListController">
+<AnchorPane id="AnchorPane" fx:id="parentAnchorPane" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.CandidateJobOfferListController">
     <children>
-        <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="522.0" prefWidth="90.0" style="-fx-background-color: gray;">
+        <AnchorPane id="rightMenuAnchorPane" fx:id="rightMenuAnchorPane" layoutY="20.0" prefHeight="583.0" prefWidth="90.0" style="-fx-background-color: gray;">
             <children>
                 <VBox layoutY="14.0" prefHeight="288.0" prefWidth="90.0">
                     <children>
@@ -33,7 +33,7 @@
         </AnchorPane>
         <AnchorPane id="topMenuAnchorPane" fx:id="topMenuAnchorPane" prefHeight="32.0" prefWidth="889.0">
             <children>
-                <MenuBar id="topMenu" fx:id="topMenu" prefHeight="29.0" prefWidth="403.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <MenuBar id="topMenu" fx:id="topMenu" prefHeight="32.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="89.0" AnchorPane.topAnchor="0.0">
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
@@ -56,14 +56,14 @@
         </AnchorPane>
       <AnchorPane layoutX="95.0" layoutY="36.0" minHeight="0.0" minWidth="0.0" prefHeight="507.0" prefWidth="794.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0">
          <children>
-            <TableView fx:id="jobsView" layoutY="101.0" onMouseClicked="#selected" prefHeight="288.0" prefWidth="777.0">
+            <TableView fx:id="jobsView" layoutY="101.0" onMouseClicked="#selected" prefHeight="288.0" prefWidth="705.0">
                <columns>
-                  <TableColumn fx:id="title" prefWidth="48.0" text="Title" />
-                  <TableColumn fx:id="offerStatus" minWidth="106.0" prefWidth="106.0" text="Status" />
-                  <TableColumn fx:id="dateOfCreation" minWidth="106.0" prefWidth="106.0" text="Created On" />
-                  <TableColumn fx:id="city" minWidth="75.0" prefWidth="89.0" text="Location" />
-                  <TableColumn fx:id="dateOfArchive" minWidth="64.0" prefWidth="153.0" text="Expires On" />
-                  <TableColumn fx:id="peopleNeeded" minWidth="113.0" prefWidth="147.0" text="People Needed" />
+                  <TableColumn fx:id="title" prefWidth="94.0" text="Title" />
+                  <TableColumn fx:id="offerStatus" minWidth="101.0" prefWidth="109.0" text="Status" />
+                  <TableColumn fx:id="dateOfCreation" minWidth="106.0" prefWidth="117.0" text="Created On" />
+                  <TableColumn fx:id="city" minWidth="75.0" prefWidth="116.0" text="Location" />
+                  <TableColumn fx:id="dateOfArchive" minWidth="64.0" prefWidth="120.0" text="Expires On" />
+                  <TableColumn fx:id="peopleNeeded" minWidth="98.0" prefWidth="145.0" text="People Needed" />
                </columns>
             </TableView>
             <Label layoutX="20.0" layoutY="14.0" prefHeight="49.0" prefWidth="311.0" text="Job Offers">
@@ -79,7 +79,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
                <children>
-                  <JFXButton fx:id="viewProfile" onMouseClicked="#viewProfileAction" text="View Profile" />
+                  <JFXButton fx:id="viewProfile" onMouseClicked="#viewProfileAction" text="View Details" />
                   <Label fx:id="status" prefHeight="27.0" prefWidth="289.0" textFill="#d71010" />
                </children>
             </HBox>

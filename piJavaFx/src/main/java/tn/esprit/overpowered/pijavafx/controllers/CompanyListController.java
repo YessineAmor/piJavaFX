@@ -71,6 +71,16 @@ public class CompanyListController implements Initializable {
     private TableColumn<?, ?> creationDate;
     @FXML
     private TextField searchText;
+    @FXML
+    private TableView<JobOffer> jobOfferView;
+    @FXML
+    private TableColumn<?, ?> jobTitle;
+    @FXML
+    private TableColumn<?, ?> jobDate;
+    @FXML
+    private TableColumn<?, ?> jobPositions;
+    @FXML
+    private Button jobOfferButton;
 
     /**
      * Initializes the controller class.
@@ -153,6 +163,34 @@ public class CompanyListController implements Initializable {
             website.setCellValueFactory(new PropertyValueFactory<>("website"));
             System.out.println("Still working at this point");
             companyView.setItems(compObs);
+
+        } catch (NamingException ex) {
+            Logger.getLogger(CandidateListController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void jobOfferButtonClicked(MouseEvent event) {
+        CompanyProfile comp = companyView.getSelectionModel().getSelectedItem();
+         try {
+            String jndiName = "piJEE-ejb-1.0/CompanyAdminFacade!tn.esprit.overpowered.byusforus.services.users.CompanyAdminFacadeRemote";
+            Context context = new InitialContext();
+            CompanyAdminFacadeRemote companyProxy = (CompanyAdminFacadeRemote) context.lookup(jndiName);
+            List<JobOffer> list = companyProxy.jobOffersByCompany(comp.getId());
+            if (list.isEmpty()) {
+                System.out.println("EMPTY");
+            }
+            //System.out.println("THE LOCATION ISSSSSSSSSS: " + list.get(0).getCity());
+            ObservableList<JobOffer> offerObs = FXCollections.observableArrayList();
+
+            for (JobOffer o : list) {
+                offerObs.add(o);
+            }
+            jobTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+            jobPositions.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+            jobDate.setCellValueFactory(new PropertyValueFactory<>("dateOfCreation"));
+            System.out.println("Still working at this point");
+            jobOfferView.setItems(offerObs);
 
         } catch (NamingException ex) {
             Logger.getLogger(CandidateListController.class.getName()).log(Level.SEVERE, null, ex);
