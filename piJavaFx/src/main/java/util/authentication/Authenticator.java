@@ -7,12 +7,12 @@ package util.authentication;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.authentication.Session;
 import tn.esprit.overpowered.byusforus.entities.users.User;
+import tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacade;
 import tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote;
+import util.cache.ContextCache;
 
 /**
  *
@@ -24,16 +24,16 @@ public class Authenticator {
     public static Session currentSession;
 
     public static String authenticate(String username, String password) throws NamingException, NoSuchAlgorithmException, IOException {
-        String jndiName = "piJEE-ejb-1.0/AuthenticationFacade!tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote";
-        Context context = new InitialContext();
-        AuthenticationFacadeRemote authenticator = (AuthenticationFacadeRemote) context.lookup(jndiName);
-        return authenticator.login(username, password);
+        return getRemote().login(username, password);
     }
 
     public static Session finalizeAuth(String uid, String token) throws NamingException {
-        String jndiName = "piJEE-ejb-1.0/AuthenticationFacade!tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote";
-        Context context = new InitialContext();
-        AuthenticationFacadeRemote authenticator = (AuthenticationFacadeRemote) context.lookup(jndiName);
-        return authenticator.finalizeLogin(uid, token);
+        return getRemote().finalizeLogin(uid, token);
+    }
+
+    public static AuthenticationFacadeRemote getRemote() {
+        return (AuthenticationFacadeRemote) ContextCache
+                .getInstance()
+                .getProxy("piJEE-ejb-1.0/AuthenticationFacade!tn.esprit.overpowered.byusforus.services.authentication.AuthenticationFacadeRemote");
     }
 }
