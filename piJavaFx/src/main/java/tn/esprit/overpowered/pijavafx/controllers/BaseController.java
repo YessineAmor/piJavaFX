@@ -31,11 +31,15 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
 import tn.esprit.overpowered.byusforus.entities.util.ExpertiseLevel;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.users.CompanyAdminFacadeRemote;
+import util.authentication.Authenticator;
 import util.exceptions.InvalidArgumentException;
 import util.exceptions.WidgetNotFoundException;
 import util.factories.ChangeDimensions;
@@ -88,6 +92,12 @@ public class BaseController implements Initializable {
         FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
         FXRouter.when("JobOfferCandidateDetails", "JobOfferCandidateDetails.fxml");
         FXRouter.when("ProfileView", "Profile.fxml");
+        FXRouter.when("CompanyAdminProfileView", "CompanyAdminProfile.fxml");
+        FXRouter.when("CompanyHRProfileView", "CompanyHRProfile.fxml");
+        FXRouter.when("CompanyPMProfileView", "CompanyPMProfile.fxml");
+        FXRouter.setRouteContainer("CompanyAdminProfileView", generalAnchorPane);
+        FXRouter.setRouteContainer("CompanyHRProfileView", generalAnchorPane);
+        FXRouter.setRouteContainer("CompanyPMProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("ProfileView", generalAnchorPane);
         FXRouter.setRouteContainer("QuizInfo", centralAnchorPane);
         FXRouter.setRouteContainer("TryQuiz", centralAnchorPane);
@@ -207,8 +217,24 @@ public class BaseController implements Initializable {
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("ProfileView");
+    private void profileButtonClicked(MouseEvent event) throws IOException, NamingException {
+                String type = Authenticator.currentUser.getDiscriminatorValue();
+        switch (type) {
+            case "CANDIDATE":
+                FXRouter.goTo("ProfileView");
+                break;
+            case "COMPANY_ADMIN":
+                FXRouter.goTo("CompanyAdminProfileView");
+                break;
+            case "HUMAN_RESOURCES_MANAGER":
+                FXRouter.goTo("CompanyHRProfileView");
+                break;
+            case "PROJECT_MANAGER":
+                FXRouter.goTo("CompanyPMProfileView");
+                break;
+            default:
+                break;
+        }
     }
 
 }
