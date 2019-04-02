@@ -7,9 +7,11 @@ package tn.esprit.overpowered.pijavafx.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +32,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
@@ -72,25 +74,46 @@ public class JobOfferCandidateDetailsController implements Initializable {
     private JFXButton inviteBtn;
     private Candidate candidate;
     private JobOffer jobOffer;
+    private Context context;
+    @FXML
+    private Label appStatusLabel;
+    @FXML
+    private Label addInfoLabel;
+    @FXML
+    private JFXButton goBackBtn;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Map<Candidate, JobOffer> candidateJobOfferMap = (HashMap) FXRouter.getData();
-        candidate = candidateJobOfferMap.keySet().stream().findFirst().get();
-        jobOffer = candidateJobOfferMap.values().stream().findFirst().get();
+        Map<Context, CandidateApplication> dataMap = (HashMap) FXRouter.getData();
+        CandidateApplication cApp = dataMap.values().stream().findFirst().get();
+        context = dataMap.keySet().stream().findFirst().get();
+        candidate = cApp.getCandidate();
+        jobOffer = cApp.getJobOffer();
+        if (cApp.getJobApplicationState() != JobApplicationState.PENDING) {
+            refuseCandidacyBtn.setDisable(true);
+            inviteBtn.setDisable(true);
+        }
+        appStatusLabel.setText(cApp.getJobApplicationState().name());
+        addInfoLabel.setText(cApp.getAdditionalInfo());
         titleLabel.setText(candidate.getFirstName() + " " + candidate.getLastName() + " " + titleLabel.getText());
         nameText.setText(candidate.getFirstName() + " " + candidate.getLastName());
-        scrollPane.setPrefHeight((double) FXRouter.scene.heightProperty().doubleValue() - 20);
-        anchorScrollPane.setPrefHeight((double) FXRouter.scene.heightProperty().doubleValue() - 10);
-        scrollPane.setPrefWidth((double) FXRouter.scene.widthProperty().doubleValue() - 55);
+        scrollPane.setPrefHeight((double) FXRouter.scene.heightProperty().doubleValue());
+        anchorScrollPane.setPrefHeight((double) FXRouter.scene.heightProperty().doubleValue());
+        scrollPane.setPrefWidth((double) FXRouter.scene.widthProperty().doubleValue());
         anchorScrollPane.setPrefWidth((double) FXRouter.scene.widthProperty().doubleValue());
-        double ss = (FXRouter.scene.widthProperty().doubleValue() / 2);
-        titleLabel.setLayoutX(ss);
+        double titleLabelX = (FXRouter.scene.widthProperty().doubleValue() / 2) - titleLabel.getWidth();
+        titleLabel.setLayoutX(titleLabelX);
+        double candidatesGridPaneX = (FXRouter.scene.widthProperty().doubleValue() / 2) - candidatesGridPane.getWidth();
+        candidatesGridPane.setLayoutX(candidatesGridPaneX);
+        double buttonsHBoxLayoutX2 = (FXRouter.scene.widthProperty().doubleValue() / 2) - buttonsHBox.getWidth() / 2;
+        buttonsHBox.setLayoutX(buttonsHBoxLayoutX2);
+        double goBackBtnX = (FXRouter.scene.widthProperty().doubleValue() / 2) - goBackBtn.getWidth() / 2;
+        goBackBtn.setLayoutX(goBackBtnX);
         FXRouter.scene.widthProperty().addListener((observable, oldValue, newValue) -> {
-            scrollPane.setPrefWidth((double) newValue - 55);
+            scrollPane.setPrefWidth((double) newValue - 10);
             anchorScrollPane.setPrefWidth((double) newValue);
             double titleLabelLayoutX = (newValue.doubleValue() / 2) - titleLabel.getWidth() / 2;
             titleLabel.setLayoutX(titleLabelLayoutX);
@@ -98,11 +121,22 @@ public class JobOfferCandidateDetailsController implements Initializable {
             candidatesGridPane.setLayoutX(gridPaneLayoutX);
             double buttonsHBoxLayoutX = (newValue.doubleValue() / 2) - buttonsHBox.getWidth() / 2;
             buttonsHBox.setLayoutX(buttonsHBoxLayoutX);
+            double goBackBtnX2 = (newValue.doubleValue() / 2) - goBackBtn.getWidth() / 2;
+            goBackBtn.setLayoutX(goBackBtnX2);
         });
         FXRouter.scene.heightProperty().addListener((observable, oldValue, newValue) -> {
             scrollPane.setPrefHeight((double) newValue - 20);
             anchorScrollPane.setPrefHeight((double) newValue - 10);
         });
+
+        motivationLetterText.setText(cApp.getMotivationLetter());
+        viewResumeText.setText(cApp.getResume());
+        skillsText.setText("JAVA");
+//        if (candidate.getSkills() != null) {
+//            for (Skill skill : candidate.getSkills()) {
+//                skillsText.setText(skillsText.getText() + " " + skill.name());
+//            }
+//        }
     }
 
     @FXML
@@ -132,12 +166,16 @@ public class JobOfferCandidateDetailsController implements Initializable {
             } else {
                 try {
                     String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
-                    Context context = new InitialContext();
                     CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
                     CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(candidate.getId(), jobOffer.getId());
+                    System.out.println("hedha capp id li jebou context : " + cApp.getId());
                     cApp.setAdditionalInfo(refusalTextArea.getText());
                     cApp.setJobApplicationState(JobApplicationState.REFUSED);
-                    candidateApplicationFacade.updateCandidateApplication(cApp);
+                    candidateApplicationFacade.updateCandidateApplication(cApp.getId(), cApp.getAdditionalInfo(), cApp.getJobApplicationState());
+                    inviteBtn.setDisable(true);
+                    refuseCandidacyBtn.setDisable(true);
+                    addInfoLabel.setText(refusalTextArea.getText());
+                    appStatusLabel.setText(JobApplicationState.REFUSED.name());
                 } catch (NamingException ex) {
                     Logger.getLogger(JobOfferCandidateDetailsController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -147,7 +185,27 @@ public class JobOfferCandidateDetailsController implements Initializable {
     }
 
     @FXML
-    private void onInviteBtnClicked(ActionEvent event) {
+    private void onInviteBtnClicked(ActionEvent event) throws IOException, NamingException {
+        Optional<ButtonType> alertResult = CreateAlert.CreateAlert(Alert.AlertType.CONFIRMATION, "Confirmation needed", "Please confirm this decision.", "You're inviting this applicant to take the job offer's quiz. Proceed?");
+        if (alertResult.isPresent() && alertResult.get() == ButtonType.OK) {
+            String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
+            CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
+            CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(candidate.getId(), jobOffer.getId());
+            System.out.println("hedha capp id li jebou context : " + cApp.getId());
+            cApp.setAdditionalInfo("Quizzes passed: 0");
+            cApp.setJobApplicationState(JobApplicationState.INVITED_FOR_QUIZ);
+            candidateApplicationFacade.updateCandidateApplication(cApp.getId(), cApp.getAdditionalInfo(), cApp.getJobApplicationState());
+            Map<Context, JobOffer> dataMap = new HashMap<>();
+            dataMap.put(context, jobOffer);
+            FXRouter.goTo("ListJobOfferCandidates", dataMap);
+        }
+    }
+
+    @FXML
+    private void onGoBackBtn(ActionEvent event) throws IOException {
+        Map<Context, JobOffer> dataMap = new HashMap<>();
+        dataMap.put(context, jobOffer);
+        FXRouter.goTo("ListJobOfferCandidates", dataMap);
     }
 
 }
