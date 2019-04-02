@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.Paiement.ChequeController">
+    <children>
+              <JFXTextField layoutX="405.0" layoutY="81.0" />
+      <JFXTextField layoutX="405.0" layoutY="27.0" />
+      <JFXTextField layoutX="405.0" layoutY="271.0" />
+      <JFXTextField layoutX="405.0" layoutY="209.0" />
+      <JFXTextField layoutX="405.0" layoutY="148.0" />
+      <Text layoutX="35.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Montant:" wrappingWidth="62.427001953125" />
+      <Text layoutX="35.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom:" wrappingWidth="62.427001953125" />
+      <Text layoutX="276.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Banque:" wrappingWidth="62.427001953125" />
+      <Text layoutX="276.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Numero cheque:" wrappingWidth="99.22698974609375" />
+      <Text layoutX="276.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" wrappingWidth="62.427001953125" />
+      <Text layoutX="276.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price:" wrappingWidth="62.427001953125" />
+      <Text layoutX="276.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Agence:" wrappingWidth="62.427001953125" />
+      <Button layoutX="457.0" layoutY="345.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="114.0" text="Confirmer" />
+      <Text layoutX="35.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cheque image:" wrappingWidth="106.427001953125" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="25.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" />
+    </children>
+</AnchorPane>

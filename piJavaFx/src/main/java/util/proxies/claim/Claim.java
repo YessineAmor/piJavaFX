@@ -11,6 +11,7 @@ import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.reclamation.Reclamation;
 import tn.esprit.overpowered.byusforus.services.Reclamation.ReclamationLocal;
 import tn.esprit.overpowered.byusforus.services.Reclamation.ReclamationRemote;
+import util.authentication.Authenticator;
 
 /**
  *
@@ -24,7 +25,8 @@ public class Claim {
         Context context = new InitialContext();
         ReclamationRemote reclamationRemote = (ReclamationRemote) context.lookup(jndiName);
         reclamationRemote.addReclamation(r);
-
+       
+                
     }
 
 
