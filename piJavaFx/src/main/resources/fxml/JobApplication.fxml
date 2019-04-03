@@ -17,9 +17,9 @@
         <content>
           <AnchorPane minHeight="570.0" minWidth="750.0" prefHeight="570.0" prefWidth="750.0">
                <children>
-                  <Label fx:id="jobAppTitle" layoutX="300.0" layoutY="38.0" text="Job Application">
+                  <Label fx:id="jobAppTitle" layoutX="282.0" layoutY="38.0" text="Job Application" textFill="#111254">
                      <font>
-                        <Font size="22.0" />
+                        <Font name="BebasNeueRegular" size="34.0" />
                      </font>
                   </Label>
                   <GridPane layoutX="106.0" layoutY="151.0" prefHeight="225.0" prefWidth="538.0">

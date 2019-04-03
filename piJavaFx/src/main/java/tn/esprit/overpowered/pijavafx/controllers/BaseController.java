@@ -219,7 +219,7 @@ public class BaseController implements Initializable {
         jobOffer.setCity("Tunis");
         jobOffer.setCompany(company);
         jobOffer.setRegisteredCandidates(registeredCandidates);
-        jobOfferFacade.create(jobOffer);
+//        jobOfferFacade.create(jobOffer);
 //        CandidateApplication candidateApplication = new CandidateApplication("motiv", "resume.pdf", jobOffer);
 //        candidateApplication.setCandidate(c);
 //        candidateApplicationFacade.create(candidateApplication);
