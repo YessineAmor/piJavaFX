@@ -5,7 +5,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -36,7 +35,7 @@
             <VBox layoutX="300.0" layoutY="27.0" prefHeight="209.0" prefWidth="158.0" spacing="25.0">
                <children>
                   <JFXTextField fx:id="title" alignment="CENTER" promptText="Title" />
-                  <JFXComboBox fx:id="stateCombobox" prefHeight="25.0" prefWidth="125.0" promptText="State" />
+                  <DatePicker fx:id="expirationDate" prefHeight="31.0" prefWidth="184.0" promptText="Expiration Date" />
                   <JFXComboBox fx:id="expertiseLevelComboBox" prefHeight="25.0" prefWidth="125.0" promptText="Expertise Level">
 
             </JFXComboBox>

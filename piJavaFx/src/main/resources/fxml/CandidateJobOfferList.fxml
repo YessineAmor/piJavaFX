@@ -85,8 +85,9 @@
                   <Label fx:id="status" prefHeight="27.0" prefWidth="289.0" textFill="#d71010" />
                </children>
             </HBox>
-            <TextField alignment="CENTER" layoutX="14.0" layoutY="66.0" prefHeight="31.0" prefWidth="134.0" promptText="Search" />
+            <TextField fx:id="searchText" alignment="CENTER" layoutX="14.0" layoutY="66.0" prefHeight="31.0" prefWidth="134.0" promptText="Location" />
             <Button fx:id="searchButton" layoutX="155.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#searchButtonClicked" text="Go" />
+            <Button fx:id="customJobsButton" layoutX="209.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#customJobsButtonClicked" text="Get Custom Jobs" />
          </children>
       </AnchorPane>
     </children>

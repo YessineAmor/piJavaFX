@@ -123,6 +123,7 @@ public class ContactProfileController implements Initializable {
             recommendations.setText(Integer.toString(rating));
     }
 
+    
     @FXML
     private void profileButtonClicked(MouseEvent event) throws IOException {
         FXRouter.when("ProfileView", "Profile.fxml","Profile", 889, 543);

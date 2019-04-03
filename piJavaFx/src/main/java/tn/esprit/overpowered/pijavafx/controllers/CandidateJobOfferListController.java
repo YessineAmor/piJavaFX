@@ -26,6 +26,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -41,6 +42,7 @@ import org.json.simple.parser.ParseException;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
 import tn.esprit.overpowered.byusforus.util.JobApplicationState;
@@ -98,6 +100,10 @@ public class CandidateJobOfferListController implements Initializable {
     private String cAppMotivationLetter;
     @FXML
     private AnchorPane centralAnchorPane;
+    @FXML
+    private TextField searchText;
+    @FXML
+    private Button customJobsButton;
 
     /**
      * Initializes the controller class.
@@ -263,7 +269,28 @@ public class CandidateJobOfferListController implements Initializable {
     }
 
     @FXML
-    private void searchButtonClicked(MouseEvent event) {
+    private void searchButtonClicked(MouseEvent event) throws NamingException {
+            String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote";
+            Context context = new InitialContext();
+            JobOfferFacadeRemote jobOfferProxy = (JobOfferFacadeRemote) context.lookup(jndiName);
+            List<JobOffer> list = jobOfferProxy.searchByLocation(searchText.getText());
+            if (list.isEmpty()) {
+                System.out.println("EMPTY");
+            }
+            //System.out.println("THE LOCATION ISSSSSSSSSS: " + list.get(0).getCity());
+            ObservableList<JobOffer> offerObs = FXCollections.observableArrayList();
+
+            for (JobOffer o : list) {
+                offerObs.add(o);
+            }
+            title.setCellValueFactory(new PropertyValueFactory<>("Title"));
+            offerStatus.setCellValueFactory(new PropertyValueFactory<>("offerStatus"));
+            dateOfCreation.setCellValueFactory(new PropertyValueFactory<>("dateOfCreation"));
+            city.setCellValueFactory(new PropertyValueFactory<>("city"));
+            dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
+            peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+            jobsView.setItems(offerObs);
+        
     }
 
     @FXML
@@ -285,6 +312,30 @@ public class CandidateJobOfferListController implements Initializable {
         FXRouter.when("CompanyListView", "CompanyList.fxml");
         FXRouter.setRouteContainer("CompanyListView", parentAnchorPane);
         FXRouter.goTo("CompanyListView");
+    }
+
+    @FXML
+    private void customJobsButtonClicked(MouseEvent event) throws NamingException {
+            String jndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+            Context context = new InitialContext();
+            CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
+            List<JobOffer> list = candidateProxy.customJobOfferList(Authenticator.currentUser.getId());
+            if (list == null) {
+                System.out.println("EMPTY");
+            }
+            //System.out.println("THE LOCATION ISSSSSSSSSS: " + list.get(0).getCity());
+            ObservableList<JobOffer> offerObs = FXCollections.observableArrayList();
+
+            for (JobOffer o : list) {
+                offerObs.add(o);
+            }
+            title.setCellValueFactory(new PropertyValueFactory<>("Title"));
+            offerStatus.setCellValueFactory(new PropertyValueFactory<>("offerStatus"));
+            dateOfCreation.setCellValueFactory(new PropertyValueFactory<>("dateOfCreation"));
+            city.setCellValueFactory(new PropertyValueFactory<>("city"));
+            dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
+            peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+            jobsView.setItems(offerObs);
     }
 
 }
