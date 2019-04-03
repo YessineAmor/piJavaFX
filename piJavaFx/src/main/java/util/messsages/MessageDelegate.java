@@ -6,6 +6,7 @@
 package util.messsages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import tn.esprit.overpowered.byusforus.entities.messaging.Message;
 import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote;
@@ -23,8 +24,8 @@ public class MessageDelegate {
                 .getProxy("piJEE-ejb-1.0/Messaging!tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote");
     }
     
-    public static void sendMessage(Message m) {
-        getRemote().sendMessage(m);
+    public static void sendMessage(Message m, User from, User to) {
+        getRemote().sendMessage(m, from.getId(), to.getId());
     }
     
     public static void seen(Message m, User u) {
@@ -38,4 +39,9 @@ public class MessageDelegate {
     public static ArrayList<Message> getMyMessages(Long id) {
         return getRemote().getMyMessages(id);
     }
+    
+        public ArrayList<Message> getMessages(Long userId, Date t) {
+            return getRemote().getMessages(userId, t);
+        }
+
 }
