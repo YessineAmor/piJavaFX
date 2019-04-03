@@ -406,6 +406,16 @@ public class TryQuizController implements Initializable {
         return moreThan;
     }
 
+    public Boolean checkLastFiveEmpty() {
+        Boolean empty = true;
+        for (int a : lastFiveFaces) {
+            if (a == 0) {
+                empty = false;
+            }
+        }
+        return empty;
+    }
+
     public void detectFaces(BufferedImage imageToAnalyse) throws IOException {
         HaarCascadeDetector detector = new HaarCascadeDetector();
         faces = detector.detectFaces(ImageUtilities.createFImage(imageToAnalyse));
@@ -430,24 +440,53 @@ public class TryQuizController implements Initializable {
                 });
 
             } else {
-                lastFiveFaces.clear();
+                if (checkLastFiveEmpty()) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("No faces detected!!!");
+                            CreateAlert.CreateAlert(Alert.AlertType.ERROR, "ERROR!", "No faces detected.",
+                                    "We couldn't detect any faces from your webcam. You will be marked as REFUSED."
+                                    + " An employee can further review the incident and make a decision.");
+                            stopCamera = true;
+
+                            try {
+                                FXRouter.goTo("baseView");
+                            } catch (IOException ex) {
+                                Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    });
+
+                } else {
+                    lastFiveFaces.clear();
+                }
+            }
+            facesList.clear();
+            for (DetectedFace face : faces) {
+                BufferedImage facePatch = ImageUtilities.createBufferedImage(face.getFacePatch());
+                facesList.add(facePatch);
+                Rectangle bounds = face.getBounds();
+                int dx = (int) (0.1 * bounds.width);
+                int dy = (int) (0.2 * bounds.height);
+                int x = (int) bounds.x - dx;
+                int y = (int) bounds.y - dy;
+                int w = (int) bounds.width + 2 * dx;
+                int h = (int) bounds.height + dy;
+                Graphics g = imageToAnalyse.getGraphics();
+                g.drawRect(x, y, w, h);
             }
         }
-        facesList.clear();
-        for (DetectedFace face : faces) {
-            BufferedImage facePatch = ImageUtilities.createBufferedImage(face.getFacePatch());
-            facesList.add(facePatch);
-            Rectangle bounds = face.getBounds();
-            int dx = (int) (0.1 * bounds.width);
-            int dy = (int) (0.2 * bounds.height);
-            int x = (int) bounds.x - dx;
-            int y = (int) bounds.y - dy;
-            int w = (int) bounds.width + 2 * dx;
-            int h = (int) bounds.height + dy;
-            Graphics g = imageToAnalyse.getGraphics();
-            g.drawRect(x, y, w, h);
-        }
-    }
+
+    
+
+    
+
+    
+
+    
+
+    
 
     public void initCam() {
         webcam = Webcam.getWebcams().get(1);
