@@ -27,14 +27,11 @@ public class MessageCheckThread implements Runnable {
     public MessageCheckThread(User u, Message m) throws NamingException {
         this.user = u;
         this.newestMessage = m;
-          String jndiName = "piJEE-ejb-1.0/Messaging!tn.esprit.overpowered.byusforus.services.messaging.MessagingRemote";
-        Context context = new InitialContext();
-        msgService = (MessagingRemote) context.lookup(jndiName);
     }
     @Override
     public void run() {
         // send request with that most recent message's time
-        retMsg = msgService.getMessages(user.getId(), newestMessage.getSentTime());
+       // retMsg = MessageDelegate.getMessages(user.getId(), newestMessage.getSentTime());
     }
     
     public ArrayList<Message> getNewestMessages() {
