@@ -8,6 +8,7 @@ package tn.esprit.overpowered.pijavafx.controllers;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +24,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.authentication.Session;
+import tn.esprit.overpowered.byusforus.entities.candidat.Cursus;
+import tn.esprit.overpowered.byusforus.entities.candidat.Experience;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
@@ -73,6 +76,26 @@ public class ProfileController implements Initializable {
     private Button jobOfferButton;
     @FXML
     private Button companyButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button addDetailsButton;
+    @FXML
+    private Label positionLabel;
+    @FXML
+    private Label orginazationLabel;
+    @FXML
+    private Label startDate;
+    @FXML
+    private Label endDate;
+    @FXML
+    private Label cursusEndDate;
+    @FXML
+    private Label cursusDegree;
+    @FXML
+    private Label cursusUniversity;
+    @FXML
+    private Label cursusStartDate;
 
     /**
      * Initializes the controller class.
@@ -87,13 +110,38 @@ public class ProfileController implements Initializable {
                 context = new InitialContext();
                 CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
                 Candidate cdt = new Candidate();
+                Experience exp = new Experience();
+                Cursus cursus = new Cursus();
                 cdt = candidateProxy.find(Authenticator.currentUser.getId());
+                exp = candidateProxy.getCandidateExperience(Authenticator.currentUser.getId());
+                cursus = candidateProxy.getCandidateCursus(Authenticator.currentUser.getId());
                 name.setText(cdt.getFirstName());
                 lastname.setText(cdt.getLastName());
                 email.setText(cdt.getEmail());
                 recommendations.setText(Integer.toString(cdt.getRecommendations()));
                 visits.setText(Integer.toString(cdt.getVisits()));
                 username.setText(cdt.getUsername());
+                if (exp == null) {
+                    System.out.println("No experience");
+                } else {
+                    orginazationLabel.setText(exp.getOrginization());
+                    positionLabel.setText(exp.getPosition());
+                    SimpleDateFormat sdfr = new SimpleDateFormat("dd/MMM/yyyy");
+                    SimpleDateFormat sdfr1 = new SimpleDateFormat("dd/MMM/yyyy");
+                    startDate.setText(sdfr.format(exp.getStartDate()));
+                    endDate.setText(sdfr1.format(exp.getEndDate()));
+                }
+                if (cursus == null) {
+                    System.out.println("No cursus");
+                } else {
+                    cursusDegree.setText(cursus.getDegree());
+                    cursusUniversity.setText(cursus.getUniversity());
+                    SimpleDateFormat sdfr2 = new SimpleDateFormat("dd/MMM/yyyy");
+                    SimpleDateFormat sdfr3 = new SimpleDateFormat("dd/MMM/yyyy");
+                    cursusStartDate.setText(sdfr2.format(cursus.getStartDate()));
+                    cursusEndDate.setText(sdfr3.format(cursus.getEndDate()));
+                }
+
             } catch (NamingException ex) {
                 Logger.getLogger(ProfileController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -125,7 +173,6 @@ public class ProfileController implements Initializable {
         FXRouter.goTo("Profile");
     }
 
-
     @FXML
     private void contactsButtonClicked(MouseEvent event) throws IOException {
         FXRouter.when("CandidateListView", "CandidateList.fxml");
@@ -135,25 +182,35 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void homeButtonClicked(MouseEvent event) throws IOException {
-         FXRouter.when("BaseView", "Base.fxml" );
+        FXRouter.when("BaseView", "Base.fxml");
         FXRouter.setRouteContainer("BaseView", generalAnchorPane);
         FXRouter.goTo("BaseView");
     }
 
     @FXML
     private void jobOfferButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml" );
+        FXRouter.when("JobOfferView", "CandidateJobOfferList.fxml");
         FXRouter.setRouteContainer("JobOfferView", generalAnchorPane);
         FXRouter.goTo("JobOfferView");
     }
 
     @FXML
     private void companyButtonClicked(MouseEvent event) throws IOException {
-        FXRouter.when("CompanyListView", "CompanyList.fxml" );
+        FXRouter.when("CompanyListView", "CompanyList.fxml");
         FXRouter.setRouteContainer("CompanyListView", generalAnchorPane);
         FXRouter.goTo("CompanyListView");
-        
+
     }
-    
+
+    @FXML
+    private void editButtonClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void addDetailsClicked(MouseEvent event) throws IOException {
+        FXRouter.when("DetailsView", "AddDetails.fxml");
+        FXRouter.setRouteContainer("DetailsView", generalAnchorPane);
+        FXRouter.goTo("DetailsView");
+    }
 
 }

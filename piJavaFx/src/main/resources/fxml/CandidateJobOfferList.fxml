@@ -82,7 +82,6 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
                <children>
-                  <Button fx:id="viewProfile" onMouseClicked="#viewProfileAction" text="View Details" />
                   <Label fx:id="status" prefHeight="27.0" prefWidth="289.0" textFill="#d71010" />
                </children>
             </HBox>
