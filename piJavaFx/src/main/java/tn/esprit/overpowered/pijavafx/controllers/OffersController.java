@@ -17,10 +17,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -37,6 +40,7 @@ import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacade
 import util.authentication.Authenticator;
 import util.information.tracker.InfoTracker;
 import util.routers.FXRouter;
+import utilJoboffer.HandleOffer;
 
 /**
  * FXML Controller class
@@ -70,8 +74,6 @@ public class OffersController implements Initializable {
     @FXML
     private TableColumn<JobOffer, String> peopleNeeded;
     @FXML
-    private JFXButton viewProfile;
-    @FXML
     private Label status;
     @FXML
     private Button searchButton;
@@ -81,6 +83,16 @@ public class OffersController implements Initializable {
     private Button homeButton;
     @FXML
     private Button myProfileButton;
+    @FXML
+    private Button viewOfferButton;
+    @FXML
+    private ComboBox<String> searchOptionCombo;
+    ObservableList<String> options = FXCollections.
+            observableArrayList("title", "date", "location", "expertise");
+    @FXML
+    private TextField searchElement;
+    @FXML
+    private TableColumn<?, ?> expertiseLevel;
 
     /**
      * Initializes the controller class.
@@ -88,6 +100,8 @@ public class OffersController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        searchOptionCombo.setValue("title");
+        searchOptionCombo.setItems(options);
         FXRouter.when("CreateJobOfferView", "CreateJobOffer.fxml", "JobOffer", 640, 425);
         FXRouter.setRouteContainer("CreateJobOfferView", parentAnchorPane);
         FXRouter.when("CompanyHRProfileView", "CompanyHRProfile.fxml", "Profile", 600, 400);
@@ -96,6 +110,8 @@ public class OffersController implements Initializable {
         FXRouter.setRouteContainer("CompanyPMProfileView", parentAnchorPane);
         FXRouter.when("BaseView", "Base.fxml", "HOME", 800, 600);
         FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+        FXRouter.when("CompanyViewOfferDetailsView", "CompanyViewOfferDetails.fxml", "HOME", 800, 600);
+        FXRouter.setRouteContainer("CompanyViewOfferDetailsView", parentAnchorPane);
         try {
             String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote";
             Context context = new InitialContext();
@@ -116,6 +132,7 @@ public class OffersController implements Initializable {
             city.setCellValueFactory(new PropertyValueFactory<>("city"));
             dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
             peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+            expertiseLevel.setCellValueFactory(new PropertyValueFactory<>("expertiseLevel"));
             System.out.println("Still working at this point");
             jobsView.setItems(offerObs);
 
@@ -133,11 +150,65 @@ public class OffersController implements Initializable {
     }
 
     @FXML
-    private void viewProfileAction(MouseEvent event) {
-    }
+    private void searchButtonClicked(MouseEvent event) throws NamingException {
 
-    @FXML
-    private void searchButtonClicked(MouseEvent event) {
+        switch (searchOptionCombo.getValue()) {
+            case "title":
+                List<JobOffer> list = HandleOffer.searchByTitle(searchElement.getText());
+                ObservableList<JobOffer> offerObs = FXCollections.observableArrayList();
+
+                for (JobOffer o : list) {
+                    offerObs.add(o);
+                }
+                title.setCellValueFactory(new PropertyValueFactory<>("Title"));
+                offerStatus.setCellValueFactory(new PropertyValueFactory<>("offerStatus"));
+                dateOfCreation.setCellValueFactory(new PropertyValueFactory<>("dateOfCreation"));
+                city.setCellValueFactory(new PropertyValueFactory<>("city"));
+                dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
+                peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+                expertiseLevel.setCellValueFactory(new PropertyValueFactory<>("expertiseLevel"));
+                System.out.println("Still working at this point");
+                jobsView.setItems(offerObs);
+                break;
+
+            case "location":
+                List<JobOffer> listes = HandleOffer.searchLocation(searchElement.getText());
+                ObservableList<JobOffer> offerObsss = FXCollections.observableArrayList();
+
+                for (JobOffer o : listes) {
+                    offerObsss.add(o);
+                }
+                title.setCellValueFactory(new PropertyValueFactory<>("Title"));
+                offerStatus.setCellValueFactory(new PropertyValueFactory<>("offerStatus"));
+                dateOfCreation.setCellValueFactory(new PropertyValueFactory<>("dateOfCreation"));
+                city.setCellValueFactory(new PropertyValueFactory<>("city"));
+                dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
+                peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+                expertiseLevel.setCellValueFactory(new PropertyValueFactory<>("expertiseLevel"));
+                System.out.println("Still working at this point");
+                jobsView.setItems(offerObsss);
+                break;
+            case "expertise":
+                List<JobOffer> liste = HandleOffer.searchByTitle(searchElement.getText());
+                ObservableList<JobOffer> offerObss = FXCollections.observableArrayList();
+
+                for (JobOffer o : liste) {
+                    offerObss.add(o);
+                }
+                title.setCellValueFactory(new PropertyValueFactory<>("Title"));
+                offerStatus.setCellValueFactory(new PropertyValueFactory<>("offerStatus"));
+                dateOfCreation.setCellValueFactory(new PropertyValueFactory<>("dateOfCreation"));
+                city.setCellValueFactory(new PropertyValueFactory<>("city"));
+                dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
+                peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+                expertiseLevel.setCellValueFactory(new PropertyValueFactory<>("expertiseLevel"));
+                System.out.println("Still working at this point");
+                jobsView.setItems(offerObss);
+                break;
+            default:
+                break;
+
+        }
     }
 
     @FXML
@@ -152,25 +223,32 @@ public class OffersController implements Initializable {
 
     @FXML
     private void myProfileButtonOnClicked(MouseEvent event) throws IOException, NamingException {
- String type = Authenticator.currentUser.getDiscriminatorValue();
+        String type = Authenticator.currentUser.getDiscriminatorValue();
         Long currentUserId = Authenticator.currentUser.getId();
         switch (type) {
             case "COMPANY_ADMIN":
                 CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
-                FXRouter.goTo("CompanyAdminProfileView",compAdmin);
+                FXRouter.goTo("CompanyAdminProfileView", compAdmin);
                 break;
             case "HUMAN_RESOURCES_MANAGER":
                 System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
                 HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
-                FXRouter.goTo("CompanyHRProfileView",hrManager);
+                FXRouter.goTo("CompanyHRProfileView", hrManager);
                 break;
             case "PROJECT_MANAGER":
-                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
-                FXRouter.goTo("CompanyPMProfileView",pManager);
+                ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                FXRouter.goTo("CompanyPMProfileView", pManager);
                 break;
             default:
                 break;
         }
+
+    }
+
+    @FXML
+    private void viewOfferButtonOnClicked(MouseEvent event) throws IOException {
+        JobOffer jobOffer = jobsView.getSelectionModel().getSelectedItem();
+        FXRouter.goTo("CompanyViewOfferDetailsView", jobOffer);
 
     }
 

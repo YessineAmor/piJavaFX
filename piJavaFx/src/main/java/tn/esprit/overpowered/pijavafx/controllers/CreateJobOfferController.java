@@ -12,7 +12,9 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -91,10 +94,9 @@ public class CreateJobOfferController implements Initializable {
     @FXML
     private Button logoutButton;
     @FXML
-    private JFXComboBox<?> stateCombobox;
-    @FXML
     private AnchorPane parentAnchorPane;
-
+    @FXML
+    private DatePicker expirationDate;
     /**
      * Initializes the controller class.
      *
@@ -104,6 +106,8 @@ public class CreateJobOfferController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        FXRouter.when("LoginView", "Login.fxml", "Login", 600, 400);
+        FXRouter.setRouteContainer("LoginView", parentAnchorPane);
         FXRouter.when("OffersView", "Offers.fxml", 889, 543);
         FXRouter.setRouteContainer("OffersView", parentAnchorPane);
         expertiseLevelComboBox.setValue("JUNIOR");
@@ -134,13 +138,15 @@ public class CreateJobOfferController implements Initializable {
                 FXRouter.goTo("OffersView", compAdmin);
                 HandleOffer.createJobOffer(title.getText(), location.getText(),
                         ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
-                        Integer.parseInt(neededCandidates.getText()), description.getText());
+                        Integer.parseInt(neededCandidates.getText()), description.getText(),
+                        expirationDate.getValue());
                 break;
             case "HUMAN_RESOURCES_MANAGER":
                 System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
                 HandleOffer.createJobOffer(title.getText(), location.getText(),
                         ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
-                        Integer.parseInt(neededCandidates.getText()), description.getText());
+                        Integer.parseInt(neededCandidates.getText()), description.getText(),
+                        expirationDate.getValue());
                 HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
                 FXRouter.goTo("OffersVieww", hrManager);
                 break;
@@ -148,7 +154,8 @@ public class CreateJobOfferController implements Initializable {
                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
                 HandleOffer.requestJobOfferCreation(title.getText(), location.getText(),
                         ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
-                        Integer.parseInt(neededCandidates.getText()), description.getText());
+                        Integer.parseInt(neededCandidates.getText()), description.getText(),
+                        expirationDate.getValue());
                 FXRouter.goTo("OffersView", pManager);
                 break;
             default:
@@ -167,18 +174,36 @@ public class CreateJobOfferController implements Initializable {
 
     @FXML
     private void myprofileButton(MouseEvent event
-    ) {
+    ) throws NamingException, IOException {
+        String type = Authenticator.currentUser.getDiscriminatorValue();
+        Long currentUserId = Authenticator.currentUser.getId();
+        switch (type) {
+            case "COMPANY_ADMIN":
+                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
+                FXRouter.goTo("CompanyAdminProfileView", compAdmin);
+                break;
+            case "HUMAN_RESOURCES_MANAGER":
+                System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
+                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
+                FXRouter.goTo("CompanyHRProfileView", hrManager);
+                break;
+            case "PROJECT_MANAGER":
+                ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                FXRouter.goTo("CompanyPMProfileView", pManager);
+                break;
+            default:
+                break;
+        }
     }
 
     @FXML
     private void offersButtonOnClicked(MouseEvent event
-    ) {
+    ) throws IOException {
+        FXRouter.goTo("OffersView");
     }
 
     @FXML
     private void logoutButtonOnClicked(MouseEvent event) throws IOException {
-        FXRouter.when("LoginView", "Login.fxml", "Login", 600, 400);
-        FXRouter.setRouteContainer("LoginView", parentAnchorPane);
         FXRouter.goTo("LoginView");
     }
 
