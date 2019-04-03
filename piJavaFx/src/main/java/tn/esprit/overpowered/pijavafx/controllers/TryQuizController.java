@@ -31,12 +31,13 @@ import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
 import java.awt.Graphics;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,6 +62,8 @@ import javax.naming.NamingException;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.math.geometry.shape.Rectangle;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
@@ -70,7 +73,9 @@ import tn.esprit.overpowered.byusforus.entities.quiz.Question;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuestionType;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
+import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
@@ -125,6 +130,7 @@ public class TryQuizController implements Initializable {
     @FXML
     private AnchorPane anchorScrollPane;
     private List<Integer> lastFiveFaces = new ArrayList<>();
+    private String cAppMotivationLetter;
 
     /**
      * Initializes the controller class.
@@ -161,7 +167,7 @@ public class TryQuizController implements Initializable {
         System.out.println("alert accepted - TryQuizController");
         answers = new ArrayList<>();
         quiz = (Quiz) FXRouter.getData();
-        quizTry = new QuizTry();
+        quizTry = new QuizTry((Candidate) Authenticator.currentUser);
         System.out.println("quiz try serial " + QuizTry.getSerialVersionUID());
         long start = System.currentTimeMillis();
         quizTry.setStartDate(new Date());
@@ -230,8 +236,6 @@ public class TryQuizController implements Initializable {
                     String jndiName = "piJEE-ejb-1.0/QuizTryFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote";
                     String jndiNamejo = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote";
                     String quizFacadejndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
-                    quiz.getJobOffer().setSkills(new HashSet<>());
-                    quiz.getJobOffer().getCompany().setListOfOffers(new ArrayList<>());
                     QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) secondContext.lookup(jndiName);
                     JobOfferFacadeRemote jobOfferFacade = (JobOfferFacadeRemote) secondContext.lookup(jndiNamejo);
 //                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
@@ -239,24 +243,60 @@ public class TryQuizController implements Initializable {
 //                    quizTryFacadeProxy.create(quizTry);
                     ObjectMapper mapper = new ObjectMapper();
                     quizTry.setIdQuizTry(250L);
-                    quiz.setJobOffer(jobOfferFacade.find(1L));
-                    String fileName = "quiz_try_" + quizTry.getQuiz().getId() + "_" + Authenticator.currentUser.getEmail();
+//                    quiz.setJobOffer(jobOfferFacade.find(1L));
+                    String fileName = "quiz_tries";
 //                    mapper.writeValue(new File(fileName + ".json"), quizTry);
                     String jndiName2 = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
                     CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName2);
-                    CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(Authenticator.currentUser.getId(), quiz.getJobOffer().getId());
-                    JSONObject quizTryJSON = new JSONObject();
-                    quizTryJSON.put("quizId", quiz.getId());
-                    quizTryJSON.put("candidateId", Authenticator.currentUser.getId());
-                    quizTryJSON.put("score", quizTry.getPercentage());
-                    quizTryJSON.put("answers", candidateAnswers);
-                    JSONArray quizTryList = new JSONArray();
-                    quizTryList.add(quizTryJSON);
-                    try (FileWriter file = new FileWriter(fileName + ".json")) {
-                        file.write(quizTryList.toJSONString());
+//                    CandidateApplication cApp = candidateApplicationFacade.getCAppByMotivLetter(Authenticator.currentUser.getId(), quiz.getJobOffer().getId());
+                    JSONParser jsonParser = new JSONParser();
+                    try (FileReader reader = new FileReader("candidate_apps.json")) {
+                        //Read JSON file
+                        Object obj = jsonParser.parse(reader);
+                        JSONArray quizJList = (JSONArray) obj;
+                        System.out.println(quizJList);
+                        for (Object quiz : quizJList) {
+                            JSONObject quizJson = (JSONObject) quiz;
+                            Long jobOfferId = (Long) quizJson.get("jobOfferId");
+                            Long candidateId = (Long) quizJson.get("candidateId");
+                            if (jobOfferId == quizTry.getQuiz().getJobOffer().getId() && candidateId == Authenticator.currentUser.getId()) {
+                                cAppMotivationLetter = (String) quizJson.get("cAppMotivationLetter");
+                            }
+
+                        }
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException | ParseException ex) {
+                        Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    CandidateApplication cApp = candidateApplicationFacade.getCAppByMotivLetter(cAppMotivationLetter);
+                    JSONArray quizJList = null;
+//                    File yourFile = new File("quiz_tries_.json");
+//                    try {
+//                        yourFile.createNewFile(); // if file already exists will do nothing 
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+                    try (FileReader reader = new FileReader("quiz_tries_.json")) {
+                        //Read JSON file
+                        Object obj = jsonParser.parse(reader);
+
+                        quizJList = (JSONArray) obj;
+                        System.out.println(quizJList);
+                        JSONObject quizTryJSON = new JSONObject();
+                        quizTryJSON.put("quizId", quiz.getId());
+                        quizTryJSON.put("candidateId", Authenticator.currentUser.getId());
+                        quizTryJSON.put("score", quizTry.getPercentage());
+                        quizTryJSON.put("answers", candidateAnswers);
+                        quizJList.add(quizTryJSON);
+
+                    } catch (FileNotFoundException e) {
+                    } catch (IOException | ParseException e) {
+                    }
+                    try (FileWriter file = new FileWriter("quiz_tries_.json")) {
+                        file.write(quizJList.toJSONString());
                         file.flush();
                     } catch (IOException e) {
-                        e.printStackTrace();
                     }
                     if (quizTry.getPercentage() >= 80f) {
                         cApp.setJobApplicationState(JobApplicationState.ACCEPTED_FOR_INTERVIEW);
@@ -343,9 +383,7 @@ public class TryQuizController implements Initializable {
                         candidateAnswers.put(questionToDisplay, c);
                         break;
                     case MULTI_ANSWER:
-                        if (candidateAnswers.containsKey(questionToDisplay)) {
-                            // TO DO
-                        }
+                        candidateAnswers.put(questionToDisplay, c);
                         break;
                     case FILL_IN_BLANKS:
                         break;

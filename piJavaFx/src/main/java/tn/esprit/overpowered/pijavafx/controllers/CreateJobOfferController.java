@@ -142,7 +142,7 @@ public class CreateJobOfferController implements Initializable {
                         ExpertiseLevel.valueOf(expertiseLevelComboBox.getValue()), listofSkills,
                         Integer.parseInt(neededCandidates.getText()), description.getText());
                 HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
-                FXRouter.goTo("OffersVieww", hrManager);
+                FXRouter.goTo("OffersView", hrManager);
                 break;
             case "PROJECT_MANAGER":
                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);

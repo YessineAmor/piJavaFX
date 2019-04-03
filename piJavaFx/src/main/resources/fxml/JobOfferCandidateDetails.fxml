@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="570.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.JobOfferCandidateDetailsController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="570.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.JobOfferCandidateDetailsController">
    <children>
       <ScrollPane fx:id="scrollPane" layoutX="-6.0" prefHeight="570.0" prefWidth="759.0">
          <content>
