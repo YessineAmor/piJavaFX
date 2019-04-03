@@ -143,9 +143,6 @@ public class CompanyListController implements Initializable {
     private void selected(MouseEvent event) {
     }
 
-    @FXML
-    private void viewProfileAction(MouseEvent event) {
-    }
 
     @FXML
     private void searchButtonClicked(MouseEvent event) {
@@ -219,6 +216,14 @@ public class CompanyListController implements Initializable {
         FXRouter.when("CandidateListView", "CandidateList.fxml");
         FXRouter.setRouteContainer("CandidateListView", parentAnchorPane);
         FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void viewDetailsAction(MouseEvent event) throws IOException {
+        CompanyProfile comp = companyView.getSelectionModel().getSelectedItem();
+         FXRouter.when("CompanyProfileView", "CompanyProfile.fxml");
+        FXRouter.setRouteContainer("CompanyProfileView", parentAnchorPane);
+        FXRouter.goTo("CompanyProfileView", comp);
     }
     
 }

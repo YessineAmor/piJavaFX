@@ -5,6 +5,7 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -67,6 +68,9 @@ public class ContactProfileController implements Initializable {
     private Label about;
     @FXML
     private Label idLabel;
+    @FXML
+    private JFXButton sendMessageButton;
+    Candidate injectedCadidate;
 
     /**
      * Initializes the controller class.
@@ -74,6 +78,7 @@ public class ContactProfileController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        Candidate cdt = (Candidate) FXRouter.getData();
+       injectedCadidate = cdt;
       /* if(cdt.getCurriculumVitaes().equals("exists"))
        {
            addContactButton.setDisable(true);
@@ -129,6 +134,13 @@ public class ContactProfileController implements Initializable {
         FXRouter.when("CandidateListView", "CandidateList.fxml","Candidate List", 889, 543);
                  FXRouter.setRouteContainer("CandidateListView", generalAnchorPane);
         FXRouter.goTo("CandidateListView");
+    }
+
+    @FXML
+    private void sendMessage(ActionEvent event) throws IOException {
+                FXRouter.when("inboxView", "Inbox.fxml");
+        FXRouter.setRouteContainer("inboxView", centralAnchorPane);
+        FXRouter.goTo("inboxView", injectedCadidate);
     }
     
 }

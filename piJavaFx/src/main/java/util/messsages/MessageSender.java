@@ -22,9 +22,7 @@ import util.cache.ContextCache;
 public class MessageSender {
     public static void send() throws NamingException {
         Message m = new Message();
-        m.setFrom(Authenticator.currentUser);
-        m.setTo(null);
         m.setText("hi");
-        MessageDelegate.sendMessage(m);
+        MessageDelegate.sendMessage(m, Authenticator.currentUser, Authenticator.currentUser);
     }
 }

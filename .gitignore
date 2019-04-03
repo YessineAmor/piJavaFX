@@ -1,3 +1,4 @@
 /piJavaFx/target/
 *.ts
 *.log
+/piJavaFx/candidate_apps.json

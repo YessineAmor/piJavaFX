@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import util.dataAbstraction.messaging.Conversation;
 
 /**
  * FXML Controller class
@@ -30,6 +31,18 @@ public class MessageInfoViewController implements Initializable {
     private Text messageExrept;
     @FXML
     private Hyperlink deleteLink;
+    
+    Conversation c;
+
+    public Conversation getConversation() {
+        return c;
+    }
+
+    public void setConversation(Conversation c) {
+        this.c = c;
+        userName.setText(this.c.getNewestMessage().getFrom().getUsername());
+        messageExrept.setText(c.getMessages().get(c.getMessages().size() - 1).getText().substring(0,c.getMessages().get(c.getMessages().size() - 1).getText().length() / 2 + 1 ));
+    }
 
     
    
@@ -41,5 +54,9 @@ public class MessageInfoViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    void setUsername(String username) {
+        this.userName.setText(username);
+    }
     
 }
