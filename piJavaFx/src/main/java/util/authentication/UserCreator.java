@@ -22,7 +22,7 @@ public class UserCreator {
 
     public static void main(String[] args) throws NamingException, NoSuchAlgorithmException {
         User u = new User();
-        u.setEmail("Amine.skhiri@protonmail.com");
+        u.setEmail("mohamedamine.skhiri@esprit.tn");
         u.setPassword("1234@".getBytes(StandardCharsets.UTF_8));
         u.setUsername("amine");
         getRemote().create(u);

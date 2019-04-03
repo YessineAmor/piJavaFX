@@ -8,7 +8,9 @@ package tn.esprit.overpowered.pijavafx.controllers;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,21 +23,21 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitMenuButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
-import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.HRManager;
 import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
-import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import util.authentication.Authenticator;
 import util.information.tracker.InfoTracker;
@@ -93,6 +95,12 @@ public class OffersController implements Initializable {
     private TextField searchElement;
     @FXML
     private TableColumn<?, ?> expertiseLevel;
+    @FXML
+    private TableColumn<JobOffer, String> quiz;
+    private Context context;
+    @FXML
+    private AnchorPane centerAnchorPane;
+
 
     /**
      * Initializes the controller class.
@@ -110,11 +118,16 @@ public class OffersController implements Initializable {
         FXRouter.setRouteContainer("CompanyPMProfileView", parentAnchorPane);
         FXRouter.when("BaseView", "Base.fxml", "HOME", 800, 600);
         FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+
         FXRouter.when("CompanyViewOfferDetailsView", "CompanyViewOfferDetails.fxml", "HOME", 800, 600);
         FXRouter.setRouteContainer("CompanyViewOfferDetailsView", parentAnchorPane);
+
+        FXRouter.when("ManageQuiz", "ManageQuiz.fxml");
+        FXRouter.setRouteContainer("ManageQuiz", centerAnchorPane);
+
         try {
             String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote";
-            Context context = new InitialContext();
+            context = new InitialContext();
             JobOfferFacadeRemote jobOfferProxy = (JobOfferFacadeRemote) context.lookup(jndiName);
             List<JobOffer> list = jobOfferProxy.viewAllOffers();
             if (list.isEmpty()) {
@@ -132,9 +145,48 @@ public class OffersController implements Initializable {
             city.setCellValueFactory(new PropertyValueFactory<>("city"));
             dateOfArchive.setCellValueFactory(new PropertyValueFactory<>("dateOfArchive"));
             peopleNeeded.setCellValueFactory(new PropertyValueFactory<>("peopleNeeded"));
+
             expertiseLevel.setCellValueFactory(new PropertyValueFactory<>("expertiseLevel"));
+
+            Callback<TableColumn<JobOffer, String>, TableCell<JobOffer, String>> cellFactory
+                    = //
+                    new Callback<TableColumn<JobOffer, String>, TableCell<JobOffer, String>>() {
+                @Override
+                public TableCell call(final TableColumn<JobOffer, String> param) {
+                    final TableCell<JobOffer, String> cell = new TableCell<JobOffer, String>() {
+
+                        final Button btn = new Button("Manage Quiz");
+
+                        @Override
+                        public void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                btn.setOnAction(event -> {
+                                    JobOffer jobOffer = getTableView().getItems().get(getIndex());
+                                    System.out.println("Quiz btn clicked for job offer" + jobOffer.getTitle());
+                                    Map<Context, JobOffer> dataMap = new HashMap<>();
+                                    dataMap.put(context, jobOffer);
+                                    try {
+                                        FXRouter.goTo("ManageQuiz", dataMap);
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(OffersController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                });
+                                setGraphic(btn);
+                                setText(null);
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            };
             System.out.println("Still working at this point");
+            quiz.setCellFactory(cellFactory);
             jobsView.setItems(offerObs);
+//            jobsView.getColumns().add(quiz);
 
         } catch (NamingException ex) {
             Logger.getLogger(CandidateListController.class.getName()).log(Level.SEVERE, null, ex);

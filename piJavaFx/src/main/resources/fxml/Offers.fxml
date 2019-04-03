@@ -60,17 +60,30 @@
                 </MenuBar>
             </children>
         </AnchorPane>
-      <AnchorPane layoutX="92.0" layoutY="32.0" minHeight="0.0" minWidth="0.0" prefHeight="507.0" prefWidth="794.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="92.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="32.0">
+
+      <AnchorPane fx:id="centerAnchorPane" layoutX="95.0" layoutY="36.0" minHeight="0.0" minWidth="0.0" prefHeight="507.0" prefWidth="794.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0">
+
          <children>
             <TableView fx:id="jobsView" layoutY="106.0" onMouseClicked="#selected" prefHeight="288.0" prefWidth="705.0">
                <columns>
-                  <TableColumn fx:id="title" prefWidth="84.0" text="Title" />
+
+                 <!-- <TableColumn fx:id="title" prefWidth="84.0" text="Title" />
                   <TableColumn fx:id="offerStatus" minWidth="80.0" prefWidth="95.0" text="Status" />
                   <TableColumn fx:id="dateOfCreation" minWidth="85.0" prefWidth="85.0" text="Created On" />
                   <TableColumn fx:id="city" minWidth="75.0" prefWidth="100.0" text="Location" />
                   <TableColumn fx:id="dateOfArchive" minWidth="0.0" prefWidth="98.0" text="Expires On" />
                   <TableColumn fx:id="peopleNeeded" minWidth="45.0" prefWidth="85.0" text="People Needed" />
+                  
+                  -->
                   <TableColumn fx:id="expertiseLevel" prefWidth="176.0" text="Expertise" />
+                  <TableColumn fx:id="title" prefWidth="48.0" text="Title" />
+                  <TableColumn fx:id="offerStatus" minWidth="106.0" prefWidth="106.0" text="Status" />
+                  <TableColumn fx:id="dateOfCreation" minWidth="106.0" prefWidth="106.0" text="Created On" />
+                  <TableColumn fx:id="city" minWidth="75.0" prefWidth="89.0" text="Location" />
+                  <TableColumn fx:id="dateOfArchive" minWidth="64.0" prefWidth="153.0" text="Expires On" />
+                  <TableColumn fx:id="peopleNeeded" minWidth="113.0" prefWidth="147.0" text="People Needed" />
+                  <TableColumn fx:id="quiz" prefWidth="100.0" text="Quiz" />
+
                </columns>
             </TableView>
             <Label layoutX="257.0" layoutY="42.0" prefHeight="49.0" prefWidth="311.0" text="Jobs List">

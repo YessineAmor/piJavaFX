@@ -195,6 +195,10 @@ public class JobOfferCandidateDetailsController implements Initializable {
             cApp.setAdditionalInfo("Quizzes passed: 0");
             cApp.setJobApplicationState(JobApplicationState.INVITED_FOR_QUIZ);
             candidateApplicationFacade.updateCandidateApplication(cApp.getId(), cApp.getAdditionalInfo(), cApp.getJobApplicationState());
+            candidateApplicationFacade.sendMail(candidate.getEmail(), "You're invited to pass a quiz!", "Good morning, "
+                    + "you've been invited to pass the quiz for the job offer: " + jobOffer.getTitle() + ".\n"
+                    + "Please login to your account and consult "
+                    + "the My Job Applications window to start your quiz");
             Map<Context, JobOffer> dataMap = new HashMap<>();
             dataMap.put(context, jobOffer);
             FXRouter.goTo("ListJobOfferCandidates", dataMap);

@@ -76,7 +76,13 @@
             <version>14.0.0.Final</version>
             <type>pom</type>
         </dependency>
-        
+    
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+    
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -299,7 +305,6 @@
             <artifactId>controlsfx</artifactId>
             <version>8.40.14</version>
         </dependency>
-
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>piJEE-ejb</artifactId>
