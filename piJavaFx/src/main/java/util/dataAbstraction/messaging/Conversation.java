@@ -8,6 +8,7 @@ package util.dataAbstraction.messaging;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.function.Predicate;
 import tn.esprit.overpowered.byusforus.entities.messaging.Message;
 import tn.esprit.overpowered.byusforus.entities.users.User;
@@ -21,6 +22,7 @@ public class Conversation {
     private ArrayList<Message> messages;
     private User u1;
     private User u2;
+    private String uid;
 
     public User getU1() {
         return u1;
@@ -33,6 +35,7 @@ public class Conversation {
     public Conversation(User u1, User u2) {
         this.u1 = u1;
         this.u2 = u2;
+        uid = u1.getId().toString() + ";" + u2.getId().toString();
         this.messages = new ArrayList<>();
     }
 
@@ -82,5 +85,37 @@ public class Conversation {
         }
         return false;
 
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Conversation other = (Conversation) obj;
+        if (!this.uid.equals(other.uid)) {
+            return false;
+        }
+        return true;
     }
 }
