@@ -10,7 +10,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jfoenix.controls.JFXButton;
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -27,12 +28,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javax.naming.Context;
+import javax.naming.NamingException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
+import tn.esprit.overpowered.byusforus.util.JobApplicationState;
 import util.authentication.Authenticator;
 import util.routers.FXRouter;
 
@@ -81,58 +87,46 @@ public class JobApplicationController implements Initializable {
     }
 
     @FXML
-    private void onSubmitAppBtnClicked(ActionEvent event) throws IOException {
+    private void onSubmitAppBtnClicked(ActionEvent event) throws IOException, NamingException {
         CandidateApplication cApp = new CandidateApplication();
-        List<Long> recommendedIdList = new ArrayList<>();
-        recommendedIdList.add(2L);
-        cdt.setRecommendedIdList(recommendedIdList);
-        cdt.setExperiences(new ArrayList<>());
-        cdt.setSubscribedCompanies(new ArrayList<>());
-        cdt.setActivities(new ArrayList<>());
-        cdt.setCertificates(new ArrayList<>());
-        cdt.setContacts(new ArrayList<>());
-        cdt.setCursus(new ArrayList<>());
-        cdt.setRegisteredOffers(new ArrayList<>());
-        cdt.setSubscribedCompanies(new ArrayList<>());
-        Set<Skill> skillSet = new HashSet<>();
-        skillSet.add(Skill.JAVA);
-        cdt.setSkills(skillSet);
-        jobOffer.setSkills(new HashSet<>());
-        cApp.setCandidate(cdt);
-        cApp.setJobOffer(jobOffer);
-        cApp.setResume(resume.getText());
+        cApp.setJobApplicationState(JobApplicationState.PENDING);
         cApp.setMotivationLetter(motivationLetter.getText());
-        cApp.setId(jobOffer.getId().intValue() + Authenticator.currentUser.getId().intValue());
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        mapper.configure(JsonParser.Feature.ALLOW_MISSING_VALUES, true);
-        mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
-        mapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
-        mapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
-
-        cApp.getCandidate().getId();
+        cApp.setCandidate(null);
+        cApp.setJobOffer(null);
+        Candidate cand = (Candidate) Authenticator.currentUser;
+        cApp.setResume(cand.getCurriculumVitaes());
+        cApp.setQuizzesTaken(null);
 //        mapper.writeValue(new File(fileName + ".json"), cApp);
 //        CandidateApplication cApp2 = mapper.readValue(new File(fileName + ".json"), CandidateApplication.class);
 //        System.out.println("this is quiz try from json : \n " + cApp2);
-        String fileName = "candidate_app_" + jobOffer.getId() + "_" + Authenticator.currentUser.getEmail();
-        JSONObject cAppJSON = new JSONObject();
-        cAppJSON.put("jobOfferId", cApp.getJobOffer().getId());
-        cAppJSON.put("candidateId", Authenticator.currentUser.getId());
-        cAppJSON.put("motivation", cApp.getMotivationLetter());
-        cAppJSON.put("jobApplicationState", cApp.getJobApplicationState());
-        JSONArray cAppJSONList = new JSONArray();
-        cAppJSONList.add(cAppJSON);
+        String fileName = "candidate_apps";
+        JSONParser jsonParser = new JSONParser();
+        JSONArray quizJList = null;
+        try (FileReader reader = new FileReader("candidate_apps.json")) {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+
+            quizJList = (JSONArray) obj;
+            System.out.println(quizJList);
+            JSONObject quizAppJSON = new JSONObject();
+            quizAppJSON.put("candidateId", Authenticator.currentUser.getId());
+            quizAppJSON.put("jobOfferId", jobOffer.getId());
+            quizAppJSON.put("cAppMotivationLetter", motivationLetter.getText());
+            quizJList.add(quizAppJSON);
+
+        } catch (FileNotFoundException e) {
+        } catch (IOException | ParseException e) {
+        }
         try (FileWriter file = new FileWriter(fileName + ".json")) {
-            file.write(cAppJSONList.toJSONString());
+            file.write(quizJList.toJSONString());
             file.flush();
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
-//        String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
-//        CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
-//        candidateApplicationFacade.create(cApp);
+        String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
+        CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
+        cApp.setCandidate(null);
+        candidateApplicationFacade.create(cApp);
     }
 
 }
