@@ -76,7 +76,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
                <children>
-                  <JFXButton fx:id="viewDetails" onMouseClicked="#viewProfileAction" text="Views Details" />
+                  <JFXButton fx:id="viewDetails" onMouseClicked="#viewDetailsAction" text="Views Details" />
                   <Label fx:id="status" prefHeight="27.0" prefWidth="289.0" textFill="#d71010" />
                </children>
             </HBox>
