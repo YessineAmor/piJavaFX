@@ -135,6 +135,7 @@ public class CompanyProfileController implements Initializable {
 
     @FXML
     private void followButtonClicked(MouseEvent event) {
+        followButton.setDisable(true);
     }
     
 }
