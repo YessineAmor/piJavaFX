@@ -61,6 +61,8 @@ public class CompanyHRProfileController implements Initializable {
     private Button jobOffersButton;
     @FXML
     private AnchorPane parentAnchorPane;
+    @FXML
+    private Button eventsButton;
 
     /**
      * Initializes the controller class.
@@ -99,6 +101,10 @@ public class CompanyHRProfileController implements Initializable {
     private void jobOffersButtonOnClicked(MouseEvent event) throws IOException {
         HRManager hrm = (HRManager) FXRouter.getData();
         FXRouter.goTo("OffersView",hrm);
+    }
+
+    @FXML
+    private void eventsButtonOnClicked(MouseEvent event) {
     }
 
 }
