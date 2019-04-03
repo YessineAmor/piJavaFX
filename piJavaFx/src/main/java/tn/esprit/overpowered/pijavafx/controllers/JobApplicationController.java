@@ -79,6 +79,7 @@ public class JobApplicationController implements Initializable {
         name.setText(cdt.getFirstName() + " " + cdt.getLastName());
         email.setText(cdt.getEmail());
         resume.setText(cdt.getCurriculumVitaes());
+        jobAppTitle.setText(jobOffer.getTitle() + " " + jobAppTitle.getText());
 
     }
 
