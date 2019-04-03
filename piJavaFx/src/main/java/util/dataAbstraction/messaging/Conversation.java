@@ -67,7 +67,7 @@ public class Conversation {
     }
 
     public Message getNewestMessage() {
-        return messages.get(0);
+        return messages.get(messages.size() - 1);
     }
 
     public boolean isPartOf(Message m) {
