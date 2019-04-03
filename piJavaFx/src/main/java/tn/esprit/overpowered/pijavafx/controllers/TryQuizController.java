@@ -446,8 +446,8 @@ public class TryQuizController implements Initializable {
                         public void run() {
                             System.out.println("No faces detected!!!");
                             CreateAlert.CreateAlert(Alert.AlertType.ERROR, "ERROR!", "No faces detected.",
-                                    "We couldn't detect any faces from your webcam. You will be marked as REFUSED."
-                                    + " An employee can further review the incident and make a decision.");
+                                    "We couldn't detect any faces from your webcam."
+                                    + " An employee will review the incident and make a decision.");
                             stopCamera = true;
 
                             try {
@@ -477,16 +477,7 @@ public class TryQuizController implements Initializable {
                 g.drawRect(x, y, w, h);
             }
         }
-
-    
-
-    
-
-    
-
-    
-
-    
+    }
 
     public void initCam() {
         webcam = Webcam.getWebcams().get(1);
