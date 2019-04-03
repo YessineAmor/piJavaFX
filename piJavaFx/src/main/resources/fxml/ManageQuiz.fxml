@@ -12,22 +12,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" fx:id="centerAnchor" minHeight="570.0" minWidth="750.0" prefHeight="570.0" prefWidth="750.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="tn.esprit.overpowered.pijavafx.controllers.ManageQuizController">
+<AnchorPane id="AnchorPane" fx:id="centerAnchor" minHeight="570.0" minWidth="750.0" prefHeight="570.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.overpowered.pijavafx.controllers.ManageQuizController">
    <children>
-      <Label fx:id="titleLabel" layoutX="216.0" layoutY="47.0" text="Manage quiz for job offer:" textFill="#1f2197">
+      <Label fx:id="titleLabel" layoutX="208.0" layoutY="14.0" text="Manage quiz for job offer:" textFill="#1f2197">
          <font>
             <Font name="BebasNeueRegular" size="37.0" />
          </font>
       </Label>
-      <GridPane fx:id="quizGridPane" layoutX="114.0" layoutY="122.0" prefHeight="248.0" prefWidth="529.0" visible="false">
+      <GridPane fx:id="quizGridPane" layoutX="114.0" layoutY="66.0" prefHeight="325.0" prefWidth="529.0" visible="false">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="224.0" minWidth="10.0" prefWidth="142.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="368.0" minWidth="10.0" prefWidth="307.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="104.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="131.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
