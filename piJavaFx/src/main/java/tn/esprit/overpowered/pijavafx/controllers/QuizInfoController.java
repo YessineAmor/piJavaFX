@@ -69,6 +69,7 @@ public class QuizInfoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             jobOffer = (JobOffer) FXRouter.getData();
+            System.out.println("hedha job offer id mel quiz info conte" + jobOffer.getId());
             FXRouter.when("TryQuiz", "TryQuiz.fxml");
             FXRouter.setRouteContainer("TryQuiz", anchorPane);
             String jndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
@@ -83,9 +84,9 @@ public class QuizInfoController implements Initializable {
                 for (Object quiz : quizJList) {
                     JSONObject quizJson = (JSONObject) quiz;
                     Long jobOfferId = (Long) quizJson.get("jobOfferId");
-                    String quizName = (String) quizJson.get("quizName");
+                    String quizNamesss = (String) quizJson.get("quizName");
                     if (jobOfferId == jobOffer.getId()) {
-                        quizO = quizFacadeProxy.getQuizByName(quizName);
+                        quizO = quizFacadeProxy.getQuizByName(quizNamesss);
                     }
                 }
 
@@ -112,6 +113,7 @@ public class QuizInfoController implements Initializable {
         } else {
             Optional<ButtonType> alertResult = CreateAlert.CreateAlert(Alert.AlertType.CONFIRMATION, "Confirmation", "We need your permission.", "In order to take the quiz, we need access to your webcam feed. Do you accept?");
             if (alertResult.isPresent() && alertResult.get() == ButtonType.OK) {
+                quizO.setJobOffer(jobOffer);
                 FXRouter.goTo("TryQuiz", quizO);
             }
         }

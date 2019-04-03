@@ -148,7 +148,7 @@ public class CreateJobOfferController implements Initializable {
                         Integer.parseInt(neededCandidates.getText()), description.getText(),
                         expirationDate.getValue());
                 HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
-                FXRouter.goTo("OffersVieww", hrManager);
+                FXRouter.goTo("OffersView", hrManager);
                 break;
             case "PROJECT_MANAGER":
                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
