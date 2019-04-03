@@ -69,7 +69,7 @@ public class ContactProfileController implements Initializable {
     @FXML
     private Label idLabel;
     @FXML
-    private JFXButton sendMessageButton;
+    private Button sendMessageButton;
     Candidate injectedCadidate;
 
     /**
@@ -119,7 +119,8 @@ public class ContactProfileController implements Initializable {
             System.out.println("The id of the data passed is: "+ cdt.getId());
             candidateProxy.recommend(cdt.getId());
             recommendButton.setDisable(true);
-            recommendations.setText(Integer.toString(cdt.getRecommendations())+1);
+            int rating = cdt.getRecommendations()+1 ;
+            recommendations.setText(Integer.toString(rating));
     }
 
     @FXML
