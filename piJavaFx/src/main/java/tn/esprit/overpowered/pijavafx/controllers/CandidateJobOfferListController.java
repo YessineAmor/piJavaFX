@@ -29,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -41,6 +42,8 @@ import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
+import tn.esprit.overpowered.byusforus.util.JobApplicationState;
 import util.authentication.Authenticator;
 import util.routers.FXRouter;
 
@@ -173,8 +176,16 @@ public class CandidateJobOfferListController implements Initializable {
                                         String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
                                         CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
                                         CandidateApplication cApp = candidateApplicationFacade.getCAppByMotivLetter(cAppMotivationLetter);
-                                        btn.setText(cApp.getJobApplicationState().name());
-                                        btn.setDisable(true);
+                                        JobApplicationState jAppState = cApp.getJobApplicationState();
+                                        btn.setText(jAppState.name());
+                                        if (jAppState == JobApplicationState.INVITED_FOR_QUIZ) {
+                                            btn.setText("Take Quiz");
+                                            btn.setId("a");
+                                            btn.setStyle("-fx-background-color: green;");
+                                            btn.setTextFill(Paint.valueOf("white"));
+                                        } else {
+                                            btn.setDisable(true);
+                                        }
                                     } else {
                                         btn.setText("Postulate");
                                     }
@@ -189,15 +200,25 @@ public class CandidateJobOfferListController implements Initializable {
                                     Logger.getLogger(CandidateJobOfferListController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                                 btn.setOnAction(event -> {
-                                    System.out.println("application btn clicked for job offer" + jobOfferEnt.getTitle());
-                                    Map<Context, JobOffer> dataMap = new HashMap<>();
-                                    dataMap.put(context, jobOfferEnt);
-                                    try {
-                                        FXRouter.when("JobApp", "JobApplication.fxml");
-                                        FXRouter.setRouteContainer("JobApp", centralAnchorPane);
-                                        FXRouter.goTo("JobApp", dataMap);
-                                    } catch (IOException ex) {
-                                        Logger.getLogger(OffersController.class.getName()).log(Level.SEVERE, null, ex);
+                                    if (btn.getText().equals("Take Quiz")) {
+                                        try {
+                                            FXRouter.when("TakeQuiz5", "QuizInfo.fxml");
+                                            FXRouter.setRouteContainer("TakeQuiz5", centralAnchorPane);
+                                            FXRouter.goTo("TakeQuiz5", jobOfferEnt);
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(CandidateJobOfferListController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    } else {
+                                        System.out.println("application btn clicked for job offer" + jobOfferEnt.getTitle());
+                                        Map<Context, JobOffer> dataMap = new HashMap<>();
+                                        dataMap.put(context, jobOfferEnt);
+                                        try {
+                                            FXRouter.when("JobApp", "JobApplication.fxml");
+                                            FXRouter.setRouteContainer("JobApp", centralAnchorPane);
+                                            FXRouter.goTo("JobApp", dataMap);
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(OffersController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
                                     }
                                 });
                                 setGraphic(btn);
