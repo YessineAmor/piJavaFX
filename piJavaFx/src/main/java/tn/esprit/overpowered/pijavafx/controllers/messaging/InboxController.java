@@ -62,7 +62,7 @@ public class InboxController implements Initializable {
 
     Context messageContext;
     HashMap<String, User> contacts;
-    HashMap<User, HashMap<User, Conversation>> conversationBarrier;
+    HashMap<String, MessageInfoViewController> conversationBarrier;
     ArrayList<Conversation> aC;
     User to;
 
@@ -87,13 +87,9 @@ public class InboxController implements Initializable {
     }
 
     private void updateMessageList(ArrayList<Message> myMessages) throws IOException {
-        for (Conversation c : ConversationCreator.create(myMessages)) {
-            boolean found = false;
-            for (Conversation sc : aC)
-                if (sc.getU1().equals(c.getU1()) && sc.getU2().equals(c.getU2()))
-                    found = true;
-            if (!found) {
-                aC.add(c);
+        for (Conversation c : ConversationCreator.create(myMessages)) {      
+            System.out.println(c.getNewestMessage().getSentTime() + " " + c.getMessages().get(c.getMessages().size() - 1));
+                if (!conversationBarrier.containsKey(c.getUid())) {
                 FXMLLoader loader = new FXMLLoader();
 
                 Pane messagePane = (Pane) loader.load(
@@ -103,6 +99,9 @@ public class InboxController implements Initializable {
                 MessageInfoViewController cn = loader.getController();
                 cn.setConversation(c);
                 conversationList.getChildren().add(messagePane);
+                } else {
+                    if (!conversationBarrier.get(c.getUid()).getConversation().getNewestMessage().getId().equals(c.getNewestMessage().getId()))
+                        conversationBarrier.get(c.getUid()).setConversation(c);
             }
 
         }
