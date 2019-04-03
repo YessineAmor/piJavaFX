@@ -7,8 +7,8 @@ package tn.esprit.overpowered.pijavafx.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +23,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
-import javafx.util.converter.LocalTimeStringConverter;
+import javax.naming.Context;
+import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import util.factories.CreateAlert;
 import util.routers.FXRouter;
@@ -58,13 +59,18 @@ public class CreateQuizController implements Initializable {
     private Spinner<Integer> hoursSpinner;
     @FXML
     private Spinner<Integer> minutesSpinner;
+    private Context context;
+    private JobOffer jobOffer;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        Map<Context, JobOffer> dataMap = (HashMap) FXRouter.getData();
+        context = dataMap.keySet().stream().findFirst().get();
+        jobOffer = dataMap.values().stream().findFirst().get();
+        jobOfferName.setText(jobOffer.getTitle());
         SpinnerValueFactory<Integer> hoursValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 0);
         hoursSpinner.setValueFactory(hoursValueFactory);
         SpinnerValueFactory<Integer> minutesValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
@@ -137,7 +143,12 @@ public class CreateQuizController implements Initializable {
         Quiz quiz = new Quiz(quizNameTextField.getText(), quizDetailsTextArea.getText(), Float.parseFloat(quizScoreTextField.getText()));
         double minutes = Duration.hours(hoursSpinner.getValue()).add(Duration.minutes(minutesSpinner.getValue())).toMinutes();
         quiz.setDuration((int) Math.round(minutes));
+        quiz.setJobOffer(jobOffer);
         System.out.println("quiz duration: " + quiz.getDuration());
-        FXRouter.goTo("CreateQuestions", quiz);
+        Map<Context, Quiz> dataMap = new HashMap<>();
+        dataMap.put(context, quiz);
+        FXRouter.when("CreateQuestions2", "CreateQuestions.fxml");
+        FXRouter.setRouteContainer("CreateQuestions2", mainAnchorPane);
+        FXRouter.goTo("CreateQuestions2", dataMap);
     }
 }

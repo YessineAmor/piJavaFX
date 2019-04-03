@@ -16,30 +16,33 @@
                     <children>
 
                         <JFXButton fx:id="notificationsButton" prefHeight="44.0" prefWidth="50.0" stylesheets="@../styles/button-styles.css" text="🔔">
-                     <font>
-                        <Font size="17.0" />
-                     </font></JFXButton>
+                            <font>
+                                <Font size="17.0" />
+                            </font>
+                        </JFXButton>
                         <JFXButton fx:id="profileButton" onMouseClicked="#profileButtonClicked" prefHeight="44.0" prefWidth="50" stylesheets="@../styles/button-styles.css" text="🙍">
-                     <font>
-                        <Font size="17.0" />
-                     </font></JFXButton>
+                            <font>
+                                <Font size="17.0" />
+                            </font>
+                        </JFXButton>
                         <JFXButton fx:id="messagesButton" onAction="#goToInbox" prefHeight="44.0" prefWidth="50" stylesheets="@../styles/button-styles.css" text="✉">
-                     <font>
-                        <Font size="20.0" />
-                     </font></JFXButton>
+                            <font>
+                                <Font size="20.0" />
+                            </font>
+                        </JFXButton>
 
                         <JFXButton fx:id="createQuizBtn" mnemonicParsing="false" onAction="#onCreateQuizBtnClicked" prefHeight="25.0" prefWidth="50" text="?">
-                     <font>
-                        <Font size="17.0" />
-                     </font></JFXButton>
+                            <font>
+                                <Font size="17.0" />
+                            </font>
+                        </JFXButton>
                         <JFXButton fx:id="manageCandidacyBtn" onAction="#onManageCandidacyBtnClicked" prefHeight="44.0" prefWidth="50.0" text="📰">
-                     <font>
-                        <Font size="17.0" />
-                     </font></JFXButton>
-
-                  
-                  
-
+                            <font>
+                                <Font size="17.0" />
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="applyToJob" onAction="#onApplyToJobBtnClicked" text="APPLY" />
+                        <JFXButton fx:id="myJobApplications" onAction="#onMyJobApplications" text="MYAPP" />
                     </children>
                 </VBox>
             </children>

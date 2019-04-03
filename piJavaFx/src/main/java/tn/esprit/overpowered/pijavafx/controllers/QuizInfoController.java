@@ -6,6 +6,8 @@
 package tn.esprit.overpowered.pijavafx.controllers;
 
 import com.github.sarxos.webcam.Webcam;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -25,6 +27,11 @@ import javafx.scene.layout.AnchorPane;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.quiz.Question;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote;
@@ -50,9 +57,10 @@ public class QuizInfoController implements Initializable {
     private TextArea quizDetails;
 
     private List<Question> questions;
-    private Quiz quiz;
+    private Quiz quizO;
     @FXML
     private AnchorPane anchorPane;
+    private JobOffer jobOffer;
 
     /**
      * Initializes the controller class.
@@ -60,20 +68,37 @@ public class QuizInfoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            jobOffer = (JobOffer) FXRouter.getData();
             FXRouter.when("TryQuiz", "TryQuiz.fxml");
             FXRouter.setRouteContainer("TryQuiz", anchorPane);
-            // TODO
             String jndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
             Context context = new InitialContext();
             QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(jndiName);
+            JSONParser jsonParser = new JSONParser();
+            try (FileReader reader = new FileReader("quiz_joboffer.json")) {
+                //Read JSON file
+                Object obj = jsonParser.parse(reader);
+                JSONArray quizJList = (JSONArray) obj;
+                System.out.println(quizJList);
+                for (Object quiz : quizJList) {
+                    JSONObject quizJson = (JSONObject) quiz;
+                    Long jobOfferId = (Long) quizJson.get("jobOfferId");
+                    String quizName = (String) quizJson.get("quizName");
+                    if (jobOfferId == jobOffer.getId()) {
+                        quizO = quizFacadeProxy.getQuizByName(quizName);
+                    }
+                }
 
-//        quiz = (Quiz) FXRouter.getData();
-            quiz = quizFacadeProxy.findAll().get(0);
-            questions = quiz.getQuestions();
-            quizName.setText(quiz.getName());
-            quizDetails.setText(quiz.getDetails());
+            } catch (FileNotFoundException e) {
+            } catch (IOException | ParseException e) {
+            }
+
+//            quiz = quizFacadeProxy.findAll().get(0);
+            questions = quizO.getQuestions();
+            quizName.setText(quizO.getName());
+            quizDetails.setText(quizO.getDetails());
             numberOfQuestions.setText(Integer.toString(questions.size()));
-            minScore.setText(Float.toString(quiz.getPercentageToPass()));
+            minScore.setText(Float.toString(quizO.getPercentageToPass()));
         } catch (NamingException ex) {
             Logger.getLogger(QuizInfoController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -87,7 +112,7 @@ public class QuizInfoController implements Initializable {
         } else {
             Optional<ButtonType> alertResult = CreateAlert.CreateAlert(Alert.AlertType.CONFIRMATION, "Confirmation", "We need your permission.", "In order to take the quiz, we need access to your webcam feed. Do you accept?");
             if (alertResult.isPresent() && alertResult.get() == ButtonType.OK) {
-                FXRouter.goTo("TryQuiz", quiz);
+                FXRouter.goTo("TryQuiz", quizO);
             }
         }
     }
