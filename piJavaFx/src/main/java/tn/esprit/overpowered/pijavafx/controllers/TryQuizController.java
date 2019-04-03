@@ -74,8 +74,8 @@ import tn.esprit.overpowered.byusforus.entities.quiz.QuestionType;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacade;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
-import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote;
@@ -131,6 +131,10 @@ public class TryQuizController implements Initializable {
     private AnchorPane anchorScrollPane;
     private List<Integer> lastFiveFaces = new ArrayList<>();
     private String cAppMotivationLetter;
+    private CandidateApplication cApp;
+    private CandidateApplicationFacadeRemote candidateApplicationFacade;
+    private cheatAlertAlreadyShown  = false;
+    private noFacesAlertAlreadyShown  = false;
 
     /**
      * Initializes the controller class.
@@ -247,7 +251,7 @@ public class TryQuizController implements Initializable {
                     String fileName = "quiz_tries";
 //                    mapper.writeValue(new File(fileName + ".json"), quizTry);
                     String jndiName2 = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
-                    CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName2);
+                    candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName2);
 //                    CandidateApplication cApp = candidateApplicationFacade.getCAppByMotivLetter(Authenticator.currentUser.getId(), quiz.getJobOffer().getId());
                     JSONParser jsonParser = new JSONParser();
                     try (FileReader reader = new FileReader("candidate_apps.json")) {
@@ -269,7 +273,7 @@ public class TryQuizController implements Initializable {
                     } catch (IOException | ParseException ex) {
                         Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    CandidateApplication cApp = candidateApplicationFacade.getCAppByMotivLetter(cAppMotivationLetter);
+                    cApp = candidateApplicationFacade.getCAppByMotivLetter(cAppMotivationLetter);
                     JSONArray quizJList = null;
 //                    File yourFile = new File("quiz_tries_.json");
 //                    try {
@@ -409,7 +413,7 @@ public class TryQuizController implements Initializable {
     public Boolean checkLastFiveEmpty() {
         Boolean empty = true;
         for (int a : lastFiveFaces) {
-            if (a == 0) {
+            if (a > 0) {
                 empty = false;
             }
         }
@@ -429,8 +433,11 @@ public class TryQuizController implements Initializable {
                         CreateAlert.CreateAlert(Alert.AlertType.ERROR, "ERROR!", "Cheating detected.",
                                 "We have detected a cheating attempt from your part."
                                 + " An employee will review the incident and make a decision.");
+                        candidateApplicationFacade.updateCandidateApplication(cApp.getId(), "Cheating detected", JobApplicationState.REFUSED);
                         stopCamera = true;
-
+                        writer.close();
+                        webcam.close();
+                        lastFiveFaces.clear();
                         try {
                             FXRouter.goTo("baseView");
                         } catch (IOException ex) {
@@ -449,7 +456,11 @@ public class TryQuizController implements Initializable {
                                     "We couldn't detect any faces from your webcam."
                                     + " An employee will review the incident and make a decision.");
                             stopCamera = true;
-
+                            candidateApplicationFacade.updateCandidateApplication(cApp.getId(), "No faces detected", JobApplicationState.REFUSED);
+                            stopCamera = true;
+                            writer.close();
+                            webcam.close();
+                            lastFiveFaces.clear();
                             try {
                                 FXRouter.goTo("baseView");
                             } catch (IOException ex) {
