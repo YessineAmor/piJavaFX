@@ -79,8 +79,6 @@ public class CandidateJobOfferListController implements Initializable {
     @FXML
     private TableColumn<?, ?> peopleNeeded;
     @FXML
-    private Button viewProfile;
-    @FXML
     private Label status;
     @FXML
     private Button searchButton;
@@ -258,7 +256,6 @@ public class CandidateJobOfferListController implements Initializable {
     private void selected(MouseEvent event) {
     }
 
-    @FXML
     private void viewProfileAction(MouseEvent event) throws IOException {
         FXRouter.when("Profile", "Profile.fxml");
         FXRouter.setRouteContainer("Profile", parentAnchorPane);
