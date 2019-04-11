@@ -32,6 +32,7 @@ import javax.naming.NamingException;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
+import tn.esprit.overpowered.byusforus.entities.users.Professional;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.users.CompanyProfileFacadeRemote;
 import util.authentication.Authenticator;
@@ -62,7 +63,7 @@ public class SubscribersListController implements Initializable {
     @FXML
     private MenuBar topMenu;
     @FXML
-    private TableView<Candidate> candidateView;
+    private TableView<Professional> candidateView;
     @FXML
     private TableColumn<?, ?> id;
     @FXML
@@ -118,11 +119,11 @@ public class SubscribersListController implements Initializable {
             String jndiName = "piJEE-ejb-1.0/CompanyProfileFacade!tn.esprit.overpowered.byusforus.services.users.CompanyProfileFacadeRemote";
             Context context = new InitialContext();
             CompanyProfileFacadeRemote compProfileProxy = (CompanyProfileFacadeRemote) context.lookup(jndiName);
-            List<Candidate> list = compProfileProxy.getSubscribersList(currentUserId);
+            List<Professional> list = compProfileProxy.getSubscribersList(currentUserId);
             System.out.println("THE NAME ISSSSSSSSSS: " + list.get(0).getUsername());
-            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
-            for (Candidate c : list) {
-                cdtObs.add(c);
+            ObservableList<Professional> cdtObs = FXCollections.observableArrayList();
+            for (Professional p : list) {
+                cdtObs.add(p);
             }
             id.setCellValueFactory(new PropertyValueFactory<>("Id"));
             name.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -183,7 +184,7 @@ public class SubscribersListController implements Initializable {
         CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
         if (radioName.isSelected()) {
             List<Candidate> list = candidateProxy.searchByName(searchText.getText());
-            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
+            ObservableList<Professional> cdtObs = FXCollections.observableArrayList();
 
             for (Candidate c : list) {
                 cdtObs.add(c);
@@ -198,7 +199,7 @@ public class SubscribersListController implements Initializable {
             candidateView.setItems(cdtObs);
         } else if (lastNameRadio.isSelected()) {
             List<Candidate> list = candidateProxy.searchByLastname(searchText.getText());
-            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
+            ObservableList<Professional> cdtObs = FXCollections.observableArrayList();
 
             for (Candidate c : list) {
                 cdtObs.add(c);
@@ -213,9 +214,9 @@ public class SubscribersListController implements Initializable {
             candidateView.setItems(cdtObs);
         } else if (emailRadio.isSelected()) {
             List<Candidate> list = candidateProxy.searchByEmail(searchText.getText());
-            ObservableList<Candidate> cdtObs = FXCollections.observableArrayList();
+            ObservableList<Professional> cdtObs = FXCollections.observableArrayList();
 
-            for (Candidate c : list) {
+            for (Professional c : list) {
                 cdtObs.add(c);
             }
             id.setCellValueFactory(new PropertyValueFactory<>("Id"));
@@ -236,7 +237,7 @@ public class SubscribersListController implements Initializable {
                 + "forus.services.candidat.CandidateFacadeRemote";
         Context context = new InitialContext();
         CandidateFacadeRemote candidateProxy = (CandidateFacadeRemote) context.lookup(jndiName);
-        Candidate cdt = candidateView.getSelectionModel().getSelectedItem();
+        Professional cdt = candidateView.getSelectionModel().getSelectedItem();
         cdt.setVisits(candidateProxy.incrementVisits(cdt.getId()));
         Candidate test = (Candidate) Authenticator.currentUser;
         List<Candidate> cdtList = cdt.getContacts();
