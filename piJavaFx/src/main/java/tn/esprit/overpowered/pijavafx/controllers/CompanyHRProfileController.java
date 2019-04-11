@@ -84,6 +84,8 @@ public class CompanyHRProfileController implements Initializable {
         FXRouter.setRouteContainer("OffersView", parentAnchorPane);
         FXRouter.when("BaseView", "Base.fxml");
         FXRouter.setRouteContainer("BaseView", parentAnchorPane);
+        FXRouter.when("EventsView", "Events.fxml");
+        FXRouter.setRouteContainer("EventsView", parentAnchorPane);
 
     }
 
@@ -94,17 +96,18 @@ public class CompanyHRProfileController implements Initializable {
     @FXML
     private void homeButtonOnClicked(MouseEvent event) throws IOException {
         HRManager hrm = (HRManager) FXRouter.getData();
-        FXRouter.goTo("BaseView",hrm);
+        FXRouter.goTo("BaseView", hrm);
     }
 
     @FXML
     private void jobOffersButtonOnClicked(MouseEvent event) throws IOException {
         HRManager hrm = (HRManager) FXRouter.getData();
-        FXRouter.goTo("OffersView",hrm);
+        FXRouter.goTo("OffersView", hrm);
     }
 
     @FXML
-    private void eventsButtonOnClicked(MouseEvent event) {
+    private void eventsButtonOnClicked(MouseEvent event) throws IOException {
+        FXRouter.goTo("EventsView");
     }
 
 }

@@ -5,21 +5,33 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
-import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.Event;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
 import tn.esprit.overpowered.byusforus.entities.users.HRManager;
 import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
+import tn.esprit.overpowered.byusforus.entities.util.OfferStatus;
+import tn.esprit.overpowered.byusforus.services.entrepriseprofile.EventFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.users.HRManagerFacadeRemote;
 import util.authentication.Authenticator;
 import util.information.tracker.InfoTracker;
 import util.routers.FXRouter;
@@ -29,48 +41,40 @@ import util.routers.FXRouter;
  *
  * @author pc
  */
-public class CompanyAdminProfileController implements Initializable {
+public class CreateEventController implements Initializable {
 
     @FXML
     private AnchorPane parentAnchorPane;
     @FXML
     private AnchorPane rightMenuAnchorPane;
     @FXML
-    private JFXButton messagesButton;
-    @FXML
-    private JFXButton messagesButton1;
-    @FXML
-    private JFXButton notificationsButton;
-    @FXML
-    private Button homeButton;
+    private Button homePageButton;
     @FXML
     private Button profileButton;
     @FXML
-    private Button jobOffersButton;
-    @FXML
-    private Button eventsButton;
-    @FXML
-    private Button compProfileButton;
+    private Button EventsButton;
     @FXML
     private Button logoutButton;
     @FXML
     private AnchorPane centralAnchorPane;
     @FXML
-    private Label visits;
+    private TextArea eventdescription;
     @FXML
-    private Label recommendations;
+    private JFXTextField name;
+    @FXML
+    private DatePicker startDate;
+    @FXML
+    private DatePicker endDate;
+    @FXML
+    private JFXTextField location;
+    @FXML
+    private JFXTextField compName;
+    @FXML
+    private Button createEventButton;
     @FXML
     private AnchorPane topMenuAnchorPane;
     @FXML
     private MenuBar topMenu;
-    @FXML
-    private Label name;
-    @FXML
-    private Label lastname;
-    @FXML
-    private Label email;
-    @FXML
-    private Label username;
 
     /**
      * Initializes the controller class.
@@ -78,17 +82,8 @@ public class CompanyAdminProfileController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-         CompanyAdmin hrm = (CompanyAdmin) FXRouter.getData();
-        name.setText(hrm.getFirstName());
-        lastname.setText(hrm.getLastName());
-        email.setText(hrm.getEmail());
-        recommendations.setText(Integer.toString(hrm.getRecommendations()));
-        visits.setText(Integer.toString(hrm.getVisits()));
-        username.setText(hrm.getUsername());
         FXRouter.when("EventsView", "Events.fxml");
         FXRouter.setRouteContainer("EventsView", parentAnchorPane);
-        FXRouter.when("OffersView", "Offers.fxml");
-        FXRouter.setRouteContainer("OffersView", parentAnchorPane);
         FXRouter.when("BaseView", "Base.fxml");
         FXRouter.setRouteContainer("BaseView", parentAnchorPane);
         FXRouter.when("LoginView", "Login.fxml");
@@ -101,23 +96,34 @@ public class CompanyAdminProfileController implements Initializable {
         FXRouter.setRouteContainer("EditEventView", parentAnchorPane);
         FXRouter.when("EventDetailsView", "EventDetails.fxml");
         FXRouter.setRouteContainer("EventDetailsView", parentAnchorPane);
-        FXRouter.when("EntrepriseProfileView", "EntrepriseProfile.fxml");
-        FXRouter.setRouteContainer("EntrepriseProfileView", parentAnchorPane);
     }
 
     @FXML
-    private void homeButtonOnClicked(MouseEvent event) throws IOException {
+    private void homePageButton(MouseEvent event) throws IOException {
         FXRouter.goTo("BaseView");
     }
 
     @FXML
-    private void profileButtonOnClicked(MouseEvent event) {
-
-    }
-
-    @FXML
-    private void jobOffersButtonOnClicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("OffersView");
+    private void profileButton(MouseEvent event) throws NamingException, IOException {
+        String type = Authenticator.currentUser.getDiscriminatorValue();
+        Long currentUserId = Authenticator.currentUser.getId();
+        switch (type) {
+            case "COMPANY_ADMIN":
+                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
+                FXRouter.goTo("CompanyAdminProfileView", compAdmin);
+                break;
+            case "HUMAN_RESOURCES_MANAGER":
+                System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
+                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
+                FXRouter.goTo("CompanyHRProfileView", hrManager);
+                break;
+            case "PROJECT_MANAGER":
+                ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
+                FXRouter.goTo("CompanyPMProfileView", pManager);
+                break;
+            default:
+                break;
+        }
     }
 
     @FXML
@@ -126,31 +132,33 @@ public class CompanyAdminProfileController implements Initializable {
     }
 
     @FXML
-    private void compProfileButtonOnClicked(MouseEvent event) throws NamingException, IOException {
-        String type = Authenticator.currentUser.getDiscriminatorValue();
-        Long currentUserId = Authenticator.currentUser.getId();
-        switch (type) {
-            case "COMPANY_ADMIN":
-                CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
-                FXRouter.goTo("EntrepriseProfileView", compAdmin);
-                break;
-            case "HUMAN_RESOURCES_MANAGER":
-                System.out.println("THIS IS UR IDDDDDDDDDDD  " + currentUserId);
-                HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
-                FXRouter.goTo("EntrepriseProfileView", hrManager);
-                break;
-            case "PROJECT_MANAGER":
-                ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);
-                FXRouter.goTo("EntrepriseProfileView", pManager);
-                break;
-            default:
-                break;
-        }
+    private void logoutButtonOnClicked(MouseEvent event) throws IOException {
+        FXRouter.goTo("LoginView");
     }
 
     @FXML
-    private void logoutButtonOnClicked(MouseEvent event) throws IOException {
-        FXRouter.goTo("LoginView");
+    private void createEventButtonOnClicked(MouseEvent event) throws IOException, NamingException {
+        Long currentUserId = Authenticator.currentUser.getId();
+        CompanyAdmin compAdmin = InfoTracker.getAdminInformation(currentUserId);
+        CompanyProfile compProf = compAdmin.getCompany();
+                String jndiName = "piJEE-ejb-1.0/EventFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.EventFacadeRemote";
+        Context context = new InitialContext();
+        EventFacadeRemote eventProxy = (EventFacadeRemote) context.lookup(jndiName);
+        Instant instant = Instant.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        Instant instant2 = Instant.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+        Date date = Date.from(instant);
+        Date date2 = Date.from(instant2);
+        Event newEvent = new Event();
+        newEvent.setName(name.getText());
+        newEvent.setDescription(eventdescription.getText());
+        newEvent.setStartDate(date);
+        newEvent.setEndDate(date2);
+        newEvent.setCompany(compProf);
+        newEvent.setLocation(location.getText());
+        createEventButton.setDisable(true);
+        eventProxy.createEvent(newEvent);
+        
+        FXRouter.goTo("EventsView");
     }
 
 }

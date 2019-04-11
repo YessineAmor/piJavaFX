@@ -84,10 +84,6 @@ public class OffersController implements Initializable {
     @FXML
     private Button homeButton;
     @FXML
-    private Button myProfileButton;
-    @FXML
-    private Button viewOfferButton;
-    @FXML
     private ComboBox<String> searchOptionCombo;
     ObservableList<String> options = FXCollections.
             observableArrayList("title", "date", "location", "expertise");
@@ -100,7 +96,10 @@ public class OffersController implements Initializable {
     private Context context;
     @FXML
     private AnchorPane centerAnchorPane;
-
+    @FXML
+    private Button logoutButton;
+    @FXML
+    private Button viewOfferButton;
 
     /**
      * Initializes the controller class.
@@ -194,10 +193,6 @@ public class OffersController implements Initializable {
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) {
-    }
-
-    @FXML
     private void selected(MouseEvent event) {
     }
 
@@ -274,7 +269,14 @@ public class OffersController implements Initializable {
     }
 
     @FXML
-    private void myProfileButtonOnClicked(MouseEvent event) throws IOException, NamingException {
+    private void viewOfferButtonOnClicked(MouseEvent event) throws IOException {
+        JobOffer jobOffer = jobsView.getSelectionModel().getSelectedItem();
+        FXRouter.goTo("CompanyViewOfferDetailsView", jobOffer);
+
+    }
+
+    @FXML
+    private void profileButtonOnClicked(MouseEvent event) throws NamingException, IOException {
         String type = Authenticator.currentUser.getDiscriminatorValue();
         Long currentUserId = Authenticator.currentUser.getId();
         switch (type) {
@@ -294,14 +296,10 @@ public class OffersController implements Initializable {
             default:
                 break;
         }
-
     }
 
     @FXML
-    private void viewOfferButtonOnClicked(MouseEvent event) throws IOException {
-        JobOffer jobOffer = jobsView.getSelectionModel().getSelectedItem();
-        FXRouter.goTo("CompanyViewOfferDetailsView", jobOffer);
-
+    private void logoutButtonClicked(MouseEvent event) {
     }
 
 }
