@@ -5,7 +5,6 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -84,10 +82,6 @@ public class OffersController implements Initializable {
     @FXML
     private Button homeButton;
     @FXML
-    private Button myProfileButton;
-    @FXML
-    private Button viewOfferButton;
-    @FXML
     private ComboBox<String> searchOptionCombo;
     ObservableList<String> options = FXCollections.
             observableArrayList("title", "date", "location", "expertise");
@@ -101,7 +95,12 @@ public class OffersController implements Initializable {
     @FXML
     private AnchorPane centerAnchorPane;
     @FXML
+    private Button logoutButton;
+    @FXML
+    private Button viewOfferButton;
+    @FXML
     private TableColumn<JobOffer, String> applicationsTC;
+
 
 
     /**
@@ -233,10 +232,6 @@ public class OffersController implements Initializable {
     }
 
     @FXML
-    private void profileButtonClicked(MouseEvent event) {
-    }
-
-    @FXML
     private void selected(MouseEvent event) {
     }
 
@@ -313,7 +308,14 @@ public class OffersController implements Initializable {
     }
 
     @FXML
-    private void myProfileButtonOnClicked(MouseEvent event) throws IOException, NamingException {
+    private void viewOfferButtonOnClicked(MouseEvent event) throws IOException {
+        JobOffer jobOffer = jobsView.getSelectionModel().getSelectedItem();
+        FXRouter.goTo("CompanyViewOfferDetailsView", jobOffer);
+
+    }
+
+    @FXML
+    private void profileButtonOnClicked(MouseEvent event) throws NamingException, IOException {
         String type = Authenticator.currentUser.getDiscriminatorValue();
         Long currentUserId = Authenticator.currentUser.getId();
         switch (type) {
@@ -333,14 +335,10 @@ public class OffersController implements Initializable {
             default:
                 break;
         }
-
     }
 
     @FXML
-    private void viewOfferButtonOnClicked(MouseEvent event) throws IOException {
-        JobOffer jobOffer = jobsView.getSelectionModel().getSelectedItem();
-        FXRouter.goTo("CompanyViewOfferDetailsView", jobOffer);
-
+    private void logoutButtonClicked(MouseEvent event) {
     }
 
 }
