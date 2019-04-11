@@ -31,12 +31,13 @@ import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.video.ConverterFactory;
 import com.xuggle.xuggler.video.IConverter;
 import java.awt.Graphics;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,6 +62,8 @@ import javax.naming.NamingException;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.math.geometry.shape.Rectangle;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
@@ -70,6 +73,7 @@ import tn.esprit.overpowered.byusforus.entities.quiz.Question;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuestionType;
 import tn.esprit.overpowered.byusforus.entities.quiz.Quiz;
 import tn.esprit.overpowered.byusforus.entities.quiz.QuizTry;
+import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote;
 import tn.esprit.overpowered.byusforus.services.quiz.AnswerFacadeRemote;
@@ -125,6 +129,13 @@ public class TryQuizController implements Initializable {
     @FXML
     private AnchorPane anchorScrollPane;
     private List<Integer> lastFiveFaces = new ArrayList<>();
+    private String cAppMotivationLetter;
+    private CandidateApplication cApp;
+    private CandidateApplicationFacadeRemote candidateApplicationFacade;
+    private Boolean cheatAlertAlreadyShown = false;
+    private Boolean noFacesAlertAlreadyShown = false;
+    private Context context = null;
+    private Context secondContext = null;
 
     /**
      * Initializes the controller class.
@@ -134,6 +145,48 @@ public class TryQuizController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("alert accepted - TryQuizController");
+        answers = new ArrayList<>();
+        quiz = (Quiz) FXRouter.getData();
+        quizTry = new QuizTry((Candidate) Authenticator.currentUser);
+        System.out.println("quiz try serial " + QuizTry.getSerialVersionUID());
+        long start = System.currentTimeMillis();
+        quizTry.setStartDate(new Date());
+        quizTry.setQuiz(quiz);
+        try {
+            context = new InitialContext();
+        } catch (NamingException ex) {
+            Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String jndiName2 = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
+        try {
+            candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName2);
+        } catch (NamingException ex) {
+            Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//                    CandidateApplication cApp = candidateApplicationFacade.getCAppByMotivLetter(Authenticator.currentUser.getId(), quiz.getJobOffer().getId());
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("candidate_apps.json")) {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+            JSONArray quizJList = (JSONArray) obj;
+            System.out.println(quizJList);
+            for (Object quiz : quizJList) {
+                JSONObject quizJson = (JSONObject) quiz;
+                Long jobOfferId = (Long) quizJson.get("jobOfferId");
+                Long candidateId = (Long) quizJson.get("candidateId");
+                if (jobOfferId == quizTry.getQuiz().getJobOffer().getId() && candidateId == Authenticator.currentUser.getId()) {
+                    cAppMotivationLetter = (String) quizJson.get("cAppMotivationLetter");
+                }
+
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        cApp = candidateApplicationFacade.getCAppByMotivLetter(cAppMotivationLetter);
+
         FXRouter.when("QuizResults", "QuizResults.fxml");
         FXRouter.setRouteContainer("QuizResults", anchorPane);
         scrollPane.setPrefHeight((double) FXRouter.scene.heightProperty().doubleValue() - 5);
@@ -158,14 +211,7 @@ public class TryQuizController implements Initializable {
             scrollPane.setPrefHeight((double) newValue - 5);
             anchorScrollPane.setPrefHeight((double) newValue);
         });
-        System.out.println("alert accepted - TryQuizController");
-        answers = new ArrayList<>();
-        quiz = (Quiz) FXRouter.getData();
-        quizTry = new QuizTry();
-        System.out.println("quiz try serial " + QuizTry.getSerialVersionUID());
-        long start = System.currentTimeMillis();
-        quizTry.setStartDate(new Date());
-        quizTry.setQuiz(quiz);
+
         initVideo(quizTry.getRecording());
         initCam();
 
@@ -209,8 +255,6 @@ public class TryQuizController implements Initializable {
             if (nextQuestion.getText().equals("Submit")) {
                 try {
                     quizTry.setFinishDate(new Date());
-                    Context context = null;
-                    Context secondContext = null;
                     try {
                         context = new InitialContext();
                         secondContext = new InitialContext();
@@ -230,8 +274,6 @@ public class TryQuizController implements Initializable {
                     String jndiName = "piJEE-ejb-1.0/QuizTryFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizTryFacadeRemote";
                     String jndiNamejo = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote";
                     String quizFacadejndiName = "piJEE-ejb-1.0/QuizFacade!tn.esprit.overpowered.byusforus.services.quiz.QuizFacadeRemote";
-                    quiz.getJobOffer().setSkills(new HashSet<>());
-                    quiz.getJobOffer().getCompany().setListOfOffers(new ArrayList<>());
                     QuizTryFacadeRemote quizTryFacadeProxy = (QuizTryFacadeRemote) secondContext.lookup(jndiName);
                     JobOfferFacadeRemote jobOfferFacade = (JobOfferFacadeRemote) secondContext.lookup(jndiNamejo);
 //                    QuizFacadeRemote quizFacadeProxy = (QuizFacadeRemote) context.lookup(quizFacadejndiName);
@@ -239,24 +281,37 @@ public class TryQuizController implements Initializable {
 //                    quizTryFacadeProxy.create(quizTry);
                     ObjectMapper mapper = new ObjectMapper();
                     quizTry.setIdQuizTry(250L);
-                    quiz.setJobOffer(jobOfferFacade.find(1L));
-                    String fileName = "quiz_try_" + quizTry.getQuiz().getId() + "_" + Authenticator.currentUser.getEmail();
+//                    quiz.setJobOffer(jobOfferFacade.find(1L));
+                    String fileName = "quiz_tries";
 //                    mapper.writeValue(new File(fileName + ".json"), quizTry);
-                    String jndiName2 = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
-                    CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName2);
-                    CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(Authenticator.currentUser.getId(), quiz.getJobOffer().getId());
-                    JSONObject quizTryJSON = new JSONObject();
-                    quizTryJSON.put("quizId", quiz.getId());
-                    quizTryJSON.put("candidateId", Authenticator.currentUser.getId());
-                    quizTryJSON.put("score", quizTry.getPercentage());
-                    quizTryJSON.put("answers", candidateAnswers);
-                    JSONArray quizTryList = new JSONArray();
-                    quizTryList.add(quizTryJSON);
-                    try (FileWriter file = new FileWriter(fileName + ".json")) {
-                        file.write(quizTryList.toJSONString());
+
+                    JSONArray quizJList = null;
+//                    File yourFile = new File("quiz_tries_.json");
+//                    try {
+//                        yourFile.createNewFile(); // if file already exists will do nothing 
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+                    try (FileReader reader = new FileReader("quiz_tries_.json")) {
+                        //Read JSON file
+                        Object obj = jsonParser.parse(reader);
+
+                        quizJList = (JSONArray) obj;
+                        System.out.println(quizJList);
+                        JSONObject quizTryJSON = new JSONObject();
+                        quizTryJSON.put("quizId", quiz.getId());
+                        quizTryJSON.put("candidateId", Authenticator.currentUser.getId());
+                        quizTryJSON.put("score", quizTry.getPercentage());
+                        quizTryJSON.put("answers", candidateAnswers);
+                        quizJList.add(quizTryJSON);
+
+                    } catch (FileNotFoundException e) {
+                    } catch (IOException | ParseException e) {
+                    }
+                    try (FileWriter file = new FileWriter("quiz_tries_.json")) {
+                        file.write(quizJList.toJSONString());
                         file.flush();
                     } catch (IOException e) {
-                        e.printStackTrace();
                     }
                     if (quizTry.getPercentage() >= 80f) {
                         cApp.setJobApplicationState(JobApplicationState.ACCEPTED_FOR_INTERVIEW);
@@ -343,9 +398,7 @@ public class TryQuizController implements Initializable {
                         candidateAnswers.put(questionToDisplay, c);
                         break;
                     case MULTI_ANSWER:
-                        if (candidateAnswers.containsKey(questionToDisplay)) {
-                            // TO DO
-                        }
+                        candidateAnswers.put(questionToDisplay, c);
                         break;
                     case FILL_IN_BLANKS:
                         break;
@@ -368,6 +421,16 @@ public class TryQuizController implements Initializable {
         return moreThan;
     }
 
+    public Boolean checkLastFiveEmpty() {
+        Boolean empty = true;
+        for (int a : lastFiveFaces) {
+            if (a > 0) {
+                empty = false;
+            }
+        }
+        return empty;
+    }
+
     public void detectFaces(BufferedImage imageToAnalyse) throws IOException {
         HaarCascadeDetector detector = new HaarCascadeDetector();
         faces = detector.detectFaces(ImageUtilities.createFImage(imageToAnalyse));
@@ -378,11 +441,16 @@ public class TryQuizController implements Initializable {
                     @Override
                     public void run() {
                         System.out.println("Detected more than two faces!!!");
-                        CreateAlert.CreateAlert(Alert.AlertType.ERROR, "ERROR!", "Cheating detected.",
-                                "We have detected a cheating attempt from your part."
-                                + " An employee will review the incident and make a decision.");
-                        stopCamera = true;
-
+                        if (!cheatAlertAlreadyShown) {
+                            cheatAlertAlreadyShown = true;
+                            CreateAlert.CreateAlert(Alert.AlertType.ERROR, "ERROR!", "Cheating detected.",
+                                    "We have detected a cheating attempt from your part."
+                                    + " An employee will review the incident and make a decision.");
+                            candidateApplicationFacade.updateCandidateApplication(cApp.getId(), "Cheating detected", JobApplicationState.REFUSED);
+                            stopCamera = true;
+                            writer.close();
+                            webcam.close();
+                        }
                         try {
                             FXRouter.goTo("baseView");
                         } catch (IOException ex) {
@@ -392,22 +460,50 @@ public class TryQuizController implements Initializable {
                 });
 
             } else {
-                lastFiveFaces.clear();
+                if (checkLastFiveEmpty()) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!noFacesAlertAlreadyShown) {
+                                noFacesAlertAlreadyShown = true;
+                                System.out.println("No faces detected!!!");
+                                CreateAlert.CreateAlert(Alert.AlertType.ERROR, "ERROR!", "No faces detected.",
+                                        "We couldn't detect any faces from your webcam."
+                                        + " An employee will review the incident and make a decision.");
+                                stopCamera = true;
+                                System.out.println("cApp ID from No Faces" + cApp.getId());
+                                candidateApplicationFacade.updateCandidateApplication(cApp.getId(), "No faces detected", JobApplicationState.REFUSED);
+                                stopCamera = true;
+                                writer.close();
+                                webcam.close();
+                            }
+
+                            try {
+                                FXRouter.goTo("baseView");
+                            } catch (IOException ex) {
+                                Logger.getLogger(TryQuizController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    });
+
+                } else {
+                    lastFiveFaces.clear();
+                }
             }
-        }
-        facesList.clear();
-        for (DetectedFace face : faces) {
-            BufferedImage facePatch = ImageUtilities.createBufferedImage(face.getFacePatch());
-            facesList.add(facePatch);
-            Rectangle bounds = face.getBounds();
-            int dx = (int) (0.1 * bounds.width);
-            int dy = (int) (0.2 * bounds.height);
-            int x = (int) bounds.x - dx;
-            int y = (int) bounds.y - dy;
-            int w = (int) bounds.width + 2 * dx;
-            int h = (int) bounds.height + dy;
-            Graphics g = imageToAnalyse.getGraphics();
-            g.drawRect(x, y, w, h);
+            facesList.clear();
+            for (DetectedFace face : faces) {
+                BufferedImage facePatch = ImageUtilities.createBufferedImage(face.getFacePatch());
+                facesList.add(facePatch);
+                Rectangle bounds = face.getBounds();
+                int dx = (int) (0.1 * bounds.width);
+                int dy = (int) (0.2 * bounds.height);
+                int x = (int) bounds.x - dx;
+                int y = (int) bounds.y - dy;
+                int w = (int) bounds.width + 2 * dx;
+                int h = (int) bounds.height + dy;
+                Graphics g = imageToAnalyse.getGraphics();
+                g.drawRect(x, y, w, h);
+            }
         }
     }
 

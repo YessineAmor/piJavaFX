@@ -81,6 +81,9 @@ public class JobOfferCandidateDetailsController implements Initializable {
     private Label addInfoLabel;
     @FXML
     private JFXButton goBackBtn;
+    private CandidateApplication cApp;
+    @FXML
+    private AnchorPane anchorPane;
 
     /**
      * Initializes the controller class.
@@ -88,7 +91,7 @@ public class JobOfferCandidateDetailsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Map<Context, CandidateApplication> dataMap = (HashMap) FXRouter.getData();
-        CandidateApplication cApp = dataMap.values().stream().findFirst().get();
+        cApp = dataMap.values().stream().findFirst().get();
         context = dataMap.keySet().stream().findFirst().get();
         candidate = cApp.getCandidate();
         jobOffer = cApp.getJobOffer();
@@ -167,7 +170,7 @@ public class JobOfferCandidateDetailsController implements Initializable {
                 try {
                     String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
                     CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
-                    CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(candidate.getId(), jobOffer.getId());
+//                    CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(candidate.getId(), jobOffer.getId());
                     System.out.println("hedha capp id li jebou context : " + cApp.getId());
                     cApp.setAdditionalInfo(refusalTextArea.getText());
                     cApp.setJobApplicationState(JobApplicationState.REFUSED);
@@ -190,17 +193,21 @@ public class JobOfferCandidateDetailsController implements Initializable {
         if (alertResult.isPresent() && alertResult.get() == ButtonType.OK) {
             String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
             CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
-            CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(candidate.getId(), jobOffer.getId());
-            System.out.println("hedha capp id li jebou context : " + cApp.getId());
+//            CandidateApplication cApp = candidateApplicationFacade.getApplicationByCandidateId(candidate.getId(), jobOffer.getId());
+            System.out.println("hedha capp id li jebou el fxruter get data : " + cApp.getId());
+            System.out.println("hedha job id mel invite quiz!! : " + jobOffer.getId());
             cApp.setAdditionalInfo("Quizzes passed: 0");
             cApp.setJobApplicationState(JobApplicationState.INVITED_FOR_QUIZ);
             candidateApplicationFacade.updateCandidateApplication(cApp.getId(), cApp.getAdditionalInfo(), cApp.getJobApplicationState());
+            System.out.println("candidate email " + candidate.getEmail());
             candidateApplicationFacade.sendMail(candidate.getEmail(), "You're invited to pass a quiz!", "Good morning, "
                     + "you've been invited to pass the quiz for the job offer: " + jobOffer.getTitle() + ".\n"
                     + "Please login to your account and consult "
                     + "the My Job Applications window to start your quiz");
             Map<Context, JobOffer> dataMap = new HashMap<>();
             dataMap.put(context, jobOffer);
+            FXRouter.when("ListJobOfferCandidates", "JobOfferCandidateDetails.fxml");
+            FXRouter.setRouteContainer("ListJobOfferCandidates", anchorPane);
             FXRouter.goTo("ListJobOfferCandidates", dataMap);
         }
     }

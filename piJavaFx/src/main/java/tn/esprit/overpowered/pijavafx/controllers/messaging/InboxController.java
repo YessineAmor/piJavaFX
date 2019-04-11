@@ -88,7 +88,7 @@ public class InboxController implements Initializable {
 
     private void updateMessageList(ArrayList<Message> myMessages) throws IOException {
         for (Conversation c : ConversationCreator.create(myMessages)) {      
-            System.out.println(c.getNewestMessage().getSentTime() + " " + c.getMessages().get(c.getMessages().size() - 1));
+            System.out.println(c.getNewestMessage().getSentTime() + " " + c.getMessages().get(c.getMessages().size() - 1).getSentTime());
                 if (!conversationBarrier.containsKey(c.getUid())) {
                 FXMLLoader loader = new FXMLLoader();
 
@@ -99,6 +99,7 @@ public class InboxController implements Initializable {
                 MessageInfoViewController cn = loader.getController();
                 cn.setConversation(c);
                 conversationList.getChildren().add(messagePane);
+                conversationBarrier.put(c.getUid(), cn);
                 } else {
                     if (!conversationBarrier.get(c.getUid()).getConversation().getNewestMessage().getId().equals(c.getNewestMessage().getId()))
                         conversationBarrier.get(c.getUid()).setConversation(c);

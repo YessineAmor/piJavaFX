@@ -202,14 +202,14 @@ public class CandidateJobOfferListController implements Initializable {
                                         try {
                                             FXRouter.when("TakeQuiz5", "QuizInfo.fxml");
                                             FXRouter.setRouteContainer("TakeQuiz5", centralAnchorPane);
-                                            FXRouter.goTo("TakeQuiz5", jobOfferEnt);
+                                            FXRouter.goTo("TakeQuiz5", getTableView().getItems().get(getIndex()));
                                         } catch (IOException ex) {
                                             Logger.getLogger(CandidateJobOfferListController.class.getName()).log(Level.SEVERE, null, ex);
                                         }
                                     } else {
                                         System.out.println("application btn clicked for job offer" + jobOfferEnt.getTitle());
                                         Map<Context, JobOffer> dataMap = new HashMap<>();
-                                        dataMap.put(context, jobOfferEnt);
+                                        dataMap.put(context, getTableView().getItems().get(getIndex()));
                                         try {
                                             FXRouter.when("JobApp", "JobApplication.fxml");
                                             FXRouter.setRouteContainer("JobApp", centralAnchorPane);

@@ -66,6 +66,7 @@ public class EditQuestionsController implements Initializable {
         quiz = secondMap.values().stream().findFirst().get();
         System.out.println("this is my quiz id from dbb " + quiz.getId());
         jobOffer = secondMap.keySet().stream().findFirst().get();
+        titleLabel.setText(titleLabel.getText() + " " + quiz.getName());
         int index = 0;
         int colIndex = 0;
         for (Question questionInList : quiz.getQuestions()) {

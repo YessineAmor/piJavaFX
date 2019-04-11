@@ -10,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import tn.esprit.overpowered.byusforus.entities.users.CompanyProfile;
+import tn.esprit.overpowered.byusforus.entities.users.HRManager;
 import tn.esprit.overpowered.byusforus.entities.users.User;
 import tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote;
 import util.cache.ContextCache;
@@ -22,14 +24,19 @@ public class UserCreator {
 
     public static void main(String[] args) throws NamingException, NoSuchAlgorithmException {
         User u = new User();
-        u.setEmail("mohamedamine.skhiri@esprit.tn");
-        u.setPassword("1234@".getBytes(StandardCharsets.UTF_8));
-        u.setUsername("amine");
-        getRemote().create(u);
+        CompanyProfile cp = new CompanyProfile();
+        cp.setName("azerty");
+        HRManager hrm = new HRManager();
+        hrm.setEmail("yessin.amor@gmail.com");
+        hrm.setPassword("1234@".getBytes(StandardCharsets.UTF_8));
+        hrm.setUsername("wxc");
+        hrm.setCompany(cp);
+        hrm.setCompanyProfile(cp);
+        getRemote().create(hrm);
         System.out.println("Done");
     }
-    
-        public static UserFacadeRemote getRemote() {
+
+    public static UserFacadeRemote getRemote() {
         return (UserFacadeRemote) ContextCache
                 .getInstance()
                 .getProxy("piJEE-ejb-1.0/UserFacade!tn.esprit.overpowered.byusforus.services.users.UserFacadeRemote");

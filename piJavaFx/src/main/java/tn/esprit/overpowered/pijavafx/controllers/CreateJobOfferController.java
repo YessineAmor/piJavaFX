@@ -5,40 +5,27 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.Vector;
-import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javax.naming.NamingException;
-import javax.swing.JCheckBox;
 import tn.esprit.overpowered.byusforus.entities.users.CompanyAdmin;
 import tn.esprit.overpowered.byusforus.entities.users.HRManager;
 import tn.esprit.overpowered.byusforus.entities.users.ProjectManager;
@@ -148,7 +135,7 @@ public class CreateJobOfferController implements Initializable {
                         Integer.parseInt(neededCandidates.getText()), description.getText(),
                         expirationDate.getValue());
                 HRManager hrManager = InfoTracker.getHRInformation(currentUserId);
-                FXRouter.goTo("OffersVieww", hrManager);
+                FXRouter.goTo("OffersView", hrManager);
                 break;
             case "PROJECT_MANAGER":
                 ProjectManager pManager = InfoTracker.getPMInformation(currentUserId);

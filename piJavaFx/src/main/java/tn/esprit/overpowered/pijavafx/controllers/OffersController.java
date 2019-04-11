@@ -5,7 +5,6 @@
  */
 package tn.esprit.overpowered.pijavafx.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -100,6 +98,10 @@ public class OffersController implements Initializable {
     private Button logoutButton;
     @FXML
     private Button viewOfferButton;
+    @FXML
+    private TableColumn<JobOffer, String> applicationsTC;
+
+
 
     /**
      * Initializes the controller class.
@@ -123,7 +125,8 @@ public class OffersController implements Initializable {
 
         FXRouter.when("ManageQuiz", "ManageQuiz.fxml");
         FXRouter.setRouteContainer("ManageQuiz", centerAnchorPane);
-
+        FXRouter.when("ListJobOfferCandidates", "ListJobOfferCandidates.fxml");
+        FXRouter.setRouteContainer("ListJobOfferCandidates", centerAnchorPane);
         try {
             String jndiName = "piJEE-ejb-1.0/JobOfferFacade!tn.esprit.overpowered.byusforus.services.entrepriseprofile.JobOfferFacadeRemote";
             context = new InitialContext();
@@ -182,8 +185,44 @@ public class OffersController implements Initializable {
                     return cell;
                 }
             };
+            Callback<TableColumn<JobOffer, String>, TableCell<JobOffer, String>> appsCellFactory
+                    = //
+                    new Callback<TableColumn<JobOffer, String>, TableCell<JobOffer, String>>() {
+                @Override
+                public TableCell call(final TableColumn<JobOffer, String> param) {
+                    final TableCell<JobOffer, String> cell = new TableCell<JobOffer, String>() {
+
+                        final Button appBtn = new Button("View applications");
+
+                        @Override
+                        public void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                appBtn.setOnAction(event -> {
+                                    JobOffer jobOffer = getTableView().getItems().get(getIndex());
+                                    System.out.println("Quiz btn clicked for job offer" + jobOffer.getTitle());
+                                    Map<Context, JobOffer> dataMap = new HashMap<>();
+                                    dataMap.put(context, jobOffer);
+                                    try {
+                                        FXRouter.goTo("ListJobOfferCandidates", dataMap);
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(OffersController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                });
+                                setGraphic(appBtn);
+                                setText(null);
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            };
             System.out.println("Still working at this point");
             quiz.setCellFactory(cellFactory);
+            applicationsTC.setCellFactory(appsCellFactory);
             jobsView.setItems(offerObs);
 //            jobsView.getColumns().add(quiz);
 

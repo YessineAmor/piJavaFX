@@ -6,9 +6,13 @@
 package tn.esprit.overpowered.pijavafx.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -27,11 +31,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javax.naming.Context;
 import javax.naming.NamingException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import tn.esprit.overpowered.byusforus.entities.candidat.CandidateApplication;
 import tn.esprit.overpowered.byusforus.entities.entrepriseprofile.JobOffer;
 import tn.esprit.overpowered.byusforus.entities.users.Candidate;
 import tn.esprit.overpowered.byusforus.entities.util.Skill;
 import tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote;
+import tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote;
 import util.routers.FXRouter;
 
 /**
@@ -52,6 +61,9 @@ public class ListJobOfferCandidatesController implements Initializable {
     @FXML
     private Label titleLabel;
     private Context context;
+    private JobOffer jobOffer;
+    private String cAppMotivationLetter;
+    private List<CandidateApplication> listApplied = new ArrayList<>();
 
     /**
      * Initializes the controller class.
@@ -59,7 +71,7 @@ public class ListJobOfferCandidatesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Map<Context, JobOffer> dataMap = (HashMap) FXRouter.getData();
-        JobOffer jobOffer = dataMap.values().stream().findFirst().get();
+        jobOffer = dataMap.values().stream().findFirst().get();
         context = dataMap.keySet().stream().findFirst().get();
         titleLabel.setText(titleLabel.getText() + jobOffer.getTitle());
         scrollPane.setPrefHeight((double) FXRouter.scene.heightProperty().doubleValue() - 20);
@@ -91,19 +103,58 @@ public class ListJobOfferCandidatesController implements Initializable {
         } catch (NamingException ex) {
             Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        List<CandidateApplication> cAppList = cAppFacade.getCandidateApplicationByJobOFfer(jobOffer.getId());
-        for (CandidateApplication candidateApp : cAppList) {
+        Boolean isApplied = false;
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader("candidate_apps.json")) {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+            JSONArray quizJList = (JSONArray) obj;
+            System.out.println(quizJList);
+            for (Object quiz : quizJList) {
+                isApplied = false;
+                JSONObject quizJson = (JSONObject) quiz;
+                Long jobOfferId = (Long) quizJson.get("jobOfferId");
+                Long candidateId = (Long) quizJson.get("candidateId");
+                if (jobOfferId == jobOffer.getId()) {
+                    cAppMotivationLetter = (String) quizJson.get("cAppMotivationLetter");
+                    isApplied = true;
+                }
+                if (isApplied) {
+                    String jndiName = "piJEE-ejb-1.0/CandidateApplicationFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateApplicationFacadeRemote";
+                    String cjndiName = "piJEE-ejb-1.0/CandidateFacade!tn.esprit.overpowered.byusforus.services.candidat.CandidateFacadeRemote";
+                    CandidateApplicationFacadeRemote candidateApplicationFacade = (CandidateApplicationFacadeRemote) context.lookup(jndiName);
+                    CandidateFacadeRemote candidateFacade = (CandidateFacadeRemote) context.lookup(cjndiName);
+                    CandidateApplication cApp = candidateApplicationFacade.getCAppByMotivLetter(cAppMotivationLetter);
+                    cApp.setCandidate(candidateFacade.find(candidateId));
+                    listApplied.add(cApp);
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException | NamingException ex) {
+            Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+//            List<CandidateApplication> cAppList = cAppFacade.getCandidateApplicationByJobOFfer(jobOffer.getId());
+        for (CandidateApplication candidateApp : listApplied) {
             Candidate candidate = candidateApp.getCandidate();
             VBox candidateHBox = new VBox();
             HBox btnHBox = new HBox();
             Label nameLabel = new Label("Name: " + candidate.getFirstName() + " " + candidate.getLastName());
-            double skillsScore;
+            double skillsScore = 0;
+            Set<Skill> jobSkillSet = new HashSet<>();
+            jobSkillSet.add(Skill.C);
+            jobSkillSet.add(Skill.JAVA);
+            Set<Skill> candidateSkillSet = new HashSet<>();
+            jobSkillSet.add(Skill.JAVA);
+            jobOffer.setSkills(jobSkillSet);
+            candidate.setSkills(candidateSkillSet);
             if (candidate.getSkills() == null || jobOffer.getSkills() == null) {
+                System.out.println("wahda menhom null");
                 skillsScore = 0;
             } else {
-//                skillsScore = calculateCandidateMatchPercentage(candidate.getSkills(), jobOffer.getSkills());
+                skillsScore = calculateCandidateMatchPercentage(candidate.getSkills(), jobOffer.getSkills());
             }
-            skillsScore = 0;
             Label skillsLabel = new Label("Skills match: " + 100 * skillsScore + "%");
             Label stateLabel = new Label("Status: " + candidateApp.getJobApplicationState().name());
             JFXButton detailsBtn = new JFXButton("See More Details");
@@ -116,7 +167,7 @@ public class ListJobOfferCandidatesController implements Initializable {
             candidateHBox.getChildren().add(skillsLabel);
             candidateHBox.getChildren().add(stateLabel);
             btnHBox.getChildren().add(detailsBtn);
-            btnHBox.setAlignment(Pos.CENTER_RIGHT);
+//            btnHBox.setAlignment(Pos.CENTER_RIGHT);
             candidateHBox.getChildren().add(btnHBox);
             if (colIndex % 2 == 0) {
                 candidatesGridPane.add(candidateHBox, 0, index);
@@ -130,6 +181,8 @@ public class ListJobOfferCandidatesController implements Initializable {
                 try {
                     Map<Context, CandidateApplication> dataMap2 = new HashMap<>();
                     dataMap2.put(dataMap.keySet().stream().findFirst().get(), candidateApp);
+                    FXRouter.when("JobOfferCandidateDetails", "JobOfferCandidateDetails.fxml");
+                    FXRouter.setRouteContainer("JobOfferCandidateDetails", anchorPane);
                     FXRouter.goTo("JobOfferCandidateDetails", dataMap2);
                 } catch (IOException ex) {
                     Logger.getLogger(ListJobOfferCandidatesController.class.getName()).log(Level.SEVERE, null, ex);
